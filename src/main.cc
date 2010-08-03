@@ -27,7 +27,7 @@ using std::endl;
 using std::cerr;
 using std::cout;
 
-DebugStream debug(cout, DEF_DEBUG);
+DebugStream debug(cerr, DEF_DEBUG);
 
 void usage(void);
 void digest_args(int argc, char ** argv);

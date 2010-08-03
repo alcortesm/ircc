@@ -1,2 +1,1 @@
-- Change debug to use cerr
 - Add --track-origins=yes to valgrind flags
