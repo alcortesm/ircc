@@ -14,6 +14,7 @@
 #include <cstring>
 #include <error.h>
 #include <errno.h>
+#include <sys/select.h>
 
 #include "Url.h"
 #include "utils.h"
@@ -33,6 +34,7 @@ void digest_args(int argc, char ** argv);
 void inf_loop(void);
 void initialize(const Url & rWebCache) throw (std::runtime_error);
 void tests(void);
+void main_loop();
 
 int
 main(int argc, char ** argv)
@@ -41,6 +43,8 @@ main(int argc, char ** argv)
 
    if (debug.on())
       tests();
+
+   main_loop();
 
    exit(EXIT_SUCCESS);
 
@@ -113,4 +117,63 @@ tests(void)
    Url::Test();
    //   test_prompt();
    debug << "All tests passed!" <<  endl << endl << endl;
+}
+
+void
+main_loop(void)
+{
+   /* wakeup timer: there is no need to use one at all */
+   struct timeval tv;
+   tv.tv_sec = MAIN_LOOP_TIMEOUT_SECS;
+   tv.tv_usec = MAIN_LOOP_TIMEOUT_USECS;
+
+   for(;;) {
+      int max_fds = 0;
+
+      /* read from stdin */
+      fd_set read_fds;
+      FD_ZERO(&read_fds);
+      FD_SET(STDIN_FD, &read_fds);
+      max_fds = MAX(max_fds, STDIN_FD);
+
+      int retval;
+      retval = select(max_fds+1, &read_fds, NULL, NULL, &tv);
+      debug << "main_loop's select() returns " << retval << endl ;
+
+      /* select error: exit */
+      if (retval == -1) {
+         if (errno == EINTR)
+            continue;
+         fatal("select", NULL);
+      }
+
+      /* select's timeout expire: reset timer */
+      if (retval == 0) {
+         debug << "main_loop(): timeout expire!" << endl ;
+         tv.tv_sec = MAIN_LOOP_TIMEOUT_SECS;
+         tv.tv_usec = MAIN_LOOP_TIMEOUT_SECS;
+         continue;
+      }
+
+      /* some fd was ready: which one?, run response */
+      if (FD_ISSET(STDIN_FD, &read_fds)) {
+         const size_t buf_sz = 1024;
+         char* const buf = (char* const) xcalloc(buf_sz, sizeof(char));
+         ssize_t nr;
+         nr = read(STDIN_FD, (void*)buf, buf_sz);
+         if (nr == -1)
+            fatal("read", NULL);
+         if (nr == 0) {
+            free(buf);
+            break;
+         }
+         if (strcmp(buf, "quit\n") == 0) {
+            free(buf);
+            break;
+         }
+         fprintf(stdout, "%s", buf);
+         free(buf);
+      }
+   }
+   return;
 }
