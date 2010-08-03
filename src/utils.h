@@ -7,7 +7,10 @@
 #include <stdint.h>
 
 /* prevent compiler warnings about unused variables */
+#undef UNUSED
 #define UNUSED(x) ((void)(x))
+#undef MAX
+#define MAX(x,y) ((x) > (y) ? (x) : (y))
 
 // string to int conversions
 int         string_to_int(std::string & s) throw (std::invalid_argument);
@@ -28,5 +31,9 @@ bool begins_with(std::string a, std::string b);
 char * xstrdup(char const * const);
 void * xmalloc(size_t size);
 void * xcalloc(size_t n, size_t size);
+
+// perror + exit
+void   fatal(const char* const funcName, char *fmt, ...);
+void   fatalne(const char* const funcName, char *fmt, ...);
 
 #endif // UTILS_H
