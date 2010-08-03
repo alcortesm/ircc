@@ -17,7 +17,7 @@ LFLAGS = -g -lpthread
 OBJS = $(SRCS:.cc=.o)
 DEPS = $(OBJS:.o=.d)
 INSTALL_BIN=$(INSTALL_DIR)/$(BIN)
-VALGRIND_FLAGS = --tool=memcheck --show-reachable=yes --leak-check=full -q
+VALGRIND_FLAGS = --track-origins=yes --tool=memcheck --show-reachable=yes --leak-check=full -q
 
 
 
