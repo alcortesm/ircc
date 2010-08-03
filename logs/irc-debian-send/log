@@ -1,0 +1,162 @@
+bat:~; irc alcortes irc.debian.org
+*** Connecting to port 6667 of server change_this_in_etc_irc_servers
+*** Unable to connect to port 6667 of server change_this_in_etc_irc_servers:
+*** Connecting to port 6667 of server irc.debian.org
+-solenoid.oftc.net- *** Looking up your hostname...
+-solenoid.oftc.net- *** Checking Ident
+-solenoid.oftc.net- *** No Ident response
+-solenoid.oftc.net- *** Found your hostname
+*** Welcome to the OFTC Internet Relay Chat Network alcortes (from
++solenoid.oftc.net)
+*** /etc/irc/script/local V0.5 for Debian finished. Welcome to ircII.
+*** If you have not already done so, please read the new user information with
++/HELP NEWUSER
+*** Your host is solenoid.oftc.net[130.239.18.160/6667], running version
++hybrid-7.2.2+oftc1.6.8
+*** This server was created Mar 10 2010 at 10: 10:11
+*** umodes available CDGPRSabcdfgiklnorsuwxyz, channel modes available
++biklmnopstveI
+*** CALLERID CASEMAPPING=rfc1459 DEAF=D KICKLEN=160 MODES=4 NICKLEN=30
++PREFIX=(ov)@+ STATUSMSG=@+ TOPICLEN=390 NETWORK=OFTC MAXLIST=beI: 100
++MAXTARGETS=1 CHANTYPES=#& :are supported by this server
+*** CHANLIMIT=#&: 70 CHANNELLEN=50 CHANMODES=eIqb,k,l,imnpstMRS AWAYLEN=160 KNOCK
++ELIST=CMNTU SAFELIST EXCEPTS=e INVEX=I are supported by this server
+*** 659AABAQ6 your unique ID
+*** Connecting to port 6667 of server irc.debian.org
+-galapagos.oftc.net- *** Looking up your hostname...
+-galapagos.oftc.net- *** Checking Ident
+-galapagos.oftc.net- *** No Ident response
+-galapagos.oftc.net- *** Found your hostname
+*** Welcome to the OFTC Internet Relay Chat Network alcortes (from
++galapagos.oftc.net)
+*** /etc/irc/script/local V0.5 for Debian finished. Welcome to ircII.
+*** If you have not already done so, please read the new user information with
++/HELP NEWUSER
+*** Your host is galapagos.oftc.net[131.211.141.245/6667], running version
++hybrid-7.2.2+oftc1.6.8
+*** This server was created Jan 27 2010 at 16: 04:49
+*** umodes available CDGPRSabcdfgiklnorsuwxyz, channel modes available
++biklmnopstveI
+*** CALLERID CASEMAPPING=rfc1459 DEAF=D KICKLEN=160 MODES=4 NICKLEN=30
++PREFIX=(ov)@+ STATUSMSG=@+ TOPICLEN=390 NETWORK=OFTC MAXLIST=beI: 100
++MAXTARGETS=1 CHANTYPES=#& :are supported by this server
+*** CHANLIMIT=#&: 70 CHANNELLEN=50 CHANMODES=eIqb,k,l,imnpstMRS ELIST=CMNTU
++SAFELIST KNOCK AWAYLEN=160 EXCEPTS=e INVEX=I are supported by this server
+*** 7GDAAD3EM your unique ID
+*** There are 145 users and 6555 invisible on 21 servers
+*** There are 22 operators online
+*** 1695 channels have been formed
+*** This server has 690 clients and 1 servers connected
+*** Current local users:  690  Max: 1050
+*** Current global users:  6700  Max: 7458
+*** Connecting to port 6667 of server irc.debian.org
+-magnet.oftc.net- *** Looking up your hostname...
+-magnet.oftc.net- *** Checking Ident
+-magnet.oftc.net- *** No Ident response
+-magnet.oftc.net- *** Found your hostname
+*** Welcome to the OFTC Internet Relay Chat Network alcortes (from
++magnet.oftc.net)
+*** /etc/irc/script/local V0.5 for Debian finished. Welcome to ircII.
+*** If you have not already done so, please read the new user information with +/HELP NEWUSER
+*** Your host is magnet.oftc.net[82.195.75.116/6667], running version
++hybrid-7.2.2+oftc1.6.8
+*** This server was created Feb 10 2010 at 16: 30:38
+*** umodes available CDGPRSabcdfgiklnorsuwxyz, channel modes available
++biklmnopstveI
+*** CALLERID CASEMAPPING=rfc1459 DEAF=D KICKLEN=160 MODES=4 NICKLEN=30
++PREFIX=(ov)@+ STATUSMSG=@+ TOPICLEN=390 NETWORK=OFTC MAXLIST=beI: 100
++MAXTARGETS=1 CHANTYPES=#& :are supported by this server
+*** CHANLIMIT=#&: 70 CHANNELLEN=50 CHANMODES=eIqb,k,l,imnpstMRS AWAYLEN=160 KNOCK
++ELIST=CMNTU SAFELIST EXCEPTS=e INVEX=I are supported by this server
+*** 04ZAADO13 your unique ID
+*** There are 144 users and 6552 invisible on 21 servers
+*** There are 22 operators online
+*** 1693 channels have been formed
+*** This server has 689 clients and 1 servers connected
+*** Current local users:  689  Max: 1007
+*** Current global users:  6696  Max: 7458
+*** Highest connection count:  1008 (1007 clients) (159114 connections received)
+*** Connecting to port 6667 of server irc.debian.org
+-kilo.oftc.net- *** Looking up your hostname...
+-kilo.oftc.net- *** Checking Ident
+-kilo.oftc.net- *** No Ident response
+-kilo.oftc.net- *** Found your hostname
+*** Welcome to the OFTC Internet Relay Chat Network alcortes (from kilo.oftc.net)
+*** /etc/irc/script/local V0.5 for Debian finished. Welcome to ircII.
+*** If you have not already done so, please read the new user information with
++/HELP NEWUSER
+*** Your host is kilo.oftc.net[193.198.184.13/6667], running version +hybrid-7.2.2+oftc1.6.8
+*** This server was created Jan 26 2010 at 15: 38:37
+*** umodes available CDGPRSabcdfgiklnorsuwxyz, channel modes available
++biklmnopstveI
+*** CALLERID CASEMAPPING=rfc1459 DEAF=D KICKLEN=160 MODES=4 NICKLEN=30
++PREFIX=(ov)@+ STATUSMSG=@+ TOPICLEN=390 NETWORK=OFTC MAXLIST=beI: 100
++MAXTARGETS=1 CHANTYPES=#& :are supported by this server
+*** CHANLIMIT=#&: 70 CHANNELLEN=50 CHANMODES=eIqb,k,l,imnpstMRS KNOCK AWAYLEN=160
++ELIST=CMNTU SAFELIST EXCEPTS=e INVEX=I are supported by this server
+*** 1RDAABERX your unique ID
+*** There are 145 users and 6553 invisible on 21 servers
+*** There are 22 operators online
+*** 1 unknown connection(s)
+*** 1694 channels have been formed
+*** This server has 118 clients and 1 servers connected
+*** Current local users:  118  Max: 822
+*** Current global users:  6698  Max: 7350
+*** Highest connection count:  823 (822 clients) (52476 connections received)
+*** - kilo.oftc.net Message of the Day - 
+*** - Welcome to OFTC - The Open and Free Technology Community
+*** - 
+*** - You have connected to OFTC's IRC services.
+*** - 
+*** - We are not a general purpose chat platform, but a topical
+*** - network intent on providing the open source and free
+*** - software communities a means to cooperate and communicate.
+*** - As such, illegal and off-topic activity, such as warez
+*** - trading, may result in being barred from access.
+*** - 
+*** - The Open and Free Technology Community was founded at the
+*** - end of 2001 by a group of experienced members of the Open
+*** - Source and Free Software communities; it is aimed at
+*** - providing these communities with better communication,
+*** - development, and support infrastructure. Our goal is to
+*** - provide stable services to members of the community in any
+*** - part of the world, while listening closely to their needs
+*** - and desires.
+*** - 
+*** - For more information on OFTC please visit http://www.oftc.net/.
+*** - 
+*** - If you require assistance stop by in channel #oftc, or email
+*** - support@oftc.net with details.
+*** - 
+*** - 2008-06-19  Rotating server certificates
+*** - ----------------------------------------
+*** - We are slowly rotating our servers' SSL certificates.  The new
+*** - certs are signed, indirectly, by SPI's certification authority
+*** - and no longer by cacert's.
+*** - 
+*** - If you use SSL to connect to our network (ports 6697 and 9999)
+*** - and you verify the certs you need to get SPI's root cert from
+*** - <URL:http://www.spi-inc.org/secretary/spi-cacert.crt/view>.
+*** - 
+*** - 
+*** - 2007-11-23  Enabling ssl client certificates
+*** - --------------------------------------------
+*** - NickServ now supports auto-identification using SSL connections
+*** - and client certificates.
+*** - 
+*** - Please see http://www.oftc.net/oftc/NickServ/CertFP for
+*** - more information.
+*** - 
+*** - Thanks and enjoy your stay,
+*** - 
+*** -         The OFTC team
+*** Mode change "+i" for user alcortes by alcortes
+*** alcortes (~alcortes@253.Red-88-24-91.staticIP.rima-tde.net) has joined
++channel #debian
+*** Topic for #debian: lenny (5.0.5) /msg dpkg 5.0.5 | etch no longer on mirrors:
++/msg dpkg etch->lenny | NO FLOOD: /msg dpkg pastebin | /msg bots NOT people |
++offtopic: #debian-offtopic | FAQ: http://wiki.debian.org/DebianIRC
+*** #debian themill!~stuart@themill.user.oftc.net 1277569551
+*** #debian 1221533990
+> test
+[1] 20:40 alcortes (+i) on #debian (+clnt 386) * type /help for help
