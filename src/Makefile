@@ -54,6 +54,7 @@ clean:
 	- rm -f $(DEPS)
 	- rm -f cscope.in.out cscope.out cscope.po.out
 	- rm -f *~
+	- rm -f $(BIN).tgz
 
 nuke: clean
 	- rm -f $(INSTALL_DIR)/$(BIN)
