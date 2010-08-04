@@ -34,7 +34,7 @@ uninstall:
 	- rm -f $(INSTALL_BIN)
 
 dist:
-	tar -cvzf $(BIN).tgz $(SRCS)
+	tar -cvzf $(BIN).tgz $(SRCS) *.h Makefile
 
 TAGS:
 	cscope -b -q *.cpp *.h
