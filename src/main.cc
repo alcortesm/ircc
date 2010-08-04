@@ -31,7 +31,6 @@ DebugStream debug(cerr, DEF_DEBUG);
 
 void usage(void);
 void digest_args(int argc, char ** argv);
-void inf_loop(void);
 void initialize(const Url & rWebCache) throw (std::runtime_error);
 void tests(void);
 void main_loop();
@@ -87,21 +86,6 @@ digest_args(int argc, char ** argv)
 }
 
 void
-inf_loop(void)
-{
-   const struct timespec onesec = {1, 0};
-   int r;
-
-   while (true) {
-      r = nanosleep(&onesec, NULL);
-      if (r == -1) {
-         perror("nanosleep");
-         exit(EXIT_FAILURE);
-      }
-   }
-}
-
-void
 initialize(const Url & rWebCache) throw (std::runtime_error)
 {
    debug << "** Initialization started" << endl;
@@ -117,6 +101,69 @@ tests(void)
    Url::Test();
    //   test_prompt();
    debug << "All tests passed!" <<  endl << endl << endl;
+}
+
+/* when there is a line waiting to be read at stdin, the main loop calls
+ * this function. The function must read one full line from stdin and
+ * nothing more (the next lines will be read by subsequent invocations to
+ * this same function).
+ *
+ * It exits with error messages if an error is found reading the line.
+ *
+ * It returns the empty string in case an end of file is found on stdin.
+ *
+ * If the line is longer than MAX_LINE_LEN, then the whole line is read,
+ * forgotten and a string with a description of this error is thrown.
+ *
+ * If the line is OK, it is returned as a string. 
+ */
+string
+fetch_line(void) throw (string)
+{
+   size_t total_bytes_read = 0;
+
+   const size_t buf_sz = MAX_LINE_LEN;
+   char* const buf = (char* const) xmalloc(buf_sz);
+
+   ssize_t bytes_read;
+   size_t remaining_buf_sz;
+   for (;;) {
+      remaining_buf_sz = buf_sz - total_bytes_read;
+      bytes_read = read(STDIN_FD, (void*)(buf+total_bytes_read),
+                        remaining_buf_sz);
+      //      debug << "fetch_line bytes_read = " << bytes_read << endl ;
+      if (bytes_read == -1 && errno == EINTR)
+         continue;
+      if (bytes_read == -1)
+         fatal("read", NULL);
+      if (bytes_read == 0) { /* EOF found */
+         free(buf);
+         return string();
+      }
+      total_bytes_read += bytes_read ;
+      if (total_bytes_read == buf_sz
+          && buf[buf_sz-1] != '\n') { /* line too long */
+         /* fetch all the line, while forgetting it and throw a warning */
+         for (;;) {
+            bytes_read = read(STDIN_FD, (void*)buf, buf_sz);
+            if (bytes_read == -1 && errno == EINTR)
+               continue;
+            if (bytes_read == -1)
+               fatal("read", NULL);
+            if (buf[bytes_read-1] == '\n') /* end of line detected */
+               break;
+         }
+         free(buf);
+         throw string("line too long");
+      }
+      /* if last char is a \n, we had fetch all the line */
+      if (buf[total_bytes_read-1] == '\n') {
+         string str(buf, total_bytes_read);
+         free(buf);
+         return str;
+      }
+      /* else continue fetching */
+   }
 }
 
 void
@@ -138,7 +185,7 @@ main_loop(void)
 
       int retval;
       retval = select(max_fds+1, &read_fds, NULL, NULL, &tv);
-      debug << "main_loop's select() returns " << retval << endl ;
+      //      debug << "main_loop's select() returns " << retval << endl ;
 
       /* select error: exit */
       if (retval == -1) {
@@ -149,30 +196,29 @@ main_loop(void)
 
       /* select's timeout expire: reset timer */
       if (retval == 0) {
-         debug << "main_loop(): timeout expire!" << endl ;
+         //         debug << "main_loop(): timeout expire!" << endl ;
          tv.tv_sec = MAIN_LOOP_TIMEOUT_SECS;
          tv.tv_usec = MAIN_LOOP_TIMEOUT_SECS;
          continue;
       }
 
-      /* some fd was ready: which one?, run response */
-      if (FD_ISSET(STDIN_FD, &read_fds)) {
-         const size_t buf_sz = 1024;
-         char* const buf = (char* const) xcalloc(buf_sz, sizeof(char));
-         ssize_t nr;
-         nr = read(STDIN_FD, (void*)buf, buf_sz);
-         if (nr == -1)
-            fatal("read", NULL);
-         if (nr == 0) {
-            free(buf);
+      /* some fd was ready: which one?, read and process data */
+      if (FD_ISSET(STDIN_FD, &read_fds)) { /* stdin: user input */
+         string line;
+         try {
+            line = fetch_line();
+         } catch(string line_too_long) {
+            cout << line_too_long << endl ;
+            continue;
+         }
+         /* process the line */
+         /* if EOF found (empty string), exit the program */
+         if (line.size() == 0) {
+            cout << "bye!" << endl ;
             break;
          }
-         if (strcmp(buf, "quit\n") == 0) {
-            free(buf);
-            break;
-         }
-         fprintf(stdout, "%s", buf);
-         free(buf);
+         /* else process the command */
+         cout << line ; /* just echo the line for now */
       }
    }
    return;
