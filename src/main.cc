@@ -46,7 +46,7 @@ main(int argc, char ** argv)
 
    main_loop();
 
-   exit(EXIT_SUCCESS);
+   return 0;
 
    /*
    try {
