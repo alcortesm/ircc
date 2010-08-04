@@ -17,7 +17,9 @@ LFLAGS = -g -lpthread
 OBJS = $(SRCS:.cc=.o)
 DEPS = $(OBJS:.o=.d)
 INSTALL_BIN=$(INSTALL_DIR)/$(BIN)
-VALGRIND_FLAGS = --track-origins=yes --tool=memcheck --show-reachable=yes --leak-check=full -q
+# can't use --track-origins==yes, because monitor01 use
+# an older version of valgrind
+VALGRIND_FLAGS = --tool=memcheck --show-reachable=yes --leak-check=full -q
 
 
 
