@@ -253,14 +253,20 @@ process_line(const string & rLine)
 {
    debug << "process_line argument (len= " << rLine.length() << "): " << rLine << endl ;
 
-   /* if the user press only enter: do nothing */
-   if (rLine.empty())
+   /* if the user pressed only enter: do nothing */
+   if (rLine.empty()) {
+      debug << "process_line: nop presumed" << endl ;
       return;
+   }
 
    /* if nop command: do nothing */
-   if (rLine.substr(1,4) == "/nop")
+   if (rLine.substr(0,3) == string("/nop")) {
+      debug << "process_line: nop detected" << endl ;
       return;
-   if (rLine.substr(1,5) == "/nop ")
+   }
+   if (rLine.substr(0,4) == "/nop ") {
+      debug << "process_line: nop + other things detected" << endl ;
       return;
+   }
 
 }
