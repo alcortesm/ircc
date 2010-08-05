@@ -19,7 +19,6 @@
 #include "Url.h"
 #include "utils.h"
 #include "DebugStream.h"
-#include "prompt.h"
 #include "ircc.h"
 
 using std::string;
@@ -34,6 +33,7 @@ void digest_args(int argc, char ** argv);
 void initialize(const Url & rWebCache) throw (std::runtime_error);
 void tests(void);
 void main_loop();
+void process_line(const string & rLine);
 
 int
 main(int argc, char ** argv)
@@ -46,22 +46,6 @@ main(int argc, char ** argv)
    main_loop();
 
    return 0;
-
-   /*
-   try {
-      Conf conf = Conf::FromFile();
-      initialize(conf.WebCache());
-   } catch (std::exception & e) {
-      cerr << e.what() << endl;
-      goto error;
-   }
-
-   launch_prompt_and_wait();
-
-   exit(EXIT_SUCCESS);
- error:
-   exit(EXIT_FAILURE);
-   */
 }
 
 void
@@ -97,10 +81,11 @@ initialize(const Url & rWebCache) throw (std::runtime_error)
 void
 tests(void)
 {
-   debug << endl << endl << "Running unit tests!" <<  endl;
+   debug << endl << endl << "****** Running unit tests!" <<  endl;
+   debug << endl ;
    Url::Test();
-   //   test_prompt();
-   debug << "All tests passed!" <<  endl << endl << endl;
+   debug << endl ;
+   debug << "****** All tests passed!" <<  endl << endl << endl;
 }
 
 /* when there is a line waiting to be read at stdin, the main loop calls
@@ -216,15 +201,30 @@ main_loop(void)
             cout << e.what() << endl ;
             continue;
          }
-         /* process the line */
+         /* process line */
          /* if EOF found (empty string), exit the program */
          if (line.size() == 0) {
             cout << "bye!" << endl ;
             break;
          }
-         /* else process the command */
-         cout << line ; /* just echo the line for now */
+         process_line(line);
       }
    }
+   return;
+}
+
+void
+process_line(const string & rLine)
+{
+   debug << "process_line argument: " << rLine << endl ;
+
+   if (rLine.empty())
+      return;
+
+   if (rLine.substr(1,4) == "/nop")
+      return;
+   if (rLine.substr(1,4) == "/nop ")
+      return;
+
    return;
 }
