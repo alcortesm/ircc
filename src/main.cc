@@ -117,8 +117,13 @@ tests(void)
  *
  * If the line is OK, it is returned as a string. 
  */
+class LineTooLongException : public std::runtime_error {
+public:
+   LineTooLongException() : std::runtime_error("Line too long") { }
+};
+
 string
-fetch_line(void) throw (string)
+fetch_line(void) throw (LineTooLongException)
 {
    size_t total_bytes_read = 0;
 
@@ -154,7 +159,7 @@ fetch_line(void) throw (string)
                break;
          }
          free(buf);
-         throw string("line too long");
+         throw LineTooLongException();
       }
       /* if last char is a \n, we had fetch all the line */
       if (buf[total_bytes_read-1] == '\n') {
@@ -207,8 +212,8 @@ main_loop(void)
          string line;
          try {
             line = fetch_line();
-         } catch(string line_too_long) {
-            cout << line_too_long << endl ;
+         } catch(LineTooLongException& e) {
+            cout << e.what() << endl ;
             continue;
          }
          /* process the line */
