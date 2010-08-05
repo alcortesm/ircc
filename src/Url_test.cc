@@ -7,12 +7,15 @@
 #include <cstdlib>
 
 #include "Url.h"
+#include "DebugStream.h"
+extern DebugStream debug;
 
 using std::endl;
 
 /* static */ void
 Url::Test(void)
 {
+   debug << "*** Begin of Url test" << endl ;
    // test the private constructor
    // this test involves a DNS resolution, you'll need a working resolver
    // of it.uc3m.es
@@ -440,6 +443,7 @@ Url::Test(void)
       ok9:;
       }
    }
+   debug << "*** End of Url test" << endl ;
    return;
  error:
    exit(EXIT_FAILURE);
