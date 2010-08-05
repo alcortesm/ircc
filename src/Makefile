@@ -1,7 +1,6 @@
 BIN = ircc
 INSTALL_DIR = ~/bin
 SRCS = \
-    prompt.cc \
     Url.cc \
     Url_test.cc \
     utils.cc \
