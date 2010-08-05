@@ -34,6 +34,7 @@ void initialize(const Url & rWebCache) throw (std::runtime_error);
 void tests(void);
 void main_loop();
 void process_line(const string & rLine);
+bool line_is_quit(const string & rLine);
 
 int
 main(int argc, char ** argv)
@@ -82,20 +83,20 @@ void
 tests(void)
 {
    debug << endl << endl << "****** Running unit tests!" <<  endl;
-   debug << endl ;
-   Url::Test();
-   debug << endl ;
+   //   debug << endl ;
+   //   Url::Test();
+   //   debug << endl ;
    debug << "****** All tests passed!" <<  endl << endl << endl;
 }
 
 /* when there is a line waiting to be read at stdin, the main loop calls
  * this function. The function must read one full line from stdin and
  * nothing more (the next lines will be read by subsequent invocations to
- * this same function).
+ * this same function). The returned string does not have the ending '\n'.
  *
  * It exits with error messages if an error is found reading the line.
  *
- * It returns the empty string in case an end of file is found on stdin.
+ * It returns EofException if the end of file is found on stdin.
  *
  * If the line is longer than MAX_LINE_LEN, then the whole line is read,
  * forgotten and a string with a description of this error is thrown.
@@ -106,13 +107,17 @@ class LineTooLongException : public std::runtime_error {
 public:
    LineTooLongException() : std::runtime_error("Line too long") { }
 };
+class EofException : public std::runtime_error {
+public:
+   EofException() : std::runtime_error("EOF found!") { }
+};
 
 string
-fetch_line(void) throw (LineTooLongException)
+fetch_line(void) throw (LineTooLongException, EofException)
 {
    size_t total_bytes_read = 0;
 
-   const size_t buf_sz = MAX_LINE_LEN;
+   const size_t buf_sz = MAX_LINE_LEN + 1; /* line + '\n' */
    char* const buf = (char* const) xmalloc(buf_sz);
 
    ssize_t bytes_read;
@@ -128,7 +133,7 @@ fetch_line(void) throw (LineTooLongException)
          fatal("read", NULL);
       if (bytes_read == 0) { /* EOF found */
          free(buf);
-         return string();
+         throw EofException();
       }
       total_bytes_read += bytes_read ;
       if (total_bytes_read == buf_sz
@@ -148,7 +153,7 @@ fetch_line(void) throw (LineTooLongException)
       }
       /* if last char is a \n, we had fetch all the line */
       if (buf[total_bytes_read-1] == '\n') {
-         string str(buf, total_bytes_read);
+         string str(buf, total_bytes_read-1); /* remove ending '\n' */
          free(buf);
          return str;
       }
@@ -200,10 +205,13 @@ main_loop(void)
          } catch(LineTooLongException& e) {
             cout << e.what() << endl ;
             continue;
+         } catch(EofException& e) {
+            cout << "bye!" << endl ;
+            break;
          }
          /* process line */
-         /* if EOF found (empty string), exit the program */
-         if (line.size() == 0) {
+         /* /quit command, exit the program */
+         if (line_is_quit(line)) {
             cout << "bye!" << endl ;
             break;
          }
@@ -213,18 +221,46 @@ main_loop(void)
    return;
 }
 
+bool
+line_is_quit(const string & rLine)
+{
+   if (rLine  == "/quit")
+      return true;
+
+   /* /quit + " " + anything will also be recognised as the quit
+      command */
+   if (rLine.substr(0,5) == "/quit ")
+      return true;
+
+   return false;
+}
+
+/* proccess the user command, depending on the command issued by the
+   user this function will perform many different tasks.
+
+   In case of an unrecognised command, this function will echo and error
+   message to the user and return without any further action.
+   
+   In case of a proper command, the corresponding action will take place
+   inmediately.
+
+   This function does not handle the quit command, because it has no way
+   to notify the main_loop to exit the program. The quit command must be
+   handled before calling this function.
+  */
 void
 process_line(const string & rLine)
 {
-   debug << "process_line argument: " << rLine << endl ;
+   debug << "process_line argument (len= " << rLine.length() << "): " << rLine << endl ;
 
+   /* if the user press only enter: do nothing */
    if (rLine.empty())
       return;
 
+   /* if nop command: do nothing */
    if (rLine.substr(1,4) == "/nop")
       return;
-   if (rLine.substr(1,4) == "/nop ")
+   if (rLine.substr(1,5) == "/nop ")
       return;
 
-   return;
 }
