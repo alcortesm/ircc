@@ -22,6 +22,7 @@
 #include "ircc.h"
 #include "ComNop.h"
 #include "ComUnknown.h"
+#include "Factory.h"
 
 using std::string;
 using std::endl;
@@ -256,23 +257,16 @@ line_is_quit(const string & rLine)
 void
 process_line(const string & rLine)
 {
-   *gpDebug << "process_line: argument (len= " << rLine.length() << "): \"" << rLine << "\"" << endl ;
+   //   *gpDebug << "process_line: argument (len= " << rLine.length() << "): \"" << rLine << "\"" << endl ;
 
-   Command* p_command;
-
-   /* if the user pressed only enter: do nothing */
-   if (rLine.empty()) {
-      *gpDebug << "process_line: nop presumed" << endl ;
-      p_command = new ComNop();
-   } else if (rLine == ComNop::STR) { /* if nop command: do nothing */
-      *gpDebug << "process_line: nop detected" << endl ;
-      p_command = new ComNop();
-   } else {
-      *gpDebug << "process_line: unknown command" << endl ;
-      p_command = new ComUnknown();      
+   try {
+      Command* p_command;
+      p_command = Factory::NewCommand(rLine);
+      p_command->run();
+      delete p_command;
+   } catch (Factory::BadSyntaxException e) {
+      cout << e.what() << endl ;
    }
 
-   p_command->run();
-   delete p_command;
    return;
 }

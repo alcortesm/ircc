@@ -1,1 +1,2 @@
-- Add Command Factory from a string, it must throw badSintax and return a Command (it may be ComUnknown)
+- grow MAX_LINE
+- Change ComUnknown ctor to store the original command
