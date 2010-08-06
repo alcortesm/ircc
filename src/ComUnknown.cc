@@ -4,12 +4,10 @@
 
 extern std::ostream* gpDebug;
 
-ComUnknown::ComUnknown() {}
-
-/* just do nothing */
+/* print the ofending command */
 void
 ComUnknown::run(void) {
    *gpDebug << "ComUnknown.run() invoked" << std::endl ;
-   std::cout << "*** Unknown command" << std::endl ;
+   std::cout << "*** Unknown command: " << mOriginal << std::endl ;
    return ;
 }

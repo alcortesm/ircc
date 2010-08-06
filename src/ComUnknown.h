@@ -4,8 +4,10 @@
 #include "Command.h"
 
 class ComUnknown : public Command {
+ protected:
+   const std::string mOriginal; /* the original command that is unknown */
  public:
-   ComUnknown();
+   ComUnknown(const std::string& original) : mOriginal(original) {};
    void run(void);
 };
 

@@ -34,5 +34,5 @@ Factory::NewCommand(const std::string& rLine)
    }
           
    *gpDebug << "Factory::NewCommand: unknown command" << endl ;
-   return new ComUnknown();
+   return new ComUnknown(rLine);
 }

@@ -1,1 +1,2 @@
-- Change ComUnknown ctor to store the original command
+- Add support for /quit to the Factory, maybe throw an exception to
+   signal the main_loop THINK ABOUT this

@@ -7,11 +7,8 @@
 #include <string>
 
 class Command {
- protected:
-   const std::string mStr;
  public:
    virtual void run(void) = 0;
-   const std::string& Str() const { return mStr; };
 };
 
 #endif /* COMMAND_H */
