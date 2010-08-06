@@ -20,6 +20,8 @@
 #include "utils.h"
 #include "NullStream.h"
 #include "ircc.h"
+#include "ComNop.h"
+#include "ComUnknown.h"
 
 using std::string;
 using std::endl;
@@ -229,7 +231,10 @@ line_is_quit(const string & rLine)
 
    /* /quit + " " + anything will also be recognised as the quit
       command */
-   if (rLine.substr(0,5) == "/quit ")
+   if (rLine == "/quit")
+      return true;
+
+   if (rLine.compare(0, 6, "/quit ") == 0)
       return true;
 
    return false;
@@ -251,22 +256,23 @@ line_is_quit(const string & rLine)
 void
 process_line(const string & rLine)
 {
-   *gpDebug << "process_line argument (len= " << rLine.length() << "): " << rLine << endl ;
+   *gpDebug << "process_line: argument (len= " << rLine.length() << "): \"" << rLine << "\"" << endl ;
+
+   Command* p_command;
 
    /* if the user pressed only enter: do nothing */
    if (rLine.empty()) {
       *gpDebug << "process_line: nop presumed" << endl ;
-      return;
-   }
-
-   /* if nop command: do nothing */
-   if (rLine.substr(0,3) == string("/nop")) {
+      p_command = new ComNop();
+   } else if (rLine == ComNop::STR) { /* if nop command: do nothing */
       *gpDebug << "process_line: nop detected" << endl ;
-      return;
-   }
-   if (rLine.substr(0,4) == "/nop ") {
-      *gpDebug << "process_line: nop + other things detected" << endl ;
-      return;
+      p_command = new ComNop();
+   } else {
+      *gpDebug << "process_line: unknown command" << endl ;
+      p_command = new ComUnknown();      
    }
 
+   p_command->run();
+   delete p_command;
+   return;
 }

@@ -1,6 +1,8 @@
 BIN = ircc
 INSTALL_DIR = ~/bin
 SRCS = \
+    ComUnknown.cc \
+    ComNop.cc \
     Url.cc \
     Url_test.cc \
     utils.cc \

@@ -1,1 +1,1 @@
-- Add Command class with constructor from a string
+- Add Command Factory from a string, it must throw badSintax and return a Command (it may be ComUnknown)
