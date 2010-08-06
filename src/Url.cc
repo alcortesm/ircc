@@ -1,7 +1,6 @@
 #include "Url.h"
 #include "utils.h"
-#include "DebugStream.h"
-extern DebugStream debug;
+extern std::ostream* gpDebug;
 
 #include <sstream>
 #include <netdb.h>
@@ -89,7 +88,7 @@ parse_url(const string & url, string & proto, uint16_t & port, string & domain, 
       prefix_http_colon_slash_slash(&start);
    sz = strlen(start);
    end = start + sz;
-   //    debug << "start=" << start << endl;
+   //    *gpDebug << "start=" << start << endl;
 
    // find if there is an anchor strip it
    // find anchor end
@@ -150,7 +149,7 @@ parse_url(const string & url, string & proto, uint16_t & port, string & domain, 
    // get proto
    proto_sz = p_proto_end - p_proto_start;
    proto = string(p_proto_start, proto_sz);
-   //    debug << "proto=" << proto << endl;
+   //    *gpDebug << "proto=" << proto << endl;
 
 
    // find domain start
@@ -169,7 +168,7 @@ parse_url(const string & url, string & proto, uint16_t & port, string & domain, 
    if (path_sz == 1)
       path_sz = 0; // if path is "/" there is no path
    path = string(p_path_start, path_sz);
-   //    debug << "path="  << path  << endl; 
+   //    *gpDebug << "path="  << path  << endl; 
 
    // find port end
    p_port_end = p_path_start;
@@ -191,7 +190,7 @@ parse_url(const string & url, string & proto, uint16_t & port, string & domain, 
          throw Url::MalformedUrlException();
       }
    }
-   //    debug << "port="  << port  << endl;
+   //    *gpDebug << "port="  << port  << endl;
 
    // find domain end
    p_domain_end = p_port_start;
@@ -202,7 +201,7 @@ parse_url(const string & url, string & proto, uint16_t & port, string & domain, 
       throw Url::MalformedUrlException(url + ": domain name not found");
    }
    domain = string(p_domain_start, domain_sz);
-   //    debug << "domain="  << domain  << endl;
+   //    *gpDebug << "domain="  << domain  << endl;
    
    free(start);
    return;
@@ -350,7 +349,7 @@ Url::Url(const std::string & rProto,
    throw (Url::MalformedUrlException, std::bad_alloc)
 {
    Url::Init(rProto, port, rDomain, rPath, rQuery, rAnchor);
-   debug << "Creating " << *this << endl ;
+   *gpDebug << "Creating " << *this << endl ;
 }
 
 Url::Url(const std::string & rTxt)
@@ -365,7 +364,7 @@ Url::Url(const std::string & rTxt)
    parse_url(rTxt, proto, port, domain, path, query, anchor);
 
    Url::Init(proto, port, domain, path, query, anchor);
-   debug << "Creating " << *this << endl ;
+   *gpDebug << "Creating " << *this << endl ;
 }
 
 /* static */ Url

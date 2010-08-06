@@ -18,7 +18,7 @@
 
 #include "Url.h"
 #include "utils.h"
-#include "DebugStream.h"
+#include "NullStream.h"
 #include "ircc.h"
 
 using std::string;
@@ -26,7 +26,7 @@ using std::endl;
 using std::cerr;
 using std::cout;
 
-DebugStream debug(cerr, DEF_DEBUG);
+std::ostream* gpDebug = (std::ostream*) &NullStream::cnull;
 
 void usage(void);
 void digest_args(int argc, char ** argv);
@@ -41,7 +41,7 @@ main(int argc, char ** argv)
 {
    digest_args(argc, argv);
 
-   if (debug.on())
+   if (*gpDebug != NullStream::cnull)
       tests();
 
    main_loop();
@@ -63,7 +63,7 @@ digest_args(int argc, char ** argv)
       usage();
    if (argc == 2) {
       if (string("-d") == argv[1]) {
-         debug.on() = true;
+         gpDebug = (std::ostream*) &cout;
       } else {
          usage();
       }
@@ -73,20 +73,20 @@ digest_args(int argc, char ** argv)
 void
 initialize(const Url & rWebCache) throw (std::runtime_error)
 {
-   debug << "** Initialization started" << endl;
+   *gpDebug << "** Initialization started" << endl;
    UNUSED(rWebCache);
-   debug << "** Initialization finnished" << endl;
+   *gpDebug << "** Initialization finnished" << endl;
    return;
 }
 
 void
 tests(void)
 {
-   debug << endl << endl << "****** Running unit tests!" <<  endl;
-   //   debug << endl ;
-   //   Url::Test();
-   //   debug << endl ;
-   debug << "****** All tests passed!" <<  endl << endl << endl;
+   *gpDebug << endl << endl << "****** Running unit tests!" <<  endl;
+   *gpDebug << endl ;
+   Url::Test();
+   *gpDebug << endl ;
+   *gpDebug << "****** All tests passed!" <<  endl << endl << endl;
 }
 
 /* when there is a line waiting to be read at stdin, the main loop calls
@@ -126,7 +126,7 @@ fetch_line(void) throw (LineTooLongException, EofException)
       remaining_buf_sz = buf_sz - total_bytes_read;
       bytes_read = read(STDIN_FD, (void*)(buf+total_bytes_read),
                         remaining_buf_sz);
-      //      debug << "fetch_line bytes_read = " << bytes_read << endl ;
+      //      *gpDebug << "fetch_line bytes_read = " << bytes_read << endl ;
       if (bytes_read == -1 && errno == EINTR)
          continue;
       if (bytes_read == -1)
@@ -180,7 +180,7 @@ main_loop(void)
 
       int retval;
       retval = select(max_fds+1, &read_fds, NULL, NULL, &tv);
-      //      debug << "main_loop's select() returns " << retval << endl ;
+      //      *gpDebug << "main_loop's select() returns " << retval << endl ;
 
       /* select error: exit */
       if (retval == -1) {
@@ -191,7 +191,7 @@ main_loop(void)
 
       /* select's timeout expire: reset timer */
       if (retval == 0) {
-         //         debug << "main_loop(): timeout expire!" << endl ;
+         //         *gpDebug << "main_loop(): timeout expire!" << endl ;
          tv.tv_sec = MAIN_LOOP_TIMEOUT_SECS;
          tv.tv_usec = MAIN_LOOP_TIMEOUT_SECS;
          continue;
@@ -251,21 +251,21 @@ line_is_quit(const string & rLine)
 void
 process_line(const string & rLine)
 {
-   debug << "process_line argument (len= " << rLine.length() << "): " << rLine << endl ;
+   *gpDebug << "process_line argument (len= " << rLine.length() << "): " << rLine << endl ;
 
    /* if the user pressed only enter: do nothing */
    if (rLine.empty()) {
-      debug << "process_line: nop presumed" << endl ;
+      *gpDebug << "process_line: nop presumed" << endl ;
       return;
    }
 
    /* if nop command: do nothing */
    if (rLine.substr(0,3) == string("/nop")) {
-      debug << "process_line: nop detected" << endl ;
+      *gpDebug << "process_line: nop detected" << endl ;
       return;
    }
    if (rLine.substr(0,4) == "/nop ") {
-      debug << "process_line: nop + other things detected" << endl ;
+      *gpDebug << "process_line: nop + other things detected" << endl ;
       return;
    }
 
