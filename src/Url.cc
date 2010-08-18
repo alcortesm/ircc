@@ -322,7 +322,7 @@ Url::Init(const string & rProto,
    mCanonical.append(Url::DOMAIN_SEPARATOR);
    mCanonical.append(mDomain);
    mCanonical.append(Url::PORT_SEPARATOR);
-   mCanonical.append(uint16_to_string(mPort));
+   mCanonical.append(stringify(mPort));
    if (HasPath()) {
       if (! begins_with(mPath, Url::PATH_SEPARATOR))
          mCanonical.append(Url::PATH_SEPARATOR);

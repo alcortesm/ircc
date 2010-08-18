@@ -20,10 +20,20 @@ string_to_int(std::string & s) throw (std::invalid_argument) {
 }
 
 std::string
-uint16_to_string(uint16_t i)
+stringify(int i) throw (BadConversion)
 {
    std::ostringstream oss;
-   oss<< i;
+   if (!(oss << i))
+     throw BadConversion("stringify(int)");
+   return oss.str();
+}
+
+std::string
+stringify(uint16_t i) throw (BadConversion)
+{
+   std::ostringstream oss;
+   if (!(oss << i))
+     throw BadConversion("stringify(uint16_t)");
    return oss.str();
 }
 

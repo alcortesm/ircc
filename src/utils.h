@@ -13,8 +13,15 @@
 #define MAX(x,y) ((x) > (y) ? (x) : (y))
 
 // string to int conversions
+class BadConversion : public std::runtime_error {
+public:
+   BadConversion(std::string const & s)
+      : std::runtime_error(s) {} ;
+};
+
 int         string_to_int(std::string & s) throw (std::invalid_argument);
-std::string uint16_to_string(uint16_t i);
+std::string stringify(uint16_t i) throw (BadConversion);
+std::string stringify(int i) throw (BadConversion);
 uint16_t    int_to_uint16(int i) throw (std::invalid_argument);
 
 // c string handling

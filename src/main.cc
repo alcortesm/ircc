@@ -32,6 +32,7 @@ using std::cout;
 
 std::ostream* gpDebug = (std::ostream*) &NullStream::cnull;
 
+void usage(void);
 void tests(void);
 void main_loop();
 void process_line(const string & rLine);
@@ -40,25 +41,35 @@ bool line_is_quit(const string & rLine);
 int
 main(int argc, char ** argv)
 {
-   Args* p_args;
+
    try {
-      p_args = Args::New(argc, argv);
+
+      Args* p_args;
+      p_args = Args::Build(argc, argv);
+
+      if (p_args->IsDebug())
+         gpDebug = (std::ostream*) &cout;
+
+      if (p_args->IsTest())
+         tests();
+
+      main_loop();
+
+      delete(p_args);
+
+      return 0;
+
    } catch (Args::InvalidArgumentException & e) {
-      std::cerr << USAGE << std::endl ;
-      return 1;
+      usage();
    }
 
-   if (p_args->IsDebug())
-      gpDebug = (std::ostream*) &cout;
+}
 
-   if (p_args->IsTest())
-      tests();
-
-   main_loop();
-
-   delete(p_args);
-
-   return 0;
+void
+usage(void)
+{
+   std::cerr << USAGE << std::endl ;
+   exit(1);
 }
 
 void

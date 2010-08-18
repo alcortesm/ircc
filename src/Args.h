@@ -5,7 +5,7 @@
 
 class Args
 {
- private:
+ protected:
    bool mTest;
    bool mDebug;
    Args(bool test, bool debug);
@@ -14,10 +14,10 @@ class Args
    bool IsDebug() const ;
    class InvalidArgumentException : public std::runtime_error {
    public:
-   InvalidArgumentException() : std::runtime_error("Invalid argument") { }
-   InvalidArgumentException(std::string s) : std::runtime_error("Invalid argument: " + s) { }
+      InvalidArgumentException();
+      InvalidArgumentException(std::string const & s);
    };
-   static Args* New(int argc, char ** argv) throw (Args::InvalidArgumentException);
+   static Args* Build(int argc, char ** argv) throw (Args::InvalidArgumentException);
    static void Test();
 };
 #endif /* ARGS_H */
