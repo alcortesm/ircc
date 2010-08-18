@@ -1,2 +1,7 @@
-- Add commands to connect
+- Add commands to connect (SERVER host[:port])
+- Modify QUIT to notify server
+- Add args or command for NICK
+- Add args or command for USER
+- Add command for JOIN
+- Add command for SEND
 - Add server class to allow connection, Think this.
