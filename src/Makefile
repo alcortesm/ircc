@@ -6,7 +6,6 @@ SRCS = \
     ComUnknown.cc \
     ComNop.cc \
     Url.cc \
-    Url_test.cc \
     utils.cc \
     main.cc
 INCLUDES =
