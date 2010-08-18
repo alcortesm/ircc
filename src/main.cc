@@ -22,7 +22,7 @@
 #include "ircc.h"
 #include "ComNop.h"
 #include "ComUnknown.h"
-#include "Factory.h"
+#include "CommandFactory.h"
 #include "Args.h"
 
 using std::string;
@@ -250,10 +250,10 @@ process_line(const string & rLine)
 
    try {
       Command* p_command;
-      p_command = Factory::NewCommand(rLine);
+      p_command = CommandFactory::Build(rLine);
       p_command->run();
       delete p_command;
-   } catch (Factory::BadSyntaxException e) {
+   } catch (CommandFactory::BadSyntaxException e) {
       cout << e.what() << endl ;
    }
 
