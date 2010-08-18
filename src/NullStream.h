@@ -14,6 +14,5 @@ class NullStream : public std::ostream {
 public:
    static const NullStream cnull;
 };
-NullStream const NullStream::cnull;
 
 #endif /* NULLSTREAM_H */

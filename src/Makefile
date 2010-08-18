@@ -7,6 +7,7 @@ SRCS = \
     ComUnknown.cc \
     ComNop.cc \
     Url.cc \
+    NullStream.cc \
     utils.cc \
     main.cc
 INCLUDES =
