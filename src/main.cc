@@ -35,7 +35,7 @@ std::ostream* gpDebug = (std::ostream*) &NullStream::cnull;
 void usage(void);
 void tests(void);
 void main_loop();
-void process_line(const string & rLine);
+bool process_line_is_quit(const string & rLine);
 bool line_is_quit(const string & rLine);
 
 int
@@ -202,12 +202,12 @@ main_loop(void)
             break;
          }
          /* process line */
-         /* /quit command, exit the program */
-         if (line_is_quit(line)) {
+         bool is_quit;
+         is_quit = process_line_is_quit(line);
+         if (is_quit) {
             cout << "bye!" << endl ;
             break;
          }
-         process_line(line);
       }
    }
    return;
@@ -239,23 +239,22 @@ line_is_quit(const string & rLine)
    In case of a proper command, the corresponding action will take place
    inmediately.
 
-   This function does not handle the quit command, because it has no way
-   to notify the main_loop to exit the program. The quit command must be
-   handled before calling this function.
+   If the command was "quit" return true to notify the main_loop.
   */
-void
-process_line(const string & rLine)
+bool
+process_line_is_quit(const string & rLine)
 {
-   //   *gpDebug << "process_line: argument (len= " << rLine.length() << "): \"" << rLine << "\"" << endl ;
+   bool must_quit;
 
    try {
       Command* p_command;
       p_command = CommandFactory::Build(rLine);
       p_command->run();
+      must_quit = p_command->MustQuit();
       delete p_command;
    } catch (CommandFactory::BadSyntaxException e) {
       cout << e.what() << endl ;
    }
 
-   return;
+   return must_quit;
 }

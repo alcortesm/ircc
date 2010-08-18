@@ -9,6 +9,7 @@
 class Command {
  public:
    virtual void run(void) = 0;
+   virtual bool MustQuit() const { return false ; };
 };
 
 #endif /* COMMAND_H */
