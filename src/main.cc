@@ -36,7 +36,6 @@ void usage(void);
 void tests(void);
 void main_loop();
 bool process_line_is_quit(const string & rLine);
-bool line_is_quit(const string & rLine);
 
 int
 main(int argc, char ** argv)
@@ -191,6 +190,7 @@ main_loop(void)
 
       /* some fd was ready: which one?, read and process data */
       if (FD_ISSET(STDIN_FD, &read_fds)) { /* stdin: user input */
+         bool is_quit;
          string line;
          try {
             line = fetch_line();
@@ -198,12 +198,13 @@ main_loop(void)
             cout << e.what() << endl ;
             continue;
          } catch(EofException& e) {
-            cout << "bye!" << endl ;
-            break;
+            is_quit = true;
+            goto quit;
          }
          /* process line */
-         bool is_quit;
          is_quit = process_line_is_quit(line);
+      quit:
+         *gpDebug << "main_loop() : is_quit = " << stringify(is_quit) << endl ;
          if (is_quit) {
             cout << "bye!" << endl ;
             break;
@@ -211,23 +212,6 @@ main_loop(void)
       }
    }
    return;
-}
-
-bool
-line_is_quit(const string & rLine)
-{
-   if (rLine  == "/quit")
-      return true;
-
-   /* /quit + " " + anything will also be recognised as the quit
-      command */
-   if (rLine == "/quit")
-      return true;
-
-   if (rLine.compare(0, 6, "/quit ") == 0)
-      return true;
-
-   return false;
 }
 
 /* proccess the user command, depending on the command issued by the

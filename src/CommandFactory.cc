@@ -1,6 +1,7 @@
 #include "CommandFactory.h"
 #include "ComNop.h"
 #include "ComUnknown.h"
+#include "ComQuit.h"
 #include <ostream>
 
 extern std::ostream* gpDebug;
@@ -11,12 +12,16 @@ Command*
 CommandFactory::Build(const std::string& rLine)
    throw (std::runtime_error)
 {
+
+
+
+   /* NOP */
+
    /* if the user pressed only enter: nop command */
    if (rLine.empty()) {
       *gpDebug << "CommandFactory::Build(): nop presumed" << endl ;
       return new ComNop();
    }
-
 
    /* nop */
    if (rLine == ComNop::STR) {
@@ -32,7 +37,30 @@ CommandFactory::Build(const std::string& rLine)
          return new ComNop();
       }
    }
-          
+
+
+
+
+
+   /* QUIT */
+
+   if (rLine  == ComQuit::STR) {
+      *gpDebug << "CommandFactory::Build(): quit detected" << endl ;
+      return new ComQuit();
+   }
+
+   /* /quit + " " + anything will also be recognised as the quit
+      command */
+   if (rLine.compare(0, 6, ComQuit::STR + " ") == 0) {
+      *gpDebug << "CommandFactory::Build(): quit + some chars detected" << endl ;
+      return new ComQuit();
+   }
+
+
+
+
+   /* UNKNOWN */
+
    *gpDebug << "CommandFactory::Build(): unknown command" << endl ;
    return new ComUnknown(rLine);
 }

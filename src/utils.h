@@ -22,6 +22,7 @@ public:
 int         string_to_int(std::string & s) throw (std::invalid_argument);
 std::string stringify(uint16_t i) throw (BadConversion);
 std::string stringify(int i) throw (BadConversion);
+std::string stringify(bool b) throw (BadConversion);
 uint16_t    int_to_uint16(int i) throw (std::invalid_argument);
 
 // c string handling

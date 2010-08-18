@@ -3,6 +3,7 @@ INSTALL_DIR = ~/bin
 SRCS = \
     Args.cc \
     CommandFactory.cc \
+    ComQuit.cc \
     ComUnknown.cc \
     ComNop.cc \
     Url.cc \

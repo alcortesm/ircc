@@ -37,6 +37,15 @@ stringify(uint16_t i) throw (BadConversion)
    return oss.str();
 }
 
+std::string
+stringify(bool b) throw (BadConversion)
+{
+   std::ostringstream oss;
+   if (!(oss << b))
+     throw BadConversion("stringify(bool)");
+   return oss.str();
+}
+
 uint16_t
 int_to_uint16(int i) throw (std::invalid_argument) {
    if (i < 0)
