@@ -75,13 +75,10 @@ usage(void)
 void
 tests(void)
 {
-   *gpDebug << endl << endl << "****** Running unit tests!" <<  endl;
-   *gpDebug << endl ;
+   cout << "*** Running unit tests!" <<  endl ;
    Url::Test();
-   *gpDebug << endl ;
    Args::Test();
-   *gpDebug << endl ;
-   *gpDebug << "****** All tests passed!" <<  endl << endl << endl;
+   cout << "*** All tests passed!" <<  endl ;
 }
 
 /* when there is a line waiting to be read at stdin, the main loop calls

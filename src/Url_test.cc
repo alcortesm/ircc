@@ -10,11 +10,12 @@
 extern std::ostream* gpDebug;
 
 using std::endl;
+using std::cout;
 
 /* static */ void
 Url::Test(void)
 {
-   *gpDebug << "*** Begin of Url test" << endl ;
+   cout << "*** Begin of Url test" << endl ;
    // test the private constructor
    // this test involves a DNS resolution, you'll need a working resolver
    // of it.uc3m.es
@@ -442,7 +443,7 @@ Url::Test(void)
       ok9:;
       }
    }
-   *gpDebug << "*** End of Url test" << endl ;
+   cout << "*** End of Url test" << endl ;
    return;
  error:
    exit(EXIT_FAILURE);

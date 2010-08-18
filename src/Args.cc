@@ -9,6 +9,7 @@
 extern std::ostream* gpDebug;
 
 using std::endl;
+using std::cout;
 
 bool
 Args::IsTest() const {
@@ -62,7 +63,7 @@ Args::Build(int argc, char ** argv) throw (Args::InvalidArgumentException)
 void
 Args::Test()
 {
-   *gpDebug << "*** Begin of Args test" << endl ;
+   cout << "*** Begin of Args test" << endl ;
    {
       bool test = false;
       bool debug = false;
@@ -245,6 +246,6 @@ Args::Test()
       }
       delete(p_a);
    }
-   *gpDebug << "*** End of Args test" << endl ;
+   cout << "*** End of Args test" << endl ;
    return;
 }
