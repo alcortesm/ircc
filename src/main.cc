@@ -51,8 +51,8 @@ main(int argc, char ** argv)
 
       if (p_args->IsTest())
          tests();
-
-      main_loop();
+      else
+         main_loop();
 
       delete(p_args);
 
