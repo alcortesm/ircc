@@ -41,7 +41,7 @@ dist:
 	tar -cvzf $(BIN).tgz $(SRCS) *.h Makefile
 
 TAGS:
-	cscope -b -q *.cpp *.h
+	cscope -b -q *.cc *.h
 
 test:
 
