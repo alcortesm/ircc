@@ -10,8 +10,8 @@ const std::string ComQuit::STR = std::string("/quit");
 
 /* just do nothing */
 void
-ComQuit::run(void) {
-   *gpDebug << "ComQuit.run(): do nothing" << std::endl ;
+ComQuit::Run(void) {
+   *gpDebug << "ComQuit::Run(): do nothing" << std::endl ;
    return ;
 }
 

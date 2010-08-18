@@ -233,7 +233,7 @@ process_line_is_quit(const string & rLine)
    try {
       Command* p_command;
       p_command = CommandFactory::Build(rLine);
-      p_command->run();
+      p_command->Run();
       must_quit = p_command->MustQuit();
       delete p_command;
    } catch (CommandFactory::BadSyntaxException e) {

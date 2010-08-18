@@ -6,7 +6,7 @@
 class ComQuit : public Command {
  public:
    ComQuit();
-   void run(void);
+   void Run(void);
    static const std::string STR;
    bool MustQuit() const;
 };

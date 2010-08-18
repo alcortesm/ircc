@@ -8,7 +8,7 @@
 
 class Command {
  public:
-   virtual void run(void) = 0;
+   virtual void Run(void) = 0;
    virtual bool MustQuit() const { return false ; };
 };
 
