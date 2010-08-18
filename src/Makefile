@@ -2,7 +2,6 @@ BIN = ircc
 INSTALL_DIR = ~/bin
 SRCS = \
     Args.cc \
-    Args_test.cc \
     Factory.cc \
     ComUnknown.cc \
     ComNop.cc \
