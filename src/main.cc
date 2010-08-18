@@ -23,6 +23,7 @@
 #include "ComNop.h"
 #include "ComUnknown.h"
 #include "Factory.h"
+#include "Args.h"
 
 using std::string;
 using std::endl;
@@ -31,9 +32,6 @@ using std::cout;
 
 std::ostream* gpDebug = (std::ostream*) &NullStream::cnull;
 
-void usage(void);
-void digest_args(int argc, char ** argv);
-void initialize(const Url & rWebCache) throw (std::runtime_error);
 void tests(void);
 void main_loop();
 void process_line(const string & rLine);
@@ -42,44 +40,25 @@ bool line_is_quit(const string & rLine);
 int
 main(int argc, char ** argv)
 {
-   digest_args(argc, argv);
+   Args* p_args;
+   try {
+      p_args = Args::New(argc, argv);
+   } catch (Args::InvalidArgumentException & e) {
+      std::cerr << USAGE << std::endl ;
+      return 1;
+   }
 
-   if (*gpDebug != NullStream::cnull)
+   if (p_args->IsDebug())
+      gpDebug = (std::ostream*) &cout;
+
+   if (p_args->IsTest())
       tests();
 
    main_loop();
 
+   delete(p_args);
+
    return 0;
-}
-
-void
-usage(void)
-{
-   cerr << "Usage:\n\tircc [-d]" << endl;
-   exit(EXIT_FAILURE);
-}
-
-void
-digest_args(int argc, char ** argv)
-{
-   if (argc > 2)
-      usage();
-   if (argc == 2) {
-      if (string("-d") == argv[1]) {
-         gpDebug = (std::ostream*) &cout;
-      } else {
-         usage();
-      }
-   }
-}
-
-void
-initialize(const Url & rWebCache) throw (std::runtime_error)
-{
-   *gpDebug << "** Initialization started" << endl;
-   UNUSED(rWebCache);
-   *gpDebug << "** Initialization finnished" << endl;
-   return;
 }
 
 void
@@ -88,6 +67,8 @@ tests(void)
    *gpDebug << endl << endl << "****** Running unit tests!" <<  endl;
    *gpDebug << endl ;
    Url::Test();
+   *gpDebug << endl ;
+   Args::Test();
    *gpDebug << endl ;
    *gpDebug << "****** All tests passed!" <<  endl << endl << endl;
 }
