@@ -24,6 +24,7 @@
 #include "ComUnknown.h"
 #include "CommandFactory.h"
 #include "Args.h"
+#include "ComQuit.h"
 
 using std::string;
 using std::endl;
@@ -75,7 +76,7 @@ void
 tests(void)
 {
    cout << "*** Running unit tests!" <<  endl ;
-   Url::Test();
+   //Url::Test();
    Args::Test();
    cout << "*** All tests passed!" <<  endl ;
 }
@@ -190,7 +191,6 @@ main_loop(void)
 
       /* some fd was ready: which one?, read and process data */
       if (FD_ISSET(STDIN_FD, &read_fds)) { /* stdin: user input */
-         bool is_quit;
          string line;
          try {
             line = fetch_line();
@@ -198,47 +198,24 @@ main_loop(void)
             cout << e.what() << endl ;
             continue;
          } catch(EofException& e) {
-            is_quit = true;
-            goto quit;
+            line = ComQuit::STR; /* eof = /quit */
          }
-         /* process line */
-         is_quit = process_line_is_quit(line);
-      quit:
-         *gpDebug << "main_loop() : is_quit = " << stringify(is_quit) << endl ;
-         if (is_quit) {
-            cout << "bye!" << endl ;
-            break;
+
+         /* process line: build a command from the line and execute it */
+         try {
+            Command* p_command;
+            p_command = CommandFactory::Build(line);
+            p_command->Run();
+            if (p_command->MustQuit()) {
+               delete p_command;
+               cout << "bye!" << endl ;
+               break;
+            }
+            delete p_command;
+         } catch (CommandFactory::BadSyntaxException e) {
+            cout << e.what() << endl ;
          }
       }
    }
    return;
-}
-
-/* proccess the user command, depending on the command issued by the
-   user this function will perform many different tasks.
-
-   In case of an unrecognised command, this function will echo and error
-   message to the user and return without any further action.
-   
-   In case of a proper command, the corresponding action will take place
-   inmediately.
-
-   If the command was "quit" return true to notify the main_loop.
-  */
-bool
-process_line_is_quit(const string & rLine)
-{
-   bool must_quit;
-
-   try {
-      Command* p_command;
-      p_command = CommandFactory::Build(rLine);
-      p_command->Run();
-      must_quit = p_command->MustQuit();
-      delete p_command;
-   } catch (CommandFactory::BadSyntaxException e) {
-      cout << e.what() << endl ;
-   }
-
-   return must_quit;
 }
