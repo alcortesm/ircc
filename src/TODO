@@ -1,3 +1,8 @@
+- CommandFactory return a pointer, but I would like to return a
+   reference to avoid deleting the object afterwards, let the scope
+   rules do the work for me.
+- The Url test needs a working network, it should not, it should receive
+   the resolver as a parameter
 - Add commands to connect (SERVER host[:port])
 - Modify QUIT to notify server
 - Add args or command for NICK
