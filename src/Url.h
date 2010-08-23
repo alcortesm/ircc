@@ -7,6 +7,8 @@
 
 #include <netinet/ip.h> // HASA struct in_addr
 
+#include "DnsResolver.h" // HASA DnsResolver
+
 class Url
 {
 public:
@@ -36,9 +38,10 @@ public:
    static const std::string PROTO_HTTP;
    static const uint16_t    HTTP_DEFAULT_PORT;
 
-   Url(const std::string & rUrl) throw (Url::MalformedUrlException, std::bad_alloc);
+   Url(const std::string & rUrl, const DnsResolver * pDnsResolver) throw (Url::MalformedUrlException, std::bad_alloc);
    static Url AddQuery(const Url & rUrl, const std::string & rQuery) throw (Url::MalformedUrlException, std::bad_alloc);
 
+   const DnsResolver *    PDnsResolver() const { return mpDnsResolver; };
    const std::string &    Proto() const { return mProto; };
    uint16_t               Port() const { return mPort; };
    uint16_t               PortNbo() const { return mPortNbo; };
@@ -57,6 +60,7 @@ public:
    static void            Test();
 
 private:
+   const DnsResolver*     mpDnsResolver;
    std::string            mProto;
    uint16_t               mPort;
    uint16_t               mPortNbo; // port in network byte order
@@ -70,19 +74,21 @@ private:
    mutable std::string    mIp;
    std::string            mCanonical;
 
-   Url(const std::string & rProto,
+   Url(const DnsResolver * pDnsResolver,
+       const std::string & rProto,
        const uint16_t      port,
        const std::string & rDomain,
        const std::string & rPath,
        const std::string & rQuery  = "",
        const std::string & rAnchor = "") throw (Url::MalformedUrlException, std::bad_alloc);
 
-   void Init(const std::string & rProto,
-       const uint16_t      port,
-       const std::string & rDomain,
-       const std::string & rPath,
-       const std::string & rQuery,
-       const std::string & rAnchor);
+   void Init(const DnsResolver * pDnsResolver,
+             const std::string & rProto,
+             const uint16_t      port,
+             const std::string & rDomain,
+             const std::string & rPath,
+             const std::string & rQuery,
+             const std::string & rAnchor);
 
    void get_ip_and_addr() const throw (Url::NameResolutionException, Url::NetworkException);
 };

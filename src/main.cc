@@ -76,7 +76,7 @@ void
 tests(void)
 {
    cout << "*** Running unit tests!" <<  endl ;
-   //Url::Test();
+   Url::Test();
    Args::Test();
    cout << "*** All tests passed!" <<  endl ;
 }

@@ -1,6 +1,8 @@
 BIN = ircc
 INSTALL_DIR = ~/bin
 SRCS = \
+    DnsResolver.cc \
+    MockDnsResolver.cc \
     Args.cc \
     CommandFactory.cc \
     ComQuit.cc \

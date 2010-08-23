@@ -1,6 +1,8 @@
 #include "Url.h"
 #include "utils.h"
 extern std::ostream* gpDebug;
+#include "DnsResolver.h"
+#include "MockDnsResolver.h"
 
 #include <sstream>
 #include <netdb.h>
@@ -223,54 +225,15 @@ ipv4_addr_to_string(struct in_addr * p_a)
    return string(ipv4_addr);
 }
 
-void
-Url::get_ip_and_addr() const throw (Url::NameResolutionException, Url::NetworkException) {
-   struct hostent * he;
-   he = gethostbyname(mDomain.c_str());
-   if (!he) {
-      switch (h_errno) {
-      case HOST_NOT_FOUND : throw Url::NameResolutionException(mDomain + ": domain not found");
-      case NO_DATA : throw Url::NameResolutionException(mDomain + ": no IP for this domain");
-      case NO_RECOVERY : throw Url::NameResolutionException("name server error while recovering " + mDomain);
-      case TRY_AGAIN : throw Url::NameResolutionException("temporary error of name server while recovering " + mDomain + ", try again later");
-      default : throw Url::NameResolutionException("unknown error with getdomainbyname()");
-      }
-   }
-   memcpy(&mAddr, &he->h_addr, sizeof(he->h_addr));
-   mIp = ipv4_addr_to_string(&mAddr);
-   
-    
-   struct addrinfo * ai;
-   int error;
-   /* resolve the domain name into a list of addresses */
-   error = getaddrinfo(mDomain.c_str(), NULL, NULL, &ai);
-   if (error != 0)
-      throw Url::NetworkException(gai_strerror(error));
-
-   struct addrinfo * curr_ai;
-   struct sockaddr_in * sin;
-   for (curr_ai=ai; curr_ai!=NULL; curr_ai=curr_ai->ai_next) {
-      if (curr_ai->ai_addr->sa_family == AF_INET) {
-         sin = (struct sockaddr_in *) curr_ai->ai_addr;
-         memcpy(&mAddr, &sin->sin_addr, sizeof(sin->sin_addr));
-         freeaddrinfo(ai);
-         mIp = ipv4_addr_to_string(&mAddr);
-         return;
-      }
-   }
-   freeaddrinfo(ai);
-   throw Url::NetworkException("no ipv4 address found");
-}
-
 const std::string &
 Url::Ip() const throw (Url::NameResolutionException, Url::NetworkException) {
    try {
-      if (mIp == "")
-         get_ip_and_addr();
-   } catch (Url::NameResolutionException & nre) {
-      throw;
-   } catch (Url::NetworkException & ne) {
-      throw;
+      if (mIp == "") {
+         mpDnsResolver->resolve((struct in_addr * const) &mAddr, mDomain);
+         mIp = ipv4_addr_to_string(&mAddr);
+      }
+   } catch (DnsResolver::NetworkException & e) {
+      throw Url::NetworkException(e.what());
    }
    return mIp;
 }
@@ -278,12 +241,12 @@ Url::Ip() const throw (Url::NameResolutionException, Url::NetworkException) {
 const struct in_addr &
 Url::Addr() const throw (Url::NameResolutionException, Url::NetworkException) {
    try {
-      if (mIp == "")
-         get_ip_and_addr();
-   } catch (Url::NameResolutionException & nre) {
-      throw;
-   } catch (Url::NetworkException & ne) {
-      throw;
+      if (mIp == "") {
+         mpDnsResolver->resolve(&mAddr, mDomain.c_str());
+         mIp = ipv4_addr_to_string(&mAddr);
+      }
+   } catch (DnsResolver::NetworkException & e) {
+      throw Url::NetworkException(e.what()) ;
    }
    return mAddr;
 }
@@ -303,13 +266,15 @@ Url::Addr() const throw (Url::NameResolutionException, Url::NetworkException) {
 // }
 
 void
-Url::Init(const string & rProto,
-     uint16_t port,
-     const string & rDomain,
-     const string & rPath,
-     const string & rQuery,
-     const string & rAnchor)
+Url::Init(const DnsResolver * pDnsResolver,
+          const string & rProto,
+          uint16_t port,
+          const string & rDomain,
+          const string & rPath,
+          const string & rQuery,
+          const string & rAnchor)
 {
+   mpDnsResolver = pDnsResolver;
    mProto = rProto;
    mPort = port;
    mDomain = rDomain;
@@ -343,7 +308,8 @@ Url::Init(const string & rProto,
    }
 }
 
-Url::Url(const std::string & rProto,
+Url::Url(const DnsResolver * pDnsResolver,
+         const std::string & rProto,
          const uint16_t      port,
          const std::string & rDomain,
          const std::string & rPath,
@@ -351,11 +317,11 @@ Url::Url(const std::string & rProto,
          const std::string & rAnchor)
    throw (Url::MalformedUrlException, std::bad_alloc)
 {
-   Url::Init(rProto, port, rDomain, rPath, rQuery, rAnchor);
+   Url::Init(pDnsResolver, rProto, port, rDomain, rPath, rQuery, rAnchor);
    *gpDebug << "Creating " << *this << endl ;
 }
 
-Url::Url(const std::string & rTxt)
+Url::Url(const std::string & rTxt, const DnsResolver * pDnsResolver)
    throw (Url::MalformedUrlException, std::bad_alloc)
 {
    string proto;
@@ -366,7 +332,7 @@ Url::Url(const std::string & rTxt)
    string anchor;
    parse_url(rTxt, proto, port, domain, path, query, anchor);
 
-   Url::Init(proto, port, domain, path, query, anchor);
+   Url::Init(pDnsResolver, proto, port, domain, path, query, anchor);
    *gpDebug << "Creating " << *this << endl ;
 }
 
@@ -374,12 +340,13 @@ Url::Url(const std::string & rTxt)
 Url::AddQuery(const Url & rUrl, const std::string & rQuery)
    throw (Url::MalformedUrlException, std::bad_alloc)
 {
+   const DnsResolver * p_dns_resolver = rUrl.PDnsResolver();
    const string & proto = rUrl.Proto();
    uint16_t port = rUrl.Port();
    const string & domain = rUrl.Domain();
    const string & path = rUrl.Path();
    const string & anchor = rUrl.Anchor();
-   return Url(proto, port, domain, path, rQuery, anchor);   
+   return Url(p_dns_resolver, proto, port, domain, path, rQuery, anchor);   
 }
 
 std::ostream &
@@ -396,9 +363,11 @@ Url::Test(void)
    // this test involves a DNS resolution, you'll need a working resolver
    // of it.uc3m.es
    {
+      const MockDnsResolver dns = MockDnsResolver(); /* a true DnsResolver will not work if the test are run while not-connected */
       const char * proto = "http";
       const char * domain = "it.uc3m.es";
-      const char * ip = "163.117.139.31";
+      const char * ip = "127.0.0.1"; /* we are going to use a mock DNS server that always return 127.0.0.1 */
+      //const char * ip = "163.117.139.31"; /* we are going to use a mock DNS server that always return 127.0.0.1 */
       uint16_t port = 8080;
       const char * path = "alcortes/index.html";
       const char * query = "test.php?other=yes";
@@ -406,7 +375,7 @@ Url::Test(void)
       const char * canonical = "http://it.uc3m.es:8080/alcortes/index.html?test.php?other=yes#bla";
 
       try {
-         Url url = Url(proto, port, domain, path, query, anchor);
+         Url url = Url(&dns, proto, port, domain, path, query, anchor);
          assert(url.Proto() == proto);
          assert(url.Port() == port);
          assert(url.PortNbo() == htons(port));
@@ -417,10 +386,10 @@ Url::Test(void)
             if (r == 0) {
                std::cerr << "Provided an invalid ip: %s\n" << endl;
                goto error;
-            }
+             }
          }
          assert(memcmp(&url.Addr(), &ia, sizeof(ia)) == 0);
-         assert(url.Ip() == "163.117.139.31");
+         assert(url.Ip() == ip);
          assert(url.Path() == path);
          assert(url.Query() == query);
          assert(url.Anchor() == anchor);
@@ -446,6 +415,7 @@ Url::Test(void)
    // no more DNS resolutions from now on
    // no anchor
    {
+      const MockDnsResolver dns = MockDnsResolver();
       const char * proto = "http";
       const char * domain = "it.uc3m.es";
       uint16_t port = 8080;
@@ -455,7 +425,7 @@ Url::Test(void)
       const char * canonical = "http://it.uc3m.es:8080/alcortes/index.html?test.php?other=yes";
 
       try {
-         Url url = Url(proto, port, domain, path, query, anchor);
+         Url url = Url(&dns, proto, port, domain, path, query, anchor);
          assert(url.Proto() == proto);
          assert(url.Port() == port);
          assert(url.PortNbo() == htons(port));
@@ -477,6 +447,7 @@ Url::Test(void)
    }
    // no query
    {
+      const MockDnsResolver dns = MockDnsResolver();
       const char * proto = "http";
       const char * domain = "it.uc3m.es";
       uint16_t port = 8080;
@@ -486,7 +457,7 @@ Url::Test(void)
       const char * canonical = "http://it.uc3m.es:8080/alcortes/index.html#bla";
 
       try {
-         Url url = Url(proto, port, domain, path, query, anchor);
+         Url url = Url(&dns, proto, port, domain, path, query, anchor);
          assert(url.Proto() == proto);
          assert(url.Port() == port);
          assert(url.PortNbo() == htons(port));
@@ -508,6 +479,7 @@ Url::Test(void)
    }
    // with separators
    {
+      const MockDnsResolver dns = MockDnsResolver();
       const char * proto = "http";
       const char * domain = "it.uc3m.es";
       uint16_t port = 8080;
@@ -517,7 +489,7 @@ Url::Test(void)
       const char * canonical = "http://it.uc3m.es:8080/alcortes/index.html?name=yes?user=no#bla";
 
       try {
-         Url url = Url(proto, port, domain, path, query, anchor);
+         Url url = Url(&dns, proto, port, domain, path, query, anchor);
          assert(url.Proto() == proto);
          assert(url.Port() == port);
          assert(url.PortNbo() == htons(port));
@@ -538,10 +510,11 @@ Url::Test(void)
       }
    }
    {
+      const MockDnsResolver dns = MockDnsResolver();      
       const char * url_txt = "hTTp://gwc.iblInx.coM:2108/gwc/cgi-BIn/fc";
       Url * p_url;
       try {
-         p_url = new Url(url_txt);
+         p_url = new Url(url_txt, &dns);
       } catch (Url::MalformedUrlException & mue) {
          std::cerr << mue.what() << endl;
          goto error;
@@ -556,10 +529,11 @@ Url::Test(void)
       delete(p_url);
    }
    {
+      const MockDnsResolver dns = MockDnsResolver();
       const char * url_txt = "hTTp://gwc.iblinx.net:13/fc?bla.php#foobar";
       Url * p_url;
       try {
-         p_url = new Url(url_txt);
+         p_url = new Url(url_txt, &dns);
       } catch (Url::MalformedUrlException & mue) {
          std::cerr << mue.what() << endl;
          goto error;
@@ -576,10 +550,11 @@ Url::Test(void)
       delete p_url;
    }
    {
+      const MockDnsResolver dns = MockDnsResolver();
       const char * url_txt = "http://gwc.iblinx.com/";
       Url * p_url;
       try {
-         p_url = new Url(url_txt);
+         p_url = new Url(url_txt, &dns);
       } catch (Url::MalformedUrlException & mue) {
          std::cerr << mue.what() << endl;
          goto error;
@@ -594,10 +569,11 @@ Url::Test(void)
       delete p_url;
    }
    {
+      const MockDnsResolver dns = MockDnsResolver();
       const char * url_txt = "hTTp://gwc.iblInx.coM:2108";
       Url * p_url;
       try {
-         p_url = new Url(url_txt);
+         p_url = new Url(url_txt, &dns);
       } catch (Url::MalformedUrlException & mue) {
          std::cerr << mue.what() << endl;
          goto error;
@@ -612,10 +588,11 @@ Url::Test(void)
       delete p_url;
    }
    {
+      const MockDnsResolver dns = MockDnsResolver();
       const char * url_txt = "hTTp://gwc.iblInx.coM:2108#bla";
       Url * p_url;
       try {
-         p_url = new Url(url_txt);
+         p_url = new Url(url_txt, &dns);
       } catch (Url::MalformedUrlException & mue) {
          std::cerr << mue.what() << endl;
          goto error;
@@ -631,10 +608,11 @@ Url::Test(void)
       delete p_url;
    }
    {
+      const MockDnsResolver dns = MockDnsResolver();
       const char * url_txt = "hTTp://a";
       Url * p_url;
       try {
-         p_url = new Url(url_txt);
+         p_url = new Url(url_txt, &dns);
       } catch (Url::MalformedUrlException & mue) {
          std::cerr << mue.what() << endl;
          goto error;
@@ -649,10 +627,11 @@ Url::Test(void)
       delete p_url;
    }
    {
+      const MockDnsResolver dns = MockDnsResolver();
       const char * url_txt = "hTTp://a/bla/foo.sh";
       Url * p_url;
       try {
-         p_url = new Url(url_txt);
+         p_url = new Url(url_txt, &dns);
       } catch (Url::MalformedUrlException & mue) {
          std::cerr << mue.what() << endl;
          goto error;
@@ -667,10 +646,11 @@ Url::Test(void)
       delete p_url;
    }
    {
+      const MockDnsResolver dns = MockDnsResolver();
       const char * url_txt = "hTTp://a:1234";
       Url * p_url;
       try {
-         p_url = new Url(url_txt);
+         p_url = new Url(url_txt, &dns);
       } catch (Url::MalformedUrlException & mue) {
          std::cerr << mue.what() << endl;
          goto error;
@@ -685,10 +665,11 @@ Url::Test(void)
       delete p_url;
    }
    {
+      const MockDnsResolver dns = MockDnsResolver();
       const char * url_txt = "htatp://www.google.com:120/bla/foo.sh";
       Url * p_url;
       try {
-         p_url = new Url(url_txt);
+         p_url = new Url(url_txt, &dns);
       } catch (Url::MalformedUrlException & mue) {
          goto ok1;
       } catch (std::bad_alloc & ba) {
@@ -700,10 +681,11 @@ Url::Test(void)
    ok1:;
    }
    {
+      const MockDnsResolver dns = MockDnsResolver();
       const char * url_txt = "ahttp://www.google.com:120/bla/foo.sh";
       Url * p_url;
       try {
-         p_url = new Url(url_txt);
+         p_url = new Url(url_txt, &dns);
       } catch (Url::MalformedUrlException & mue) {
          goto ok2;
       } catch (std::bad_alloc & ba) {
@@ -715,10 +697,11 @@ Url::Test(void)
    ok2:;
    }
    {
+      const MockDnsResolver dns = MockDnsResolver();
       const char * url_txt = "http:/a/www.google.com:120/bla/foo.sh";
       Url * p_url;
       try {
-         p_url = new Url(url_txt);
+         p_url = new Url(url_txt, &dns);
       } catch (Url::MalformedUrlException & mue) {
          goto ok3;
       } catch (std::bad_alloc & ba) {
@@ -730,10 +713,11 @@ Url::Test(void)
    ok3:;
    }
    {
+      const MockDnsResolver dns = MockDnsResolver();
       const char * url_txt = "http://:120/bla/foo.sh";
       Url * p_url;
       try {
-         p_url = new Url(url_txt);
+         p_url = new Url(url_txt, &dns);
       } catch (Url::MalformedUrlException & mue) {
          goto ok4;
       } catch (std::bad_alloc & ba) {
@@ -745,10 +729,11 @@ Url::Test(void)
    ok4:;
    }
    {
+      const MockDnsResolver dns = MockDnsResolver();
       const char * url_txt = "http://www.google.com:12a0/bla/foo.sh";
       Url * p_url;
       try {
-         p_url = new Url(url_txt);
+         p_url = new Url(url_txt, &dns);
       } catch (Url::MalformedUrlException & mue) {
          goto ok5;
       } catch (std::bad_alloc & ba) {
@@ -759,10 +744,11 @@ Url::Test(void)
       exit(EXIT_FAILURE);
    ok5:;
       {
+         const MockDnsResolver dns = MockDnsResolver();
          const char * url_txt = "http:///";
          Url * p_url;
          try {
-            p_url = new Url(url_txt);
+            p_url = new Url(url_txt, &dns);
          } catch (Url::MalformedUrlException & mue) {
             goto ok6;
          } catch (std::bad_alloc & ba) {
@@ -774,10 +760,11 @@ Url::Test(void)
       ok6:;
       }
       {
+         const MockDnsResolver dns = MockDnsResolver();
          const char * url_txt = "http://:32";
          Url * p_url;
          try {
-            p_url = new Url(url_txt);
+            p_url = new Url(url_txt, &dns);
          } catch (Url::MalformedUrlException & mue) {
             goto ok7;
          } catch (std::bad_alloc & ba) {
@@ -789,10 +776,11 @@ Url::Test(void)
       ok7:;
       }
       {
-         const char * url_txt = "http://www.google.com:-32/bla/foo.sh";
+         const MockDnsResolver dns = MockDnsResolver();
+         const char * url_txt = "http:// www.google.com:-32/bla/foo.sh";
          Url * p_url;
          try {
-            p_url = new Url(url_txt);
+            p_url = new Url(url_txt, &dns);
          } catch (Url::MalformedUrlException & mue) {
             goto ok8;
          } catch (std::bad_alloc & ba) {
@@ -804,10 +792,11 @@ Url::Test(void)
       ok8:;
       }
       {
+         const MockDnsResolver dns = MockDnsResolver();
          const char * url_txt = "http://www.google.com:999999/bla/foo.sh";
          Url * p_url;
          try {
-            p_url = new Url(url_txt);
+            p_url = new Url(url_txt, &dns);
          } catch (Url::MalformedUrlException & mue) {
             goto ok9;
          } catch (std::bad_alloc & ba) {
