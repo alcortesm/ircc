@@ -1,7 +1,11 @@
+- there is a need for a server object where all the socket status is
+  stored and is used by many commands, main should create one, and it
+  should be able to delete it and create other or mutate it, don't know
+  what is better
+- Add commands to connect (SERVER host[:port])
 - CommandFactory return a pointer, but I would like to return a
    reference to avoid deleting the object afterwards, let the scope
    rules do the work for me.
-- Add commands to connect (SERVER host[:port])
 - Modify QUIT to notify server
 - Add args or command for NICK
 - Add args or command for USER
