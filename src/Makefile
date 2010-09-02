@@ -1,6 +1,7 @@
 BIN = ircc
 INSTALL_DIR = ~/bin
 SRCS = \
+    ComConnect.cc \
     DnsResolver.cc \
     MockDnsResolver.cc \
     Args.cc \
@@ -18,7 +19,7 @@ LIBS =
 
 
 CC = g++
-CFLAGS = -Wfatal-errors -Werror -Wall -Wextra -std=c++98 -pedantic-errors -g -O0
+CFLAGS = -Wfatal-errors -Werror -Wall -Wextra -std=c++98 -pedantic-errors -g -O0 -D_BSD_SOURCE
 LFLAGS = -g -lpthread
 OBJS = $(SRCS:.cc=.o)
 DEPS = $(OBJS:.o=.d)

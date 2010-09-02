@@ -10,4 +10,6 @@ const time_t MAIN_LOOP_TIMEOUT_SECS  = 2;
 const long   MAIN_LOOP_TIMEOUT_USECS = 0;
 const size_t MAX_LINE_LEN = 1023;
 const std::string USAGE("usage:\n\tircc [OPTIONS]\n\n\tOPTIONS:\n\t\t-t\n\t\t-d");
+const std::string TCP("tcp");
+const size_t PROTOENT_BUF_SZ = 1024;
 #endif

@@ -2,6 +2,7 @@
 #include "ComNop.h"
 #include "ComUnknown.h"
 #include "ComQuit.h"
+#include "ComConnect.h"
 #include <ostream>
 
 extern std::ostream* gpDebug;
@@ -55,6 +56,17 @@ CommandFactory::Build(const std::string& rLine)
       *gpDebug << "CommandFactory::Build(): quit + some chars detected" << endl ;
       return new ComQuit();
    }
+
+
+
+
+   /* Connect */
+   if (rLine == ComConnect::STR) {
+      *gpDebug << "CommandFactory::Build(): connect detected" << endl ;
+      return new ComConnect();
+   }
+   
+
 
 
 
