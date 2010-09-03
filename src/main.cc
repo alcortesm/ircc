@@ -25,6 +25,7 @@
 #include "CommandFactory.h"
 #include "Args.h"
 #include "ComQuit.h"
+#include "Server.h"
 
 using std::string;
 using std::endl;
@@ -78,6 +79,7 @@ tests(void)
    cout << "*** Running unit tests!" <<  endl ;
    Url::Test();
    Args::Test();
+   Server::Test();
    cout << "*** All tests passed!" <<  endl ;
 }
 
