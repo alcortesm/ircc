@@ -31,7 +31,7 @@ VALGRIND_FLAGS = --tool=memcheck --show-reachable=yes --leak-check=full -q
 
 
 
-.PHONY: all install clean nuke
+.PHONY: all install clean nuke test valgrind debugvalgrind debugtestvalgrind
 
 all: $(BIN)
 
