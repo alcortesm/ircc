@@ -4,6 +4,7 @@
 #include <netdb.h>
 #include <cstring>
 #include <ostream>
+#include "utils.h"
 
 extern std::ostream* gpDebug;
 
@@ -11,8 +12,6 @@ void
 MockDnsResolver::resolve(struct in_addr * p_ia, std::string const & domain) const
 throw (DnsResolver::NetworkException)
 {
-   (void)domain; /* unused */
-
    *gpDebug << "MockDnsResolver::resovle() : called with argument \""
             << domain << "\"" << std::endl ;
 
