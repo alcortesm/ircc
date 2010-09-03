@@ -6,7 +6,7 @@
 class ComNop : public Command {
  public:
    ComNop();
-   void Run(void);
+   void Run();
    static const std::string STR;
 };
 

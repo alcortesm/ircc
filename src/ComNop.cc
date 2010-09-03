@@ -10,7 +10,7 @@ const std::string ComNop::STR = std::string("/nop");
 
 /* just do nothing */
 void
-ComNop::Run(void) {
+ComNop::Run() {
    *gpDebug << "ComNop::Run(): do nothing" << std::endl ;
    return ;
 }

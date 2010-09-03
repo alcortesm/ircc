@@ -6,7 +6,7 @@
 class ComConnect : public Command {
  public:
    ComConnect();
-   void Run(void);
+   void Run();
    static const std::string STR;
 };
 

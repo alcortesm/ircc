@@ -17,7 +17,7 @@ ComConnect::ComConnect() {}
 const std::string ComConnect::STR = std::string("/connect");
 
 int
-open_socket(void)
+open_socket()
 {
 
    int proto;
@@ -59,7 +59,7 @@ open_socket(void)
 }
 
 void
-ComConnect::Run(void) {
+ComConnect::Run() {
 
    int sock = open_socket();
 

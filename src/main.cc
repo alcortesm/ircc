@@ -34,8 +34,8 @@ using std::cout;
 
 std::ostream* gpDebug = (std::ostream*) &NullStream::cnull;
 
-void usage(void);
-void tests(void);
+void usage();
+void tests();
 void main_loop();
 bool process_line_is_quit(const string & rLine);
 
@@ -67,14 +67,14 @@ main(int argc, char ** argv)
 }
 
 void
-usage(void)
+usage()
 {
    std::cerr << USAGE << std::endl ;
    exit(1);
 }
 
 void
-tests(void)
+tests()
 {
    cout << "*** Running unit tests!" <<  endl ;
    Url::Test();
@@ -107,7 +107,7 @@ public:
 };
 
 string
-fetch_line(void) throw (LineTooLongException, EofException)
+fetch_line() throw (LineTooLongException, EofException)
 {
    size_t total_bytes_read = 0;
 
@@ -156,7 +156,7 @@ fetch_line(void) throw (LineTooLongException, EofException)
 }
 
 void
-main_loop(void)
+main_loop()
 {
    /* wakeup timer: there is no need to use one at all */
    struct timeval tv;

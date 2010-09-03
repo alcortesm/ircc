@@ -356,7 +356,7 @@ operator<<(std::ostream & os, Url wc) {
 }
 
 /* static */ void
-Url::Test(void)
+Url::Test()
 {
    cout << "*** Begin of Url test" << endl ;
    // test the private constructor

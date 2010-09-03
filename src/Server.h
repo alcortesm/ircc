@@ -27,7 +27,7 @@ class Server {
    bool IsConnected() const;
    const Url& GetUrl() const throw (Server::NotConnectedException);
 
-   static void Test(void);
+   static void Test();
 
  private:
    Server(const Server&); // not implemented, prevent copy ctor

@@ -6,7 +6,7 @@ extern std::ostream* gpDebug;
 
 /* print the ofending command */
 void
-ComUnknown::Run(void) {
+ComUnknown::Run() {
    std::cout << "*** Unknown command: " << mOriginal << std::endl ;
    return ;
 }
