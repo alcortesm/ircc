@@ -55,6 +55,9 @@ valgrind: $(BIN)
 debugvalgrind: $(BIN)
 	valgrind $(VALGRIND_FLAGS) ./$(BIN) -d
 
+testvalgrind: $(BIN)
+	valgrind $(VALGRIND_FLAGS) ./$(BIN) -t
+
 debugtestvalgrind: $(BIN)
 	valgrind $(VALGRIND_FLAGS) ./$(BIN) -t -d
 
