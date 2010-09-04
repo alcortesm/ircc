@@ -37,6 +37,7 @@ public:
    static const std::string ANCHOR_SEPARATOR;
    static const std::string PROTO_HTTP;
    static const uint16_t    HTTP_DEFAULT_PORT;
+   static const std::string HTTP_DEFAULT_PORT_STRING;
 
    Url(const std::string & rUrl, const DnsResolver * pDnsResolver) throw (Url::MalformedUrlException, std::bad_alloc);
    static Url AddQuery(const Url & rUrl, const std::string & rQuery) throw (Url::MalformedUrlException, std::bad_alloc);
@@ -44,6 +45,7 @@ public:
    const DnsResolver *    PDnsResolver() const { return mpDnsResolver; };
    const std::string &    Proto() const { return mProto; };
    uint16_t               Port() const { return mPort; };
+   const std::string &    PortString() const { return mPortString; };
    uint16_t               PortNbo() const { return mPortNbo; };
    const std::string &    Domain() const { return mDomain; };
    const struct in_addr & Addr() const throw (Url::NameResolutionException, Url::NetworkException);
@@ -63,6 +65,7 @@ private:
    const DnsResolver*     mpDnsResolver;
    std::string            mProto;
    uint16_t               mPort;
+   std::string            mPortString;
    uint16_t               mPortNbo; // port in network byte order
    std::string            mDomain;
    std::string            mPath;   // includes the path separator
@@ -76,7 +79,7 @@ private:
 
    Url(const DnsResolver * pDnsResolver,
        const std::string & rProto,
-       const uint16_t      port,
+       const std::string & rPortString,
        const std::string & rDomain,
        const std::string & rPath,
        const std::string & rQuery  = "",
@@ -84,11 +87,11 @@ private:
 
    void Init(const DnsResolver * pDnsResolver,
              const std::string & rProto,
-             const uint16_t      port,
+             const std::string & rPort,
              const std::string & rDomain,
              const std::string & rPath,
              const std::string & rQuery,
-             const std::string & rAnchor);
+             const std::string & rAnchor) throw (Url::MalformedUrlException);
 
    void get_ip_and_addr() const throw (Url::NameResolutionException, Url::NetworkException);
 };

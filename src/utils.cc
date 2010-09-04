@@ -10,7 +10,7 @@
 #include "stdlib.h"
 
 int
-string_to_int(std::string & s) throw (std::invalid_argument) {
+string_to_int(const std::string & s) throw (std::invalid_argument) {
     int i;
     char c;
     std::istringstream ss(s);

@@ -26,6 +26,7 @@ using std::invalid_argument;
 /* string */ const string Url::ANCHOR_SEPARATOR = string("#");
 /* string */ const string Url::PROTO_HTTP = string("http");
 /* string */ const uint16_t Url::HTTP_DEFAULT_PORT = 80;
+/* string */ const string Url::HTTP_DEFAULT_PORT_STRING = string("80");
 
 bool
 has_colon_slash_slash(const char * s) {
@@ -48,8 +49,9 @@ prefix_http_colon_slash_slash(char* * sp) throw (bad_alloc) {
 
 // TODO: only proto & domain must be case insensitive
 void
-parse_url(const string & url, string & proto, uint16_t & port, string & domain,  string & path, string & query, string & anchor)
-   throw (Url::MalformedUrlException, bad_alloc) {
+parse_url(const string & url, string & proto, string & port, string & domain,  string & path, string & query, string & anchor)
+   throw (Url::MalformedUrlException, bad_alloc)
+{
    char * start;
    const char * end;
    size_t sz;
@@ -182,18 +184,11 @@ parse_url(const string & url, string & proto, uint16_t & port, string & domain, 
    // get port
    if (!p_port_start) {
       p_port_start = p_port_end;
-      port = Url::HTTP_DEFAULT_PORT;
+      port = Url::HTTP_DEFAULT_PORT_STRING;
    } else {
       port_sz = p_port_end - p_port_start;
       string ports;
-      ports = string(p_port_start+1, port_sz-1); // we don't want the ':' to be part of the port
-      try {
-         int tmp = string_to_int(ports);
-         port = int_to_uint16(tmp);
-      } catch (invalid_argument & ia) {
-         free(start);
-         throw Url::MalformedUrlException();
-      }
+      port = string(p_port_start+1, port_sz-1); // we don't want the ':' to be part of the port
    }
    //    *gpDebug << "port="  << port  << endl;
 
@@ -268,15 +263,22 @@ Url::Addr() const throw (Url::NameResolutionException, Url::NetworkException) {
 void
 Url::Init(const DnsResolver * pDnsResolver,
           const string & rProto,
-          uint16_t port,
+          const string & rPort,
           const string & rDomain,
           const string & rPath,
           const string & rQuery,
           const string & rAnchor)
+   throw (Url::MalformedUrlException)
 {
    mpDnsResolver = pDnsResolver;
    mProto = rProto;
-   mPort = port;
+   try {
+      int tmp = string_to_int(rPort);
+      mPort = int_to_uint16(tmp);
+   } catch (invalid_argument & ia) {
+      throw Url::MalformedUrlException();
+   }
+   mPortString = rPort;
    mDomain = rDomain;
    mPath = rPath;
    mQuery = rQuery;
@@ -310,14 +312,16 @@ Url::Init(const DnsResolver * pDnsResolver,
 
 Url::Url(const DnsResolver * pDnsResolver,
          const std::string & rProto,
-         const uint16_t      port,
+         const std::string & rPort,
          const std::string & rDomain,
          const std::string & rPath,
          const std::string & rQuery,
          const std::string & rAnchor)
    throw (Url::MalformedUrlException, std::bad_alloc)
 {
-   Url::Init(pDnsResolver, rProto, port, rDomain, rPath, rQuery, rAnchor);
+   Url::Init(pDnsResolver, rProto,
+             rPort, rDomain, rPath,
+             rQuery, rAnchor);
    *gpDebug << "Creating " << *this << endl ;
 }
 
@@ -325,7 +329,8 @@ Url::Url(const std::string & rTxt, const DnsResolver * pDnsResolver)
    throw (Url::MalformedUrlException, std::bad_alloc)
 {
    string proto;
-   uint16_t port;
+   string port;
+   string portString;
    string domain;
    string path;
    string query;
@@ -342,7 +347,7 @@ Url::AddQuery(const Url & rUrl, const std::string & rQuery)
 {
    const DnsResolver * p_dns_resolver = rUrl.PDnsResolver();
    const string & proto = rUrl.Proto();
-   uint16_t port = rUrl.Port();
+   const string & port = rUrl.PortString();
    const string & domain = rUrl.Domain();
    const string & path = rUrl.Path();
    const string & anchor = rUrl.Anchor();
@@ -369,15 +374,17 @@ Url::Test()
       const char * ip = "127.0.0.1"; /* we are going to use a mock DNS server that always return 127.0.0.1 */
       //const char * ip = "163.117.139.31"; /* we are going to use a mock DNS server that always return 127.0.0.1 */
       uint16_t port = 8080;
+      const char * port_string = "8080";
       const char * path = "alcortes/index.html";
       const char * query = "test.php?other=yes";
       const char * anchor = "bla";
       const char * canonical = "http://it.uc3m.es:8080/alcortes/index.html?test.php?other=yes#bla";
 
       try {
-         Url url = Url(&dns, proto, port, domain, path, query, anchor);
+         Url url = Url(&dns, proto, port_string,
+                       domain, path, query, anchor);
          assert(url.Proto() == proto);
-         assert(url.Port() == port);
+         assert(url.PortString() == port_string);
          assert(url.PortNbo() == htons(port));
          assert(url.Domain() == domain);
          struct in_addr ia;
@@ -419,13 +426,14 @@ Url::Test()
       const char * proto = "http";
       const char * domain = "it.uc3m.es";
       uint16_t port = 8080;
+      const char * port_string = "8080";
       const char * path = "alcortes/index.html";
       const char * query = "test.php?other=yes";
       const char * anchor = "";
       const char * canonical = "http://it.uc3m.es:8080/alcortes/index.html?test.php?other=yes";
 
       try {
-         Url url = Url(&dns, proto, port, domain, path, query, anchor);
+         Url url = Url(&dns, proto, port_string, domain, path, query, anchor);
          assert(url.Proto() == proto);
          assert(url.Port() == port);
          assert(url.PortNbo() == htons(port));
@@ -451,13 +459,14 @@ Url::Test()
       const char * proto = "http";
       const char * domain = "it.uc3m.es";
       uint16_t port = 8080;
+      const char * port_string = "8080";
       const char * path = "alcortes/index.html";
       const char * query = "";
       const char * anchor = "bla";
       const char * canonical = "http://it.uc3m.es:8080/alcortes/index.html#bla";
 
       try {
-         Url url = Url(&dns, proto, port, domain, path, query, anchor);
+         Url url = Url(&dns, proto, port_string, domain, path, query, anchor);
          assert(url.Proto() == proto);
          assert(url.Port() == port);
          assert(url.PortNbo() == htons(port));
@@ -483,13 +492,14 @@ Url::Test()
       const char * proto = "http";
       const char * domain = "it.uc3m.es";
       uint16_t port = 8080;
+      const char * port_string = "8080";
       const char * path = "/alcortes/index.html";
       const char * query = "?name=yes?user=no";
       const char * anchor = "#bla";
       const char * canonical = "http://it.uc3m.es:8080/alcortes/index.html?name=yes?user=no#bla";
 
       try {
-         Url url = Url(&dns, proto, port, domain, path, query, anchor);
+         Url url = Url(&dns, proto, port_string, domain, path, query, anchor);
          assert(url.Proto() == proto);
          assert(url.Port() == port);
          assert(url.PortNbo() == htons(port));
