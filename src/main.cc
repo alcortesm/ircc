@@ -77,9 +77,15 @@ void
 tests()
 {
    cout << "*** Running unit tests!" <<  endl ;
+
    Url::Test();
    Args::Test();
-   Server::Test();
+
+   if (Server::TestFail()) {
+      cerr << "*** Server test failed!" << endl ;
+      return;
+   }
+
    cout << "*** All tests passed!" <<  endl ;
 }
 
