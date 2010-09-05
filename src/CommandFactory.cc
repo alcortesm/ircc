@@ -4,6 +4,7 @@
 #include "ComQuit.h"
 #include "ComConnect.h"
 #include "ComError.h"
+#include "ComMsg.h"
 #include <ostream>
 #include <stdexcept>
 #include "ircc.h"
@@ -65,12 +66,28 @@ new_connect_or_error(const string& rLine, Server& rServer)
    return new ComConnect(rServer, host, port);
 }
 
+// TODO, strip /msg from line before calling ComMsg ctor
+Command*
+new_msg(const string& rLine, Server& rServer)
+{
+   // if line is just "/msg" -> error
+   if (rLine == ComMsg::STR)
+      return new ComError("can not send message: which message?");
+   // if line is just "/msg " -> error
+   if (rLine.find(ComMsg::STR, 0) == 0
+       && rLine.length() == ComMsg::STR.length()+1)
+      return new ComError("can not send message: which message?");
+
+   return new ComMsg(rLine, rServer);
+}
+
 Command*
 CommandFactory::Build(const std::string& rLine, Server& rServer)
    throw (std::runtime_error)
 {
 
-
+   *gpDebug << "CommandFactory::Build(\"" << rLine << "\", "
+            << rServer << ")" << endl;
 
    /* NOP */
    /* if the user pressed only enter: nop command */
@@ -85,8 +102,8 @@ CommandFactory::Build(const std::string& rLine, Server& rServer)
 
 
    /* MESG */
-   if (rLine.at(0) != '/' || starts_with(rLine, "/msg")) {
-      return new ComError("/msg command not yet implemmented");
+   if (rLine.at(0) != '/' || starts_with(rLine, ComMsg::STR)) {
+      return new_msg(rLine, rServer);
    }
 
 

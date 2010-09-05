@@ -172,12 +172,12 @@ Server::Disconnect()
 }
 
 void
-Server::Send(const char* buf, const size_t bufSize) const
+Server::Send(const std::string& msg) const
    throw (Server::NotConnectedException)
 {
-   UNUSED(buf);
-   UNUSED(bufSize);
-   *gpDebug << "Server::Send(buf, " << bufSize << ")" << endl ;
+   UNUSED(msg);
+
+   *gpDebug << "Server::Send(\"" << msg << "\")" << endl ;
 
    if (!IsConnected())
       throw Server::NotConnectedException();
@@ -185,13 +185,11 @@ Server::Send(const char* buf, const size_t bufSize) const
    return;
 }
 
-size_t
-Server::Recv(char* buf, const size_t bufSize) const
+std::string*
+Server::Recv() const
    throw (Server::NotConnectedException)
 {
-   UNUSED(buf);
-   UNUSED(bufSize);
-   *gpDebug << "Server::Recv(buf, " << bufSize << ")" << endl ;
+   *gpDebug << "Server::Recv()" << endl ;
 
    if (!IsConnected())
       throw Server::NotConnectedException();

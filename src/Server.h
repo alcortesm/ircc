@@ -28,9 +28,9 @@ class Server {
       throw (Server::AlreadyConnectedException, Server::ConnectException);
    void Disconnect()
       throw (Server::NotConnectedException);
-   void Send(const char* buf, const size_t bufSize) const
+   void Send(const std::string& msg) const
       throw (Server::NotConnectedException);
-   size_t Recv(char* buf, const size_t bufSize) const
+   std::string* Recv() const
       throw (Server::NotConnectedException);
 
    bool IsConnected() const;
