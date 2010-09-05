@@ -8,10 +8,12 @@
 #include "ircc.h"
 #include "utils.h"
 #include <sstream>
+#include <iostream>
 
 extern std::ostream* gpDebug;
 
-ComConnect::ComConnect() {}
+using std::cout;
+using std::endl;
 
 /* static */
 const std::string ComConnect::STR = std::string("/connect");
@@ -61,15 +63,28 @@ open_socket()
 void
 ComConnect::Run() {
 
-   int sock = open_socket();
+   *gpDebug << "ComConnect::Run()" << std::endl ;
 
-   { /* connect */
-      //struct sockaddr sa;
-      //socklen_t sa_len = sizeof(sa);
-      //int r;
-      //r = connect(sock, )
+   try {
+
+      mrServer.Connect(mHost, mPort);
+
+   } catch (Server::AlreadyConnectedException & e) {
+      cout << "*** Can not connect to " << mHost << ":" << mPort
+           << ": Already connected to " << mrServer.GetHost()
+           << ":" << mrServer.GetPort() << endl;
+   } catch (Server::ConnectException & e) {
+      cout << "*** Can not connect to "  << mHost << ":" << mPort
+           << ": " << e.what() << endl ;
    }
-   close(sock);
 
    return ;
+}
+
+
+ComConnect::ComConnect(Server& rServer, std::string & host, std::string & port)
+   : mrServer(rServer), mHost(host), mPort(port)
+{
+   *gpDebug << "ComConnect::ComConnect(\"" << host
+            << "\", \"" << port << "\")" << std::endl ;   
 }

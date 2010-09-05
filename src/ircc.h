@@ -12,4 +12,5 @@ const size_t MAX_LINE_LEN = 1023;
 const std::string USAGE("usage:\n\tircc [OPTIONS]\n\n\tOPTIONS:\n\t\t-t\n\t\t-d");
 const std::string TCP("tcp");
 const size_t PROTOENT_BUF_SZ = 1024;
-#endif
+const char   ARG_SEPARATORS[] = " ";
+#endif // IRCC_H

@@ -2,6 +2,7 @@
 #define COMMANDFACTORY_H
 
 #include "Command.h"
+#include "Server.h"
 #include <stdexcept>
 
 class CommandFactory
@@ -13,7 +14,8 @@ class CommandFactory
    BadSyntaxException(std::string s) : std::runtime_error("*** bad syntax: " + s) { }
    };
 
-   static Command* Build(const std::string& line) throw (std::runtime_error);
+   static Command* Build(const std::string& rLine, Server& rServer)
+      throw (std::runtime_error);
 };
 
 #endif /* COMMANDFACTORY_H */

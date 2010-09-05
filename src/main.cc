@@ -162,6 +162,9 @@ fetch_line() throw (LineTooLongException, EofException)
 void
 main_loop()
 {
+   // a server will be needed during the main loop
+   Server server;
+
    /* wakeup timer: there is no need to use one at all */
    struct timeval tv;
    tv.tv_sec = MAIN_LOOP_TIMEOUT_SECS;
@@ -210,7 +213,7 @@ main_loop()
          /* process line: build a command from the line and execute it */
          try {
             Command* p_command;
-            p_command = CommandFactory::Build(line);
+            p_command = CommandFactory::Build(line, server);
             p_command->Run();
             if (p_command->MustQuit()) {
                delete p_command;

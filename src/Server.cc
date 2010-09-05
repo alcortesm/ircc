@@ -73,7 +73,7 @@ void
 Server::Connect(const string & host, const string & port)
    throw (Server::AlreadyConnectedException, Server::ConnectException)
 {
-   *gpDebug << "Server::Connect(" << host << ", " << port << ")" << endl ;
+   *gpDebug << "Server::Connect(\"" << host << "\", \"" << port << "\")" << endl ;
 
    if (IsConnected())
       throw Server::AlreadyConnectedException();
