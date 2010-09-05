@@ -232,17 +232,17 @@ Server::TestOk()
 
    {
       Server server;
-      *gpDebug << server;
+      *gpDebug << server << endl;
 
       try {
          const string host("localhost");
          const string port("6757");
          
          server.Connect(host, port);
-         *gpDebug << server;
+         *gpDebug << server << endl;
          
          server.Disconnect();
-         *gpDebug << server;
+         *gpDebug << server << endl;
 
       } catch (Server::AlreadyConnectedException & e) {
          std::cerr << e.what() << endl;
@@ -263,13 +263,13 @@ Server::TestOk()
          const string port("6757");
 
          p_server = new Server();
-         *gpDebug << *p_server;
+         *gpDebug << *p_server << endl;
 
          p_server->Connect(host, port);
-         *gpDebug << *p_server;
+         *gpDebug << *p_server << endl;
 
          p_server->Disconnect();
-         *gpDebug << *p_server;
+         *gpDebug << *p_server << endl;
 
          delete p_server;
 
@@ -290,17 +290,17 @@ Server::TestOk()
 
    {
       Server server;
-      *gpDebug << server;
+      *gpDebug << server << endl;
 
       try {
          const string host("badhost");
          const string port("6757");
          
          server.Connect(host, port);
-         *gpDebug << server;
+         *gpDebug << server << endl;
          
          server.Disconnect();
-         *gpDebug << server;
+         *gpDebug << server << endl;
 
       } catch (Server::AlreadyConnectedException & e) {
          std::cerr << e.what() << endl;
@@ -331,6 +331,6 @@ operator<<(std::ostream & os, Server & server) {
    } else {
       os << "DISCONNECTED";
    }
-   os << "]" << endl;
+   os << "]";
    return os;
 }
