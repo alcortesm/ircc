@@ -3,14 +3,11 @@ INSTALL_DIR = ~/bin
 SRCS = \
     Server.cc \
     ComConnect.cc \
-    DnsResolver.cc \
-    MockDnsResolver.cc \
     Args.cc \
     CommandFactory.cc \
     ComQuit.cc \
     ComUnknown.cc \
     ComNop.cc \
-    Url.cc \
     NullStream.cc \
     utils.cc \
     main.cc

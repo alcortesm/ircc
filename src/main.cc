@@ -16,7 +16,6 @@
 #include <errno.h>
 #include <sys/select.h>
 
-#include "Url.h"
 #include "utils.h"
 #include "NullStream.h"
 #include "ircc.h"
@@ -78,7 +77,6 @@ tests()
 {
    cout << "*** Running unit tests!" <<  endl ;
 
-   Url::Test();
    Args::Test();
 
    if (Server::TestFail()) {

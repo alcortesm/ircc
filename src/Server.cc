@@ -3,7 +3,6 @@
 #include <ostream>
 #include <iostream>
 #include <string>
-#include "MockDnsResolver.h"
 #include <cassert>
 #include <sys/types.h>
 #include <sys/socket.h>
