@@ -103,7 +103,7 @@ new_nick(Server& rServer, const string& rLine)
    if (there_is_no_args(rLine))
       return new ComError("can not set nick: what is your nick?");
 
-   string nick(rLine, ComNick::STR.length());
+   string nick(rLine, ComNick::STR.length()+1);
    return new ComMsg(nick, rServer);
 }
 
