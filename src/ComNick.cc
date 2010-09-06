@@ -44,7 +44,7 @@ ComNick::Run() {
 }
 
 
-ComNick::ComNick(Server& rServer, std::string & rNick)
+ComNick::ComNick(std::string & rNick, Server& rServer)
    : mrServer(rServer), mNick(rNick)
 {
    *gpDebug << "ComNick::ComNick(" << rServer << ", \""

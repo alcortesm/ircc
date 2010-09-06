@@ -6,7 +6,7 @@
 
 class ComNick : public Command {
  public:
-   ComNick(Server& server, std::string & rNick);
+   ComNick(std::string & rNick, Server& server);
    void Run();
    static const std::string STR;
    static const std::string COMMAND;

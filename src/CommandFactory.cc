@@ -104,7 +104,7 @@ new_nick(Server& rServer, const string& rLine)
       return new ComError("can not set nick: what is your nick?");
 
    string nick(rLine, ComNick::STR.length()+1);
-   return new ComMsg(nick, rServer);
+   return new ComNick(nick, rServer);
 }
 
 Command*
