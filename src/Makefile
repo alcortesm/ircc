@@ -1,6 +1,7 @@
 BIN = ircc
 INSTALL_DIR = ~/bin
 SRCS = \
+    ComNick.cc \
     ComMsg.cc \
     ComError.cc \
     Server.cc \
