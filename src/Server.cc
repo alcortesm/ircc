@@ -181,7 +181,34 @@ Server::Send(const std::string& msg) const
 
    if (!IsConnected())
       throw Server::NotConnectedException();
-   
+
+   size_t buf_sz = msg.length();
+   char* buf = (char*) xmalloc(buf_sz);
+   memcpy(buf, msg.c_str(), buf_sz);
+
+   size_t offset = 0;
+   while (true) {
+      ssize_t nw;
+      nw = send(mSock, buf+offset, buf_sz-offset, NO_FLAGS);
+      if (nw == -1) {
+         size_t errbuf_sz = 1024; /* I hope is enough for errstr */
+         char* errbuf = (char *) xmalloc(errbuf_sz);
+         char* r;
+         r = strerror_r(errno, errbuf, errbuf_sz);
+         Server::SendException e(r);
+         free(errbuf);
+         free(buf);
+      }
+      if (nw == 0) {
+         free(buf);
+         Server::SendException e("connection closed by peer");
+      }
+      offset += nw ;
+      if (offset == msg.length())
+         break;
+   }
+
+   free(buf);
    return;
 }
 

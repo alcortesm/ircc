@@ -33,7 +33,10 @@ ComNick::Run() {
       mrServer.Send(s);
 
    } catch (Server::NotConnectedException & e) {
-      cout << "*** Can not set nick : not connected to server"
+      cout << "*** Can not set nick: not connected to server"
+           << endl;
+   } catch (Server::SendException & e) {
+      cout << "*** Can not set nick: " << e.what()
            << endl;
    }
 

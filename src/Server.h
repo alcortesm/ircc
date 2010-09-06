@@ -20,6 +20,11 @@ class Server {
       ConnectException() : std::runtime_error("Server can not connect") { }
       ConnectException(std::string s) : std::runtime_error("Server can not connect: " + s) { }
    };
+   class SendException : public std::runtime_error {
+   public:
+      SendException() : std::runtime_error("can not send") { }
+      SendException(std::string s) : std::runtime_error("Can not send: " + s) { }
+   };
 
    Server();
    ~Server();
