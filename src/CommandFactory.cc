@@ -7,9 +7,11 @@
 #include "ComMsg.h"
 #include "ComNick.h"
 #include "ComUser.h"
+#include "ComSleep.h"
 #include <ostream>
 #include <stdexcept>
 #include "ircc.h"
+#include "utils.h"
 
 extern std::ostream* gpDebug;
 
@@ -111,13 +113,31 @@ new_nick(Server& rServer, const string& rLine)
 Command*
 new_user(Server& rServer, const string& rLine)
 {
-   // if line is just "/nick" -> error
+   // if line is just "/user" -> error
    if (there_is_no_args(rLine))
       return new ComError("can not set user: what is your user and realname");
 
    //   string user(rLine, ComUser::STR.length()+1);
    const string user("alcortes 0 * :Alberto Cortes");
    return new ComUser(user, rServer);
+}
+
+Command*
+new_sleep(const string& rLine)
+{
+   // if line is just "/sleep"
+   if (there_is_no_args(rLine))
+      return new ComSleep(ComSleep::DEFAULT_SLEEP_TIME_SECS);
+
+   const string duration_str(rLine, ComUser::STR.length()+1);
+   int duration_int;
+   try {
+      duration_int = string_to_int(duration_str);
+   } catch (std::invalid_argument& e) {
+      return new ComError("can not sleep: invalid time specification");
+   }
+
+   return new ComSleep(duration_int);
 }
 
 Command*
@@ -131,11 +151,13 @@ CommandFactory::Build(const std::string& rLine, Server& rServer)
    /* NOP */
    if (rLine.empty())
       return new ComNop();
-
-   /* nop */
    if (starts_with(rLine,ComNop::STR))
       return new ComNop();
    
+   /* SLEEP */
+   if (starts_with(rLine, ComSleep::STR))
+      return new_sleep(rLine);
+
    /* MESG */
    if (rLine.at(0) != '/')
       return new ComMsg(rLine, rServer);
