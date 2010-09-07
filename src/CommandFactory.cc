@@ -6,6 +6,7 @@
 #include "ComError.h"
 #include "ComMsg.h"
 #include "ComNick.h"
+#include "ComUser.h"
 #include <ostream>
 #include <stdexcept>
 #include "ircc.h"
@@ -108,6 +109,18 @@ new_nick(Server& rServer, const string& rLine)
 }
 
 Command*
+new_user(Server& rServer, const string& rLine)
+{
+   // if line is just "/nick" -> error
+   if (there_is_no_args(rLine))
+      return new ComError("can not set user: what is your user and realname");
+
+   //   string user(rLine, ComUser::STR.length()+1);
+   const string user("alcortes 0 * :Alberto Cortes");
+   return new ComUser(user, rServer);
+}
+
+Command*
 CommandFactory::Build(const std::string& rLine, Server& rServer)
    throw (std::runtime_error)
 {
@@ -132,6 +145,10 @@ CommandFactory::Build(const std::string& rLine, Server& rServer)
    /* NICK */
    if (starts_with(rLine, ComNick::STR))
       return new_nick(rServer, rLine);
+
+   /* USER */
+   if (starts_with(rLine, ComUser::STR))
+      return new_user(rServer, rLine);
 
    /* QUIT */
    if (starts_with(rLine,ComQuit::STR))
