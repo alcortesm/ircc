@@ -136,7 +136,6 @@ main_loop()
       int retval;
       retval = select(max_fds+1, &read_fds, NULL, NULL, &tv);
       //*gpDebug << "main_loop's select() returns " << retval << endl ;
-
       /* select error: exit */
       if (retval == -1) {
          if (errno == EINTR)
@@ -153,7 +152,7 @@ main_loop()
       }
 
       /* some fd was ready: which one?, read and process data */
-      if (FD_ISSET(STDIN_FD, &read_fds)) { /* stdin: user input */
+      if (FD_ISSET(STDIN_FD, &read_fds)) {
          /* process line: build a command from the line and execute it */
          try {
             string line(*fetch_line());
@@ -162,8 +161,7 @@ main_loop()
             p_command->Run();
             if (p_command->MustQuit()) {
                delete p_command;
-               cout << "bye!" << endl ;
-               break;
+               throw EofException();
             }
             delete p_command;
          } catch (InputErrorException& e) {
