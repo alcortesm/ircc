@@ -177,6 +177,8 @@ main_loop()
       fd_set read_fds;
       FD_ZERO(&read_fds);
       FD_SET(STDIN_FD, &read_fds);
+      if (server.IsConnected())
+         FD_SET(server.GetSock(), &read_fds);
       max_fds = MAX(max_fds, STDIN_FD);
 
       int retval;
@@ -225,6 +227,14 @@ main_loop()
             cout << e.what() << endl ;
          }
       }
+
+      if (FD_ISSET(server.GetSock(), &read_fds)) { /* server socket */
+         *gpDebug << "server socket is ready to be read" << endl;
+         string* p_data = server.Recv();
+         cout << "data from server: \"" << p_data << "\"" << endl;
+         delete p_data;
+      }
+
    }
    return;
 }

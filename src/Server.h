@@ -41,6 +41,7 @@ class Server {
    bool IsConnected() const;
    const std::string & GetHost() const throw (Server::NotConnectedException);
    const std::string & GetPort() const throw (Server::NotConnectedException);
+   int                 GetSock() const;
 
    static bool TestOk();
    static bool TestFail() { return ! Server::TestOk(); };

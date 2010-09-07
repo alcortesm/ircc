@@ -250,6 +250,12 @@ Server::GetPort() const
    return *mpPort;
 }
 
+int
+Server::GetSock() const
+{
+   return mSock;
+}
+
 bool
 Server::TestOk()
 {
