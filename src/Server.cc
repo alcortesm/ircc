@@ -22,7 +22,8 @@ using std::string;
 Server::Server()
    : mpHost(NULL),
      mpPort(NULL),
-     mState(Server::DISCONNECTED)
+     mState(Server::DISCONNECTED),
+     mSock(-1)
 {
    *gpDebug << "Server::Server()" << endl ;
    return;
@@ -163,6 +164,7 @@ Server::Disconnect()
       throw Server::NotConnectedException();
 
    close(mSock);
+   mSock = -1;
    delete mpHost;
    delete mpPort;
    mpHost = NULL;
