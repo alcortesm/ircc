@@ -87,76 +87,28 @@ tests()
    cout << "*** All tests passed!" <<  endl ;
 }
 
-/* when there is a line waiting to be read at stdin, the main loop calls
- * this function. The function must read one full line from stdin and
- * nothing more (the next lines will be read by subsequent invocations to
- * this same function). The returned string does not have the ending '\n'.
- *
- * It exits with error messages if an error is found reading the line.
- *
- * It returns EofException if the end of file is found on stdin.
- *
- * If the line is longer than MAX_LINE_LEN, then the whole line is read,
- * forgotten and a string with a description of this error is thrown.
- *
- * If the line is OK, it is returned as a string. 
- */
-class LineTooLongException : public std::runtime_error {
+
+class InputErrorException : public std::runtime_error {
 public:
-   LineTooLongException() : std::runtime_error("Line too long") { }
+   InputErrorException() : std::runtime_error("Input error") { }
 };
 class EofException : public std::runtime_error {
 public:
    EofException() : std::runtime_error("EOF found!") { }
 };
 
-string
-fetch_line() throw (LineTooLongException, EofException)
+string*
+fetch_line() throw (EofException, InputErrorException)
 {
-   size_t total_bytes_read = 0;
-
-   const size_t buf_sz = MAX_LINE_LEN + 1; /* line + '\n' */
-   char* const buf = (char* const) xmalloc(buf_sz);
-
-   ssize_t bytes_read;
-   size_t remaining_buf_sz;
-   for (;;) {
-      remaining_buf_sz = buf_sz - total_bytes_read;
-      bytes_read = read(STDIN_FD, (void*)(buf+total_bytes_read),
-                        remaining_buf_sz);
-      //      *gpDebug << "fetch_line bytes_read = " << bytes_read << endl ;
-      if (bytes_read == -1 && errno == EINTR)
-         continue;
-      if (bytes_read == -1)
-         fatal("read", NULL);
-      if (bytes_read == 0) { /* EOF found */
-         free(buf);
-         throw EofException();
-      }
-      total_bytes_read += bytes_read ;
-      if (total_bytes_read == buf_sz
-          && buf[buf_sz-1] != '\n') { /* line too long */
-         /* fetch all the line, while forgetting it and throw a warning */
-         for (;;) {
-            bytes_read = read(STDIN_FD, (void*)buf, buf_sz);
-            if (bytes_read == -1 && errno == EINTR)
-               continue;
-            if (bytes_read == -1)
-               fatal("read", NULL);
-            if (buf[bytes_read-1] == '\n') /* end of line detected */
-               break;
-         }
-         free(buf);
-         throw LineTooLongException();
-      }
-      /* if last char is a \n, we had fetch all the line */
-      if (buf[total_bytes_read-1] == '\n') {
-         string str(buf, total_bytes_read-1); /* remove ending '\n' */
-         free(buf);
-         return str;
-      }
-      /* else continue fetching */
-   }
+   string line;
+   getline(std::cin, line);
+   if (std::cin.eof())
+      throw EofException();
+   if (std::cin.fail())
+      throw InputErrorException();
+   if (std::cin.bad())
+      throw InputErrorException();
+   return new string(line);
 }
 
 void
@@ -202,18 +154,9 @@ main_loop()
 
       /* some fd was ready: which one?, read and process data */
       if (FD_ISSET(STDIN_FD, &read_fds)) { /* stdin: user input */
-         string line;
-         try {
-            line = fetch_line();
-         } catch(LineTooLongException& e) {
-            cout << e.what() << endl ;
-            continue;
-         } catch(EofException& e) {
-            line = ComQuit::STR; /* eof = /quit */
-         }
-
          /* process line: build a command from the line and execute it */
          try {
+            string line(*fetch_line());
             Command* p_command;
             p_command = CommandFactory::Build(line, server);
             p_command->Run();
@@ -223,6 +166,11 @@ main_loop()
                break;
             }
             delete p_command;
+         } catch (InputErrorException& e) {
+            cout << e.what() << endl ;
+         } catch (EofException& e) {
+            cout << "bye!" << endl ;
+            break;
          } catch (CommandFactory::BadSyntaxException e) {
             cout << e.what() << endl ;
          }
