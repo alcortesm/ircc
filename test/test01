@@ -1,0 +1,7 @@
+/connect localhost 6757
+/nick alcortes
+/user alcortes Alberto Cortes
+/sleep
+/sleep
+/sleep
+/quit

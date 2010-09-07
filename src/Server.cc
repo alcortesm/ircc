@@ -175,7 +175,7 @@ Server::Disconnect()
 
 void
 Server::Send(const std::string& msg) const
-   throw (Server::NotConnectedException)
+   throw (Server::NotConnectedException, Server::SendException)
 {
    UNUSED(msg);
 
@@ -200,10 +200,11 @@ Server::Send(const std::string& msg) const
          Server::SendException e(r);
          free(errbuf);
          free(buf);
+         throw e;
       }
       if (nw == 0) {
          free(buf);
-         Server::SendException e("connection closed by peer");
+         throw Server::SendException("connection closed by peer");
       }
       offset += nw ;
       if (offset == msg.length())
@@ -214,16 +215,29 @@ Server::Send(const std::string& msg) const
    return;
 }
 
-std::string*
+std::string
 Server::Recv() const
-   throw (Server::NotConnectedException)
+   throw (Server::NotConnectedException, RecvException)
 {
    *gpDebug << "Server::Recv()" << endl ;
 
    if (!IsConnected())
       throw Server::NotConnectedException();
 
-   return 0;
+   size_t buf_sz = 1024;
+   char* buf = (char*) xcalloc(buf_sz, sizeof(char));
+
+   int nr;
+   nr = recv(mSock, buf, buf_sz-1, NO_FLAGS);
+   if (nr == -1) {
+      free(buf);
+      throw RecvException();
+   }
+
+   buf[buf_sz-1] = '\0';
+   string r(buf);
+   free(buf);
+   return r;
 }
 
 bool

@@ -129,9 +129,11 @@ main_loop()
       fd_set read_fds;
       FD_ZERO(&read_fds);
       FD_SET(STDIN_FD, &read_fds);
-      if (server.IsConnected())
-         FD_SET(server.GetSock(), &read_fds);
       max_fds = MAX(max_fds, STDIN_FD);
+      if (server.IsConnected()) {
+         FD_SET(server.GetSock(), &read_fds);
+         max_fds = MAX(max_fds, server.GetSock());
+      }
 
       int retval;
       retval = select(max_fds+1, &read_fds, NULL, NULL, &tv);
@@ -152,6 +154,19 @@ main_loop()
       }
 
       /* some fd was ready: which one?, read and process data */
+      if (FD_ISSET(server.GetSock(), &read_fds)) { /* server socket */
+         *gpDebug << "server socket is ready to be read" << endl;
+
+         try {
+            string data = server.Recv();
+            cout << "*** data from server: \"" << data << "\"" << endl;
+         } catch (Server::NotConnectedException& e) {
+            // that's OK, keep looping
+         } catch (Server::RecvException& e) {
+            cout << "*** error receiving data from server: " << e.what() << endl;
+         }
+      }
+
       if (FD_ISSET(STDIN_FD, &read_fds)) {
          /* process line: build a command from the line and execute it */
          try {
@@ -171,19 +186,6 @@ main_loop()
             break;
          } catch (CommandFactory::BadSyntaxException e) {
             cout << e.what() << endl ;
-         }
-      }
-
-      if (FD_ISSET(server.GetSock(), &read_fds)) { /* server socket */
-         *gpDebug << "server socket is ready to be read" << endl;
-
-         string* p_data;
-         try {
-            p_data = server.Recv();
-            cout << "data from server: \"" << p_data << "\"" << endl;
-            delete p_data;
-         } catch (Server::NotConnectedException& e) {
-            // that's OK, keep looping
          }
       }
 

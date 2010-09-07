@@ -25,6 +25,11 @@ class Server {
       SendException() : std::runtime_error("can not send") { }
       SendException(std::string s) : std::runtime_error("Can not send: " + s) { }
    };
+   class RecvException : public std::runtime_error {
+   public:
+      RecvException() : std::runtime_error("can not recv") { }
+      RecvException(std::string s) : std::runtime_error("Can not recv: " + s) { }
+   };
 
    Server();
    ~Server();
@@ -34,9 +39,9 @@ class Server {
    void Disconnect()
       throw (Server::NotConnectedException);
    void Send(const std::string& msg) const
-      throw (Server::NotConnectedException);
-   std::string* Recv() const
-      throw (Server::NotConnectedException);
+      throw (Server::NotConnectedException, Server::SendException);
+   std::string Recv() const
+      throw (Server::NotConnectedException, Server::RecvException);
 
    bool IsConnected() const;
    const std::string & GetHost() const throw (Server::NotConnectedException);
