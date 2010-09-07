@@ -183,7 +183,7 @@ main_loop()
 
       int retval;
       retval = select(max_fds+1, &read_fds, NULL, NULL, &tv);
-      //      *gpDebug << "main_loop's select() returns " << retval << endl ;
+      //*gpDebug << "main_loop's select() returns " << retval << endl ;
 
       /* select error: exit */
       if (retval == -1) {
@@ -230,9 +230,15 @@ main_loop()
 
       if (FD_ISSET(server.GetSock(), &read_fds)) { /* server socket */
          *gpDebug << "server socket is ready to be read" << endl;
-         string* p_data = server.Recv();
-         cout << "data from server: \"" << p_data << "\"" << endl;
-         delete p_data;
+
+         string* p_data;
+         try {
+            p_data = server.Recv();
+            cout << "data from server: \"" << p_data << "\"" << endl;
+            delete p_data;
+         } catch (Server::NotConnectedException& e) {
+            // that's OK, keep looping
+         }
       }
 
    }
