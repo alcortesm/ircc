@@ -8,5 +8,6 @@ MsgTellUser::MsgTellUser(const std::string& rPrefix, const std::string& rCommand
 void
 MsgTellUser::Run()
 {
-   std::cout << "< " << mCommand << std::endl;
+   for(std::vector<std::string>::iterator it = mParams.begin(); it != mParams.end(); ++it)
+      std::cout << "< " << *it << std::endl ;
 }

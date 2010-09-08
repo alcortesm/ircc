@@ -118,7 +118,8 @@ Msg*
 msg_factory(const string& rLine)
 {
    std::vector<string> params;
-   return new MsgTellUser(string(""), rLine, params);
+   params.push_back(rLine);
+   return new MsgTellUser(string(""), string(""), params);
 }
 
 // Takes the received data and go line by line, building a Msg for each
