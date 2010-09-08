@@ -51,13 +51,13 @@ dist:
 TAGS:
 	cscope -b -q *.cc *.h
 
-test: debugtestvalgrind
+test: debugvalgrind
 
 valgrind: $(BIN)
 	valgrind $(VALGRIND_FLAGS) ./$(BIN)
 
 debugvalgrind: $(BIN)
-	valgrind $(VALGRIND_FLAGS) ./$(BIN) -d
+	valgrind $(VALGRIND_FLAGS) ./$(BIN) -d < ../test/fast
 
 testvalgrind: $(BIN)
 	valgrind $(VALGRIND_FLAGS) ./$(BIN) -t
