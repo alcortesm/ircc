@@ -8,9 +8,11 @@
 #include "ComNick.h"
 #include "ComUser.h"
 #include "ComSleep.h"
+#include "ComJoin.h"
 #include <ostream>
 #include <stdexcept>
 #include "ircc.h"
+#include "irc.h"
 #include "utils.h"
 
 extern std::ostream* gpDebug;
@@ -111,6 +113,17 @@ new_nick(Server& rServer, const string& rLine)
 }
 
 Command*
+new_join(Server& rServer, const string& rLine)
+{
+   // if line is just "/join" -> leave all channels
+   if (there_is_no_args(rLine))
+      return new ComJoin(LEAVE_ALL_CHANNELS_CHANNEL, rServer);
+
+   string channel(rLine, ComNick::STR.length()+1);
+   return new ComJoin(channel, rServer);
+}
+
+Command*
 new_user(Server& rServer, const string& rLine)
 {
    // if line is just "/user" -> error
@@ -167,6 +180,10 @@ CommandFactory::Build(const std::string& rLine, Server& rServer)
    /* NICK */
    if (starts_with(rLine, ComNick::STR))
       return new_nick(rServer, rLine);
+
+   /* JOIN */
+   if (starts_with(rLine, ComJoin::STR))
+      return new_join(rServer, rLine);
 
    /* USER */
    if (starts_with(rLine, ComUser::STR))

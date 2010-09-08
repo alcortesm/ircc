@@ -16,5 +16,5 @@ const char PREFIX_PREFIX           = ':'; /* RFC2812 2.3 */
 const int  MESSAGE_MAX_LENGTH      = 152; /* RFC2812 2.3 */
 const char MESSAGE_SEPARATOR       = ' '; /* RFC2812 2.3 */
 const std::string END_OF_MESSAGE("\r\n"); /* RFC2812 2.3 */
-
+const std::string LEAVE_ALL_CHANNELS_CHANNEL("0"); /* RFC2812 3.2.1 */
 #endif
