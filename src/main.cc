@@ -26,6 +26,8 @@
 #include "ComQuit.h"
 #include "Server.h"
 #include "irc.h"
+#include "Msg.h"
+#include "MsgTellUser.h"
 
 using std::string;
 using std::endl;
@@ -112,6 +114,13 @@ fetch_line() throw (EofException, InputErrorException)
    return line;
 }
 
+Msg*
+msg_factory(const string& rLine)
+{
+   std::vector<string> params;
+   return new MsgTellUser(string(""), rLine, params);
+}
+
 // Takes the received data and go line by line, building a Msg for each
 // line an calling Msg::Run() of all of them in order.
 //
@@ -135,6 +144,9 @@ process_data_from_server(const string& data, const string& old_data)
          break;
       }
       string line(whole, last_line, next_line-last_line);
+      Msg* p_msg = msg_factory(line);
+      p_msg->Run();
+      delete p_msg;
       // TODO: build a Msg an call Run() in it
       last_line = next_line + END_OF_MESSAGE.length();
    }
