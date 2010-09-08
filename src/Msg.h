@@ -1,13 +1,18 @@
+#ifndef MSG_H
+#define MSG_H
+
 #include <string>
 #include <vector>
 
 class Msg {
  public:
-   Msg(std::string& rPrefix, std::string& rCommand, std::vector<std::string>& rParams);
+   Msg(const std::string& rPrefix, const std::string& rCommand, const std::vector<std::string>& rParams);
    virtual ~Msg() {};
    virtual void Run() = 0;
- private:
+ protected:
    std::string mPrefix;
    std::string mCommand;
    std::vector<std::string> mParams;
 };
+
+#endif // MSG_H

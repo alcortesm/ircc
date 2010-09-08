@@ -1,5 +1,5 @@
 #include "Msg.h"
 
-Msg::Msg(std::string& rPrefix, std::string& rCommand, std::vector<std::string>& rParams)
+Msg::Msg(const std::string& rPrefix, const std::string& rCommand, const std::vector<std::string>& rParams)
    : mPrefix(rPrefix), mCommand(rCommand), mParams(rParams)
 {}
