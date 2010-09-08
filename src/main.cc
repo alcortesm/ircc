@@ -25,6 +25,7 @@
 #include "Args.h"
 #include "ComQuit.h"
 #include "Server.h"
+#include "irc.h"
 
 using std::string;
 using std::endl;
@@ -111,12 +112,37 @@ fetch_line() throw (EofException, InputErrorException)
    return line;
 }
 
+// Takes the received data and go line by line, building a Msg for each
+// line an calling Msg::Run() of all of them in order.
+//
+// As the previous chunk of data could have left a line unended, it also
+// get the previous unended line and returns the current unended line if
+// any.
 string
 process_data_from_server(const string& data, const string& old_data)
 {
-   *gpDebug << old_data << endl;
-   cout << data << endl;
-   return string("");
+   // current received data preceded by prevous pending incomplete line
+   string whole(old_data);
+   whole.append(data);
+
+   size_t last_line = 0;
+   size_t next_line;
+   string pending(""); // the last unended line if any
+   while(true) {
+      next_line = whole.find(END_OF_MESSAGE, last_line);
+      if (next_line == string::npos) {
+         pending = string(whole, last_line);
+         break;
+      }
+      string line(whole, last_line, next_line-last_line);
+      // TODO: build a Msg an call Run() in it
+      last_line = next_line + END_OF_MESSAGE.length();
+   }
+
+   //   if (pending != string(""))
+   //      *gpDebug << "process_data_from_server : pending = " << pending << "\"" << endl;
+
+   return pending;
 }
 
 void
@@ -165,8 +191,6 @@ main_loop()
 
       /* some fd was ready: which one?, read and process data */
       if (FD_ISSET(server.GetSock(), &read_fds)) { /* server socket */
-         *gpDebug << "server socket is ready to be read" << endl;
-
          try {
             string data = server.Recv();
             old_data = process_data_from_server(data, old_data);
