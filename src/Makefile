@@ -12,7 +12,7 @@ SRCS = \
     Server.cc \
     ComConnect.cc \
     Args.cc \
-    CommandFactory.cc \
+    com_factory.cc \
     ComQuit.cc \
     ComUnknown.cc \
     ComNop.cc \

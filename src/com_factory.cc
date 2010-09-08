@@ -1,4 +1,3 @@
-#include "CommandFactory.h"
 #include "ComNop.h"
 #include "ComUnknown.h"
 #include "ComQuit.h"
@@ -154,11 +153,9 @@ new_sleep(const string& rLine)
 }
 
 Command*
-CommandFactory::Build(const std::string& rLine, Server& rServer)
-   throw (std::runtime_error)
+com_factory(const std::string& rLine, Server& rServer)
 {
-
-   *gpDebug << "CommandFactory::Build(\"" << rLine << "\", "
+   *gpDebug << "com_factory(\"" << rLine << "\", "
             << rServer << ")" << endl;
 
    /* NOP */

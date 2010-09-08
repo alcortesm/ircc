@@ -21,7 +21,7 @@
 #include "ircc.h"
 #include "ComNop.h"
 #include "ComUnknown.h"
-#include "CommandFactory.h"
+#include "com_factory.h"
 #include "Args.h"
 #include "ComQuit.h"
 #include "Server.h"
@@ -219,7 +219,7 @@ main_loop()
          try {
             string line = fetch_line();
             Command* p_command;
-            p_command = CommandFactory::Build(line, server);
+            p_command = com_factory(line, server);
             p_command->Run();
             if (p_command->MustQuit()) {
                delete p_command;
@@ -231,8 +231,6 @@ main_loop()
          } catch (EofException& e) {
             cout << "bye!" << endl ;
             break;
-         } catch (CommandFactory::BadSyntaxException e) {
-            cout << e.what() << endl ;
          }
       }
 
