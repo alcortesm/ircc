@@ -22,6 +22,7 @@
 #include "ComNop.h"
 #include "ComUnknown.h"
 #include "com_factory.h"
+#include "msg_factory.h"
 #include "Args.h"
 #include "ComQuit.h"
 #include "Server.h"
@@ -112,14 +113,6 @@ fetch_line() throw (EofException, InputErrorException)
    if (std::cin.bad())
       throw InputErrorException();
    return line;
-}
-
-Msg*
-msg_factory(const string& rLine)
-{
-   std::vector<string> params;
-   params.push_back(rLine);
-   return new MsgTellUser(string(""), string(""), params);
 }
 
 // Takes the received data and go line by line, building a Msg for each
