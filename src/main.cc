@@ -97,7 +97,7 @@ public:
    EofException() : std::runtime_error("EOF found!") { }
 };
 
-string*
+string
 fetch_line() throw (EofException, InputErrorException)
 {
    string line;
@@ -108,7 +108,7 @@ fetch_line() throw (EofException, InputErrorException)
       throw InputErrorException();
    if (std::cin.bad())
       throw InputErrorException();
-   return new string(line);
+   return line;
 }
 
 void
@@ -170,7 +170,7 @@ main_loop()
       if (FD_ISSET(STDIN_FD, &read_fds)) {
          /* process line: build a command from the line and execute it */
          try {
-            string line(*fetch_line());
+            string line = fetch_line();
             Command* p_command;
             p_command = CommandFactory::Build(line, server);
             p_command->Run();
