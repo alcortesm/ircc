@@ -10,6 +10,7 @@ class Command {
  public:
    virtual void Run() = 0;
    virtual bool MustQuit() const { return false ; };
+   virtual ~Command() {};
 };
 
 #endif /* COMMAND_H */
