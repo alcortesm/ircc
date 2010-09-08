@@ -1,6 +1,7 @@
 BIN = ircc
 INSTALL_DIR = ~/bin
 SRCS = \
+    Msg.cc \
     ComJoin.cc \
     ComSleep.cc \
     ComUser.cc \
