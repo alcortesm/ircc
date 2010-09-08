@@ -159,7 +159,7 @@ main_loop()
 
          try {
             string data = server.Recv();
-            cout << "*** data from server: \"" << data << "\"" << endl;
+            cout << data << "\"" << endl;
          } catch (Server::NotConnectedException& e) {
             // that's OK, keep looping
          } catch (Server::RecvException& e) {
