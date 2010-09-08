@@ -1,4 +1,3 @@
-- fix valgrind errors
 - A ComDisconnect is needed
 - A ComServer command must have ComConnect ComNick and its run must run
    its members
