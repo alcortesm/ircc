@@ -111,11 +111,21 @@ fetch_line() throw (EofException, InputErrorException)
    return line;
 }
 
+string
+process_data_from_server(const string& data, const string& old_data)
+{
+   *gpDebug << old_data << endl;
+   cout << data << endl;
+   return string("");
+}
+
 void
 main_loop()
 {
    // a server will be needed during the main loop
    Server server;
+   // we need to remember the still unprocessed data from the server
+   std::string old_data;
 
    /* wakeup timer: there is no need to use one at all */
    struct timeval tv;
@@ -159,7 +169,7 @@ main_loop()
 
          try {
             string data = server.Recv();
-            cout << data << "\"" << endl;
+            old_data = process_data_from_server(data, old_data);
          } catch (Server::NotConnectedException& e) {
             // that's OK, keep looping
          } catch (Server::RecvException& e) {
