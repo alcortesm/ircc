@@ -33,10 +33,10 @@ ComUser::Run() {
       mrServer.Send(s);
 
    } catch (Server::NotConnectedException & e) {
-      cout << "*** Can not set user: not connected to server"
+      cout << FROM_PROGRAM << "Can not set user: not connected to server"
            << endl;
    } catch (Server::SendException & e) {
-      cout << "*** Can not set user: " << e.what()
+      cout << FROM_PROGRAM << "Can not set user: " << e.what()
            << endl;
    }
 

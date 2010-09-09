@@ -15,5 +15,6 @@ const size_t PROTOENT_BUF_SZ = 1024;
 const char   SPACE = ' ';
 const int    NO_FLAGS = 0;
 const std::string FROM_SERVER("<<< ");
+const std::string FROM_PROGRAM("*** ");
 
 #endif // IRCC_H

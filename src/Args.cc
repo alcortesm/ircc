@@ -1,5 +1,6 @@
 #include "Args.h"
 #include "utils.h"
+#include "ircc.h"
 
 #include <cstring>
 #include <cassert>
@@ -63,7 +64,7 @@ Args::Build(int argc, char ** argv) throw (Args::InvalidArgumentException)
 void
 Args::Test()
 {
-   cout << "*** Begin of Args test" << endl ;
+   cout << FROM_PROGRAM << "Begin of Args test" << endl ;
    {
       bool test = false;
       bool debug = false;
@@ -246,6 +247,6 @@ Args::Test()
       }
       delete(p_a);
    }
-   cout << "*** End of Args test" << endl ;
+   cout << FROM_PROGRAM << "End of Args test" << endl ;
    return;
 }

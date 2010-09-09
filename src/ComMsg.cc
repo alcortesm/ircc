@@ -3,6 +3,7 @@
 #include <iostream>
 #include <sstream>
 #include "irc.h"
+#include "ircc.h"
 
 extern std::ostream* gpDebug;
 
@@ -25,10 +26,10 @@ ComMsg::Run() {
       mrServer.Send(s);
 
    } catch (Server::NotConnectedException & e) {
-      std::cout << "*** Can not send message: not connected to server"
+      std::cout << FROM_PROGRAM << "Can not send message: not connected to server"
                 << std::endl;
    } catch (Server::SendException & e) {
-      std::cout << "*** Can not send message: " << e.what()
+      std::cout << FROM_PROGRAM << "Can not send message: " << e.what()
                 << std::endl;
    }
 

@@ -70,11 +70,11 @@ ComConnect::Run() {
       mrServer.Connect(mHost, mPort);
 
    } catch (Server::AlreadyConnectedException & e) {
-      cout << "*** Can not connect to " << mHost << ":" << mPort
+      cout << FROM_PROGRAM << "Can not connect to " << mHost << ":" << mPort
            << ": Already connected to " << mrServer.GetHost()
            << ":" << mrServer.GetPort() << endl;
    } catch (Server::ConnectException & e) {
-      cout << "*** Can not connect to "  << mHost << ":" << mPort
+      cout << FROM_PROGRAM << "Can not connect to "  << mHost << ":" << mPort
            << ": " << e.what() << endl ;
    }
 

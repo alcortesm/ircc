@@ -79,16 +79,16 @@ usage()
 void
 tests()
 {
-   cout << "*** Running unit tests!" <<  endl ;
+   cout << FROM_PROGRAM << " Running unit tests!" <<  endl ;
 
    Args::Test();
 
    if (Server::TestFail()) {
-      cerr << "*** Server test failed!" << endl ;
+      cerr << FROM_PROGRAM << "Server test failed!" << endl ;
       return;
    }
 
-   cout << "*** All tests passed!" <<  endl ;
+   cout << FROM_PROGRAM << "All tests passed!" <<  endl ;
 }
 
 
@@ -199,7 +199,7 @@ main_loop()
          } catch (Server::NotConnectedException& e) {
             // that's OK, keep looping
          } catch (Server::RecvException& e) {
-            cout << "*** error receiving data from server: " << e.what() << endl;
+            cout << FROM_PROGRAM << "error receiving data from server: " << e.what() << endl;
          }
       }
 
@@ -220,7 +220,7 @@ main_loop()
          } catch (InputErrorException& e) {
             cout << e.what() << endl ;
          } catch (EofException& e) {
-            cout << "bye!" << endl ;
+            cout << FROM_PROGRAM << "bye!" << endl ;
             break;
          }
       }

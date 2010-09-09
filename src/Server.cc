@@ -273,7 +273,7 @@ Server::GetSock() const
 bool
 Server::TestOk()
 {
-   cout << "*** Begin of Server test" << endl ;
+   cout << FROM_PROGRAM << "Begin of Server test" << endl ;
 
    {
       Server server;
@@ -361,7 +361,7 @@ Server::TestOk()
    ok0:;
    }
 
-   cout << "*** End of Server test" << endl ;
+   cout << FROM_PROGRAM << "End of Server test" << endl ;
    return true;
 }
 
