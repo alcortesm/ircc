@@ -1,4 +1,6 @@
+#include "ComEcho.h"
 #include "ComHelp.h"
+#include "ComEcho.h"
 #include "ComNop.h"
 #include "ComUnknown.h"
 #include "ComQuit.h"
@@ -178,6 +180,10 @@ com_factory(const std::string& rLine, Server& rServer)
    /* NICK */
    if (starts_with(rLine, ComNick::STR))
       return new_nick(rServer, rLine);
+
+   /* ECHO */
+   if (starts_with(rLine, ComEcho::STR))
+      return new ComEcho(rLine.substr(ComEcho::STR.length()+1));
 
    /* HELP */
    if (starts_with(rLine, ComHelp::STR))
