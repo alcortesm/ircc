@@ -1,59 +1,28 @@
-/echo /help
 /help
-
-/echo /connect localhost 6757
 /connect localhost 6757
-
-/echo /nick alcortes
 /nick alcortes
-
-/echo /user alcortes Alberto Cortes
 /user alcortes Alberto Cortes
-
-/echo /sleep
 /sleep
 
-/echo /list
 /list
-
-/echo /sleep
 /sleep
 
-/echo /join #ro2
 /join #ro2
-
-/echo /sleep
 /sleep
 
-/echo /who
 /who
-
-/echo /sleep
 /sleep
 
-/echo hello
 hello
-
-/echo /sleep
 /sleep
 
-/echo /msg hello again
 /msg hello again
-
-/echo /sleep
 /sleep
 
-/echo /join
 /join
-
-/echo /sleep
 /sleep
 
-/echo /disconnect
 /disconnect
-
-/echo /sleep
 /sleep
 
-/echo /quit
 /quit
