@@ -37,7 +37,7 @@ VALGRIND_FLAGS = --tool=memcheck --show-reachable=yes --leak-check=full -q
 
 
 
-.PHONY: all install clean nuke test valgrind debugvalgrind debugtestvalgrind
+.PHONY: all install clean nuke test valgrind debugvalgrind debugtestvalgrind upload
 
 all: $(BIN)
 
@@ -79,6 +79,8 @@ clean:
 nuke: clean
 	- rm -f $(INSTALL_DIR)/$(BIN)
 
+upload:
+	- ../sh/git-upload
 
 $(BIN): $(OBJS)
 	$(CC) $(LFLAGS) $(INCLUDES) -o $@ $(OBJS) $(LIBS)
