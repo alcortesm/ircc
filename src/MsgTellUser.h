@@ -7,7 +7,10 @@
 // need to show to the user
 class MsgTellUser : public Msg {
  public:
-   MsgTellUser(const std::string& rPrefix, const std::string& rCommand, const std::vector<std::string>& rParams);
+   MsgTellUser(
+               const std::string& rPrefix,
+               const std::string& rCommand,
+               const std::vector<std::string>& rParams);
    void Run();
 };
 

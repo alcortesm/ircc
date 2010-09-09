@@ -4,20 +4,38 @@
 /echo /connect localhost 6757
 /connect localhost 6757
 
+/echo /sleep
+/sleep
+
 /echo /nick alcortes
 /nick alcortes
+
+/echo /sleep
+/sleep
 
 /echo /user alcortes Alberto Cortes
 /user alcortes Alberto Cortes
 
+/echo /sleep
+/sleep
+
 /echo /list
 /list
+
+/echo /sleep
+/sleep
 
 /echo /join #ro2
 /join #ro2
 
+/echo /sleep
+/sleep
+
 /echo /who
 /who
+
+/echo /sleep
+/sleep
 
 /echo hello
 hello
@@ -34,8 +52,14 @@ hello
 /echo /join
 /join
 
+/echo /sleep
+/sleep
+
 /echo /disconnect
 /disconnect
+
+/echo /sleep
+/sleep
 
 /echo /quit
 /quit
