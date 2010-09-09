@@ -1,5 +1,3 @@
-- process_data_from_server must create a vector of messages and old_data
-- each message from the vector must be .Run(). Most runs will be just print to stdout
 - A ComDisconnect is needed
 - A ComServer command must have ComConnect ComNick and its run must run
    its members
@@ -8,6 +6,3 @@
    reference to avoid deleting the object afterwards, let the scope
    rules do the work for me.
 - Modify QUIT to notify server
-- Add command for JOIN
-- Add command for SEND
-- Add server class to allow connection, Think this.

@@ -4,14 +4,8 @@
 /echo /connect localhost 6757
 /connect localhost 6757
 
-/echo /sleep
-/sleep
-
 /echo /nick alcortes
 /nick alcortes
-
-/echo /sleep
-/sleep
 
 /echo /user alcortes Alberto Cortes
 /user alcortes Alberto Cortes
