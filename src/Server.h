@@ -46,6 +46,9 @@ class Server {
    bool IsConnected() const;
    const std::string & GetHost() const throw (Server::NotConnectedException);
    const std::string & GetPort() const throw (Server::NotConnectedException);
+   const std::string & GetChannel() const;
+   void                SetChannel(const std::string& rChannel);
+   void                ClearChannel();
    int                 GetSock() const;
 
    static bool TestOk();
@@ -57,6 +60,7 @@ class Server {
 
    std::string mHost;
    std::string mPort;
+   std::string mChannel;
    enum state {DISCONNECTED, CONNECTED} mState;
    int mSock;
 };

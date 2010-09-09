@@ -4,6 +4,9 @@
 #include "ircc.h"
 #include "utils.h"
 #include <ostream>
+#include "NullStream.h"
+#include <sstream>
+#include <iostream>
 
 extern std::ostream* gpDebug;
 
@@ -44,8 +47,8 @@ prefix_last(const string& rLine)
 string
 get_prefix(const string& rLine)
 {
-   *gpDebug << "  prefix_first = " << prefix_first(rLine) << std::endl ;
-   *gpDebug << "  prefix_last  = " << prefix_last(rLine) << std::endl ;
+   //   *gpDebug << "  prefix_first = " << prefix_first(rLine) << std::endl ;
+   //   *gpDebug << "  prefix_last  = " << prefix_last(rLine) << std::endl ;
    if (there_is_a_prefix) {
       size_t size = prefix_last(rLine) - prefix_first(rLine) + 1;
       return rLine.substr(prefix_first(rLine), size);
@@ -84,8 +87,8 @@ command_last(const string& rLine)
 string
 get_command(const string& rLine)
 {
-   *gpDebug << "  command_first = " << command_first(rLine) << std::endl ;
-   *gpDebug << "  command_last  = " << command_last(rLine) << std::endl ;
+   //   *gpDebug << "  command_first = " << command_first(rLine) << std::endl ;
+   //   *gpDebug << "  command_last  = " << command_last(rLine) << std::endl ;
    return rLine.substr(command_first(rLine),
                        command_last(rLine)-command_first(rLine) + 1);
 }
@@ -95,7 +98,7 @@ get_command(const string& rLine)
 
 size_t
 inline
-param_first(const string& rLine)
+params_first(const string& rLine)
 {
    if (rLine.length() > (command_last(rLine) + 1))
       return (command_last(rLine) + 2); // +2 means "the next to SPACE"
@@ -103,27 +106,139 @@ param_first(const string& rLine)
       return string::npos;
 }
 
+
+
 vector<string>
 get_params(const string& rLine)
 {
-   vector<string> params;
-   params.push_back(rLine.substr(param_first(rLine)));
-   return params;
+   // we will only work with the params portion or the line
+   string only_params = rLine.substr(params_first(rLine));
+   //   *gpDebug << "  -- get_param() : rLine = \"" << rLine << "\"" << std::endl;
+   //   *gpDebug << "  -- get_param() : only_params = \"" << only_params << "\"" << std::endl;
+
+   if (only_params.empty())
+      return vector<string>();
+
+   // if there is only the "colon param", there is only one param and we
+   // can return a very simple vector
+   if (only_params.at(0) == ':') {
+      string param = only_params.substr(1);
+      vector<string> v;
+      v.push_back(param);
+      return v;
+   }
+
+   // let's find if there is a last param starting with ':'
+   // if there is, strip it from our working str and store it away
+   // for later processing
+   string no_colon_params;
+   string colon_param;
+   {
+      // as there is regular params and then the "colon param" we have
+      // to look for " :"
+      size_t colon_pos = only_params.find(COLON_PARAM_SEPARATOR);
+      if (colon_pos == string::npos) {
+         no_colon_params = only_params;
+         colon_param = string();
+      } else {
+         no_colon_params = only_params.substr(0, colon_pos);
+         colon_param = only_params.substr(colon_pos + COLON_PARAM_SEPARATOR.length());
+      }
+   }
+   //   *gpDebug << "  -- get_param() : no_colon_params = \"" << no_colon_params << "\"" << std::endl;
+   //   *gpDebug << "  -- get_param() : colon_param = \"" << colon_param << "\"" << std::endl;
+      
+   // now, build the vector of params
+   vector<string> v;
+   // if there are no_colon_params
+   if (!no_colon_params.empty()) {
+      size_t current = 0;
+      while (true) {
+         
+         size_t next_space = no_colon_params.find(SPACE, current);
+         
+         string param = (next_space == string::npos)
+            ? no_colon_params.substr(current)
+            : no_colon_params.substr(current, (next_space - current));
+         
+         //         *gpDebug << "  -- -- get_param() : current = " << current << std::endl;
+         //         *gpDebug << "  -- -- get_param() : next_space = " << next_space << std::endl;
+         //         *gpDebug << "  -- -- get_param() : adding the string \"" << param << "\" to the vector" << std::endl;  
+         v.push_back(param);
+          
+         if (next_space == string::npos)
+            break;
+         else
+            current = next_space + 1;
+      }
+   } // end of if there no_colon_params
+   // if there is a colon_param
+   if (!colon_param.empty()) {
+      //      *gpDebug << "  -- -- get_param() : adding the colon string \"" << colon_param << "\" to the vector" << std::endl;
+      v.push_back(colon_param);
+   }
+
+   return v;
 }
 
 
 
 
 Msg*
-msg_factory(const string& rLine)
+msg_factory(const string& rLine, Server& rServer)
 {
-   *gpDebug << "line = \"" << rLine << "\"" << std::endl ;
-   *gpDebug << "prefix = \"" << get_prefix(rLine) << "\"" << std::endl ;
-   *gpDebug << "command = \"" << get_command(rLine) << "\"" << std::endl ;
-   *gpDebug << "params(1) = \"" << (get_params(rLine))[0] << "\"" << std::endl ;
+   string prefix = get_prefix(rLine);
+   string command = get_command(rLine);
+   vector<string> params = get_params(rLine);
 
-   return new MsgTellUser(
-                          get_prefix(rLine),
-                          get_command(rLine),
-                          get_params(rLine));
+   //   *gpDebug << "line = \"" << rLine << "\"" << std::endl ;
+   //   *gpDebug << "prefix = \"" << prefix << "\"" << std::endl ;
+   //   *gpDebug << "command = \"" << command << "\"" << std::endl ;
+   //   *gpDebug << "params(0) = \"" << params[0] << "\"" << std::endl ;
+
+   *gpDebug << "msg_factory : prefix=\"" << get_prefix(rLine)
+            << "\", command=\"" << get_command(rLine)
+            << "\", params=(";
+   if (gpDebug != &NullStream::cnull) {
+      for(std::vector<string>::iterator it = params.begin();
+          it != params.end();
+          ++it) {
+         if (it != params.begin())
+            *gpDebug << ", ";
+         *gpDebug << "\"" << *it << "\"" ;
+      }
+      *gpDebug << ")" << std::endl;
+   }
+
+   /* JOIN */
+   if (command == "JOIN")
+      rServer.SetChannel(params[0]);
+
+   /* PART */
+   if (command == "PART") {   
+      rServer.ClearChannel();
+   }
+
+   /* PING */
+   if (command == "PING") {
+      /* send PONG */
+      try {
+         
+         std::stringstream ss;
+         ss << "PONG" << MESSAGE_SEPARATOR
+            << ":" << params[0] << END_OF_MESSAGE;
+         std::string s = ss.str();
+         rServer.Send(s);
+         
+      } catch (Server::NotConnectedException & e) {
+         std::cout << FROM_PROGRAM << "Can not send message: not connected to server"
+                   << std::endl;
+      } catch (Server::SendException & e) {
+         std::cout << FROM_PROGRAM << "Can not send message: " << e.what()
+                   << std::endl;
+      }
+      
+   }
+
+   return new MsgTellUser(prefix, command, params);
 }

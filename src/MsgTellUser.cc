@@ -1,6 +1,10 @@
 #include "MsgTellUser.h"
 #include <iostream>
+#include "NullStream.h"
 #include "ircc.h"
+
+extern std::ostream* gpDebug;
+using std::string;
 
 MsgTellUser::MsgTellUser(
                          const std::string& rPrefix,
@@ -15,6 +19,11 @@ MsgTellUser::Run()
    std::cout << FROM_SERVER << "[" << mCommand << "] " ;
    for(std::vector<std::string>::iterator it = mParams.begin();
        it != mParams.end();
-       ++it)
-      std::cout << *it << std::endl ;
+       ++it) {
+      if (it != mParams.begin())
+         std::cout << " " ;
+
+      std::cout << *it ;
+   }
+   std::cout << std::endl;
 }

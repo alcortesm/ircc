@@ -1,3 +1,7 @@
+- server should not create new channel if a user join a non-existing one
+- Prefix all debug messages with DDD or something
+- Fix the trick to copy stdin to stdout when input redirected
+- Fix Server::Send debug output to avoid \r\n
 - A ComDisconnect is needed
 - A ComServer command must have ComConnect ComNick and its run must run
    its members

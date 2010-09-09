@@ -15,12 +15,17 @@ ComMsg::Run() {
 
    *gpDebug << "ComMsg::Run()" << std::endl ;
 
+   if (mrServer.GetChannel().empty()) {
+      std::cout << FROM_PROGRAM << "Error: you must join a channel first"
+                << std::endl;
+      return;
+   }
+
    try {
 
       std::stringstream ss;
       ss << ComMsg::COMMAND << MESSAGE_SEPARATOR
-         //         << mrServer.Channel() << MESSAGE_SEPARATOR
-         << "#ro2" << MESSAGE_SEPARATOR
+         << mrServer.GetChannel() << MESSAGE_SEPARATOR
          << ":" << mMsg << END_OF_MESSAGE;
       std::string s = ss.str();
       mrServer.Send(s);

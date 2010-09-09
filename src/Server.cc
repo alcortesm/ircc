@@ -264,6 +264,26 @@ Server::GetPort() const
    return mPort;
 }
 
+const string&
+Server::GetChannel() const
+{
+   return mChannel;
+}
+
+void
+Server::SetChannel(const std::string& rChannel)
+{
+   mChannel = rChannel;
+   return;
+}
+
+void
+Server::ClearChannel()
+{
+   mChannel = string();
+   return;
+}
+
 int
 Server::GetSock() const
 {
@@ -371,8 +391,12 @@ operator<<(std::ostream & os, Server & server) {
 
    if (server.IsConnected()) {
       os << "CONNECTED";
-      os << " host=" << server.GetHost();
-      os << " port=" << server.GetPort();
+      os << ", host=" << server.GetHost();
+      os << ", port=" << server.GetPort();
+      if (!server.GetChannel().empty())
+         os << ", channel=" << server.GetChannel();
+      else
+         os << ", not in a channel";
    } else {
       os << "DISCONNECTED";
    }

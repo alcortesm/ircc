@@ -3,7 +3,8 @@
 
 #include <string>
 #include "Msg.h"
+#include "Server.h"
 
-Msg* msg_factory(const std::string& rLine);
+Msg* msg_factory(const std::string& rLine, Server& rServer);
 
 #endif // MSG_FACTORY_H

@@ -122,7 +122,7 @@ fetch_line() throw (EofException, InputErrorException)
 // also receive the previous incomplete line and returns the current one
 // if any.
 string
-process_data_from_server(const string& data, const string& old_data)
+process_data_from_server(const string& data, const string& old_data, Server& rServer)
 {
    // whole = current received data preceded by prevous pending incomplete line
    string whole(old_data);
@@ -138,7 +138,7 @@ process_data_from_server(const string& data, const string& old_data)
          break;
       }
       string line(whole, last_line_pos, next_line_pos-last_line_pos);
-      Msg* p_msg = msg_factory(line);
+      Msg* p_msg = msg_factory(line, rServer);
       p_msg->Run();
       delete p_msg;
       last_line_pos = next_line_pos + END_OF_MESSAGE.length();
@@ -175,7 +175,7 @@ main_loop()
 
       int retval;
       retval = select(max_fds+1, &read_fds, NULL, NULL, &tv);
-      //*gpDebug << "main_loop's select() returns " << retval << endl ;
+      //*gpDebug << FROM_PROGRAM << "main_loop's select() returns " << retval << endl ;
       /* select error: exit */
       if (retval == -1) {
          if (errno == EINTR)
@@ -185,7 +185,7 @@ main_loop()
 
       /* select's timeout expire: reset timer */
       if (retval == 0) {
-         //         *gpDebug << "main_loop(): timeout expire!" << endl ;
+         //         *gpDebug << FROM_PROGRAM << "main_loop(): timeout expire!" << endl ;
          tv.tv_sec = MAIN_LOOP_TIMEOUT_SECS;
          tv.tv_usec = MAIN_LOOP_TIMEOUT_SECS;
          continue;
@@ -195,7 +195,7 @@ main_loop()
       if (FD_ISSET(server.GetSock(), &read_fds)) { /* server socket */
          try {
             string data = server.Recv();
-            old_data = process_data_from_server(data, old_data);
+            old_data = process_data_from_server(data, old_data, server);
          } catch (Server::NotConnectedException& e) {
             // that's OK, keep looping
          } catch (Server::RecvException& e) {
