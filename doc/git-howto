@@ -21,4 +21,4 @@ To submit changes to the main repo:
  ; git merge non-violin/master
  ; # git remote rm non-violin
 
- ; cd ; unmount-git-repos
+ ; cd ; unmount-labro2
