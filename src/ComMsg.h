@@ -8,6 +8,7 @@ class ComMsg : public Command {
  protected:
    const std::string mMsg; /* the original message to send */
    Server& mrServer;
+   static const std::string COMMAND;
  public:
    ComMsg(const std::string& rMsg, Server& rServer)
       : mMsg(rMsg), mrServer(rServer) {};

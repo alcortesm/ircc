@@ -100,7 +100,7 @@ new_msg(Server& rServer, const string& rLine)
    if (there_is_no_args(rLine))
       return new ComError("can not send message: which message?");
 
-   return new ComMsg(rLine, rServer);
+   return new ComMsg(rLine.substr(ComMsg::STR.length()+1), rServer);
 }
 
 Command*
