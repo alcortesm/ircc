@@ -1,0 +1,24 @@
+To clone the repo into ~/tmp/:
+
+ ; cd ~/tmp
+ ; git clone ssh://labro2@monitor01.lab.it.uc3m.es/var/home/lab/asignatura/labro2/alcortes/git-repos/ircc
+ ; cd ircc
+
+
+To submit changes to the main repo:
+
+ ; cd ; mount-labro2 ; cd ~/mnt/labro2/alcortes/git-repos/ircc
+
+ # add a new remote:
+ ; # git remote add non-violin file:///home/alcortes/room/current/ircc
+ ; git fetch non-violin
+
+ # check out the changes
+ ; git log non-violin/master ^master
+
+ # If we are happy, merge:
+ ; # git checkout master
+ ; git merge non-violin/master
+ ; # git remote rm non-violin
+
+ ; cd ; unmount-git-repos

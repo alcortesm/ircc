@@ -1,0 +1,24 @@
+#!/bin/bash
+
+repo="ircc"
+
+cd
+
+echo "git-upload> mounting git repository from labro2@monitor01.lab.it.uc3m.es"
+mount-labro2 || exit
+echo "git-upload> done"
+
+cd ~/mnt/labro2/alcortes/git-repos/$repo || exit
+
+echo "git-upload> fetching commits from here to monitor01"
+git fetch non-violin || exit
+echo "git-upload> done"
+
+echo "git-upload> merging commits at violin"
+git merge non-violin/master || exit
+echo "git-upload> done"
+
+cd
+echo "git-upload> un-mounting git repository"
+unmount-labro2
+echo "git-upload> done"
