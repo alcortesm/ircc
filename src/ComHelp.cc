@@ -42,7 +42,7 @@ const std::string ComHelp::MSG("*** A typical user session goes like this:\n\
 *** \n\
 *** Lines beginning with \"*** \" are messages from the program to the user.\n\
 *** Lines beginning with \"< (<user>) \" are messages from some user <user>.\n\
-*** Lines beginning with \"<<< \" are from the server.\n                 \
+*** Lines beginning with \"<<< \" are from the server.\n\
 *** The rest of the lines are echoes of the user commands.");
 
 void
