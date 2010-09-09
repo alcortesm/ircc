@@ -55,8 +55,8 @@ class Server {
    Server(const Server&); // not implemented, prevent copy ctor
    Server& operator=(const Server&); // not implemented, prevent copy ctor
 
-   std::string * mpHost;
-   std::string * mpPort;
+   std::string mHost;
+   std::string mPort;
    enum state {DISCONNECTED, CONNECTED} mState;
    int mSock;
 };

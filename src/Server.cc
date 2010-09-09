@@ -20,8 +20,8 @@ using std::cout;
 using std::string;
 
 Server::Server()
-   : mpHost(NULL),
-     mpPort(NULL),
+   : mHost(),
+     mPort(),
      mState(Server::DISCONNECTED),
      mSock(-1)
 {
@@ -148,8 +148,8 @@ Server::Connect(const string & host, const string & port)
 
 
    // fill the object members
-   mpHost = new string(host);
-   mpPort = new string(port);
+   mHost = string(host);
+   mPort = string(port);
    mState = Server::CONNECTED;
    return;
 }
@@ -165,10 +165,8 @@ Server::Disconnect()
 
    close(mSock);
    mSock = -1;
-   delete mpHost;
-   delete mpPort;
-   mpHost = NULL;
-   mpPort = NULL;
+   mHost = string();
+   mPort = string();
    mState = Server::DISCONNECTED;
    return;
 }
@@ -253,7 +251,7 @@ Server::GetHost() const
    if (!IsConnected())
       throw Server::NotConnectedException();
    
-   return *mpHost;
+   return mHost;
 }
 
 const string&
@@ -263,7 +261,7 @@ Server::GetPort() const
    if (!IsConnected())
       throw Server::NotConnectedException();
    
-   return *mpPort;
+   return mPort;
 }
 
 int
