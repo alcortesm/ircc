@@ -128,20 +128,20 @@ process_data_from_server(const string& data, const string& old_data)
    string whole(old_data);
    whole.append(data);
 
-   size_t last_line = 0;
-   size_t next_line;
+   size_t last_line_pos = 0;
+   size_t next_line_pos;
    string pending(""); // the last unended line if any
    while(true) {
-      next_line = whole.find(END_OF_MESSAGE, last_line);
-      if (next_line == string::npos) {
-         pending = string(whole, last_line);
+      next_line_pos = whole.find(END_OF_MESSAGE, last_line_pos);
+      if (next_line_pos == string::npos) {
+         pending = string(whole, last_line_pos);
          break;
       }
-      string line(whole, last_line, next_line-last_line);
+      string line(whole, last_line_pos, next_line_pos-last_line_pos);
       Msg* p_msg = msg_factory(line);
       p_msg->Run();
       delete p_msg;
-      last_line = next_line + END_OF_MESSAGE.length();
+      last_line_pos = next_line_pos + END_OF_MESSAGE.length();
    }
 
    return pending;
