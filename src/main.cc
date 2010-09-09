@@ -118,13 +118,13 @@ fetch_line() throw (EofException, InputErrorException)
 // Takes the received data and go line by line, building a Msg for each
 // line an calling Msg::Run() of all of them in order.
 //
-// As the previous chunk of data could have left a line unended, it also
-// get the previous unended line and returns the current unended line if
-// any.
+// As the previous chunk of data could have left an incomplete line, it
+// also receive the previous incomplete line and returns the current one
+// if any.
 string
 process_data_from_server(const string& data, const string& old_data)
 {
-   // current received data preceded by prevous pending incomplete line
+   // whole = current received data preceded by prevous pending incomplete line
    string whole(old_data);
    whole.append(data);
 
@@ -141,12 +141,8 @@ process_data_from_server(const string& data, const string& old_data)
       Msg* p_msg = msg_factory(line);
       p_msg->Run();
       delete p_msg;
-      // TODO: build a Msg an call Run() in it
       last_line = next_line + END_OF_MESSAGE.length();
    }
-
-   //   if (pending != string(""))
-   //      *gpDebug << "process_data_from_server : pending = " << pending << "\"" << endl;
 
    return pending;
 }
