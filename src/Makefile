@@ -4,6 +4,7 @@ SRCS = \
     msg_factory.cc \
     Msg.cc \
     MsgTellUser.cc \
+    ComHelp.cc \
     ComJoin.cc \
     ComSleep.cc \
     ComUser.cc \
@@ -53,13 +54,19 @@ dist:
 TAGS:
 	cscope -b -q *.cc *.h
 
-test: debugvalgrind
+test: fast
+
+fast: $(BIN)
+	valgrind $(VALGRIND_FLAGS) ./$(BIN) < ../test/fast
+
+debugfast: $(BIN)
+	valgrind $(VALGRIND_FLAGS) ./$(BIN) -d < ../test/fast
 
 valgrind: $(BIN)
 	valgrind $(VALGRIND_FLAGS) ./$(BIN)
 
 debugvalgrind: $(BIN)
-	valgrind $(VALGRIND_FLAGS) ./$(BIN) -d < ../test/fast
+	valgrind $(VALGRIND_FLAGS) ./$(BIN) -d
 
 testvalgrind: $(BIN)
 	valgrind $(VALGRIND_FLAGS) ./$(BIN) -t
