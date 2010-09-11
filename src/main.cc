@@ -137,8 +137,8 @@ process_data_from_server(const string& data, const string& old_data, Server& rSe
          break;
       }
       string line(whole, last_line_pos, next_line_pos-last_line_pos);
-      Msg* p_msg = msg_factory(line, rServer);
-      //      p_msg->Run();
+      const Msg* p_msg = msg_factory(line);
+      p_msg->Run(rServer);
       delete p_msg;
       last_line_pos = next_line_pos + END_OF_MESSAGE.length();
    }

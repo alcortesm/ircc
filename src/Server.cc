@@ -252,7 +252,6 @@ Server::Recv()
    buf[buf_sz-1] = '\0';
    string r(buf);
    free(buf);
-   *gpDebug << FROM_DEBUG << "Server::Recv()" << endl ;
    return r;
 }
 

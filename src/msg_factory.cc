@@ -20,7 +20,7 @@ bool
 inline
 there_is_a_prefix(const string& rLine)
 {
-   return (rLine.at(1) != PREFIX_PREFIX);
+   return (rLine.at(0) == PREFIX_PREFIX);
 }
 
 size_t
@@ -47,9 +47,7 @@ prefix_last(const string& rLine)
 string
 get_prefix(const string& rLine)
 {
-   //   *gpDebug << FROM_DEBUG << "  prefix_first = " << prefix_first(rLine) << std::endl ;
-   //   *gpDebug << FROM_DEBUG << "  prefix_last  = " << prefix_last(rLine) << std::endl ;
-   if (there_is_a_prefix) {
+   if (there_is_a_prefix(rLine)) {
       size_t size = prefix_last(rLine) - prefix_first(rLine) + 1;
       return rLine.substr(prefix_first(rLine), size);
    }
@@ -100,6 +98,7 @@ size_t
 inline
 params_first(const string& rLine)
 {
+   //   *gpDebug << FROM_DEBUG << "  -- param_first() : command_last = " << command_last(rLine) << std::endl;
    if (rLine.length() > (command_last(rLine) + 1))
       return (command_last(rLine) + 2); // +2 means "the next to SPACE"
    else
@@ -112,8 +111,10 @@ vector<string>
 get_params(const string& rLine)
 {
    // we will only work with the params portion or the line
-   string only_params = rLine.substr(params_first(rLine));
    //   *gpDebug << FROM_DEBUG << "  -- get_param() : rLine = \"" << rLine << "\"" << std::endl;
+   string only_params_with_terminator = rLine.substr(params_first(rLine));
+   size_t terminator_first = only_params_with_terminator.rfind(END_OF_MESSAGE);
+   string only_params = only_params_with_terminator.substr(0, terminator_first);
    //   *gpDebug << FROM_DEBUG << "  -- get_param() : only_params = \"" << only_params << "\"" << std::endl;
 
    if (only_params.empty())
@@ -182,66 +183,14 @@ get_params(const string& rLine)
 }
 
 
-
-
-Msg*
-msg_factory(const string& rLine, Server& rServer)
+const Msg*
+msg_factory(const string& rLine)
 {
+   //   *gpDebug << FROM_DEBUG << "msg_factory(\"" << rLine.substr(0, rLine.rfind(END_OF_MESSAGE)) << "\", " << rServer << ")" << std::endl ;
+
    string prefix = get_prefix(rLine);
    string command = get_command(rLine);
    vector<string> params = get_params(rLine);
-
-   //   *gpDebug << FROM_DEBUG << "msg_factory() : line = \"" << rLine << "\"" << std::endl ;
-   //   *gpDebug << FROM_DEBUG << "msg_factory() : prefix = \"" << prefix << "\"" << std::endl ;
-   //   *gpDebug << FROM_DEBUG << "msg_factory() : command = \"" << command << "\"" << std::endl ;
-   //   *gpDebug << FROM_DEBUG << "msg_factory() : params(0) = \"" << params[0] << "\"" << std::endl ;
-
-   *gpDebug << FROM_DEBUG << FROM_SERVER << "[" << command << "] " ;
-   for(std::vector<std::string>::iterator it = params.begin();
-       it != params.end();
-       ++it) {
-      if (it != params.begin())
-         *gpDebug << " " ;
-
-      *gpDebug << *it ;
-   }
-   *gpDebug << std::endl;
-
-   /* JOIN */
-   if (command == "JOIN")
-      rServer.SetChannel(params[0]);
-
-   /* PART */
-   if (command == "PART") {
-      rServer.ClearChannel();
-      // if there is a desired channel to join to, join now
-      if (rServer.IsDesiredChannel()) {
-         ComJoin command(rServer.GetDesiredChannel(), rServer);
-         command.Run();
-         rServer.ClearDesiredChannel();
-      }
-   }
-
-   /* PING */
-   if (command == "PING") {
-      /* send PONG */
-      try {
-         
-         std::stringstream ss;
-         ss << "PONG" << MESSAGE_SEPARATOR
-            << ":" << params[0] << END_OF_MESSAGE;
-         std::string s = ss.str();
-         rServer.Send(s);
-         
-      } catch (Server::NotConnectedException & e) {
-         std::cout << FROM_PROGRAM << "Can not send message: not connected to server"
-                   << std::endl;
-      } catch (Server::SendException & e) {
-         std::cout << FROM_PROGRAM << "Can not send message: " << e.what()
-                   << std::endl;
-      }
-      
-   }
-
-   return NULL;
+   const Msg* p_msg = new Msg(prefix, command, params);
+   return p_msg;
 }
