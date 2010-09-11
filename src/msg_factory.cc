@@ -1,5 +1,4 @@
 #include "msg_factory.h"
-#include "MsgTellUser.h"
 #include "irc.h"
 #include "ircc.h"
 #include "utils.h"
@@ -197,19 +196,16 @@ msg_factory(const string& rLine, Server& rServer)
    //   *gpDebug << FROM_DEBUG << "msg_factory() : command = \"" << command << "\"" << std::endl ;
    //   *gpDebug << FROM_DEBUG << "msg_factory() : params(0) = \"" << params[0] << "\"" << std::endl ;
 
-   *gpDebug << FROM_DEBUG << "msg_factory() : prefix=\"" << get_prefix(rLine)
-            << "\", command=\"" << get_command(rLine)
-            << "\", params=(";
-   if (gpDebug != &NullStream::cnull) {
-      for(std::vector<string>::iterator it = params.begin();
-          it != params.end();
-          ++it) {
-         if (it != params.begin())
-            *gpDebug << ", ";
-         *gpDebug << "\"" << *it << "\"" ;
-      }
-      *gpDebug << "), " << rServer << std::endl;
+   *gpDebug << FROM_DEBUG << FROM_SERVER << "[" << command << "] " ;
+   for(std::vector<std::string>::iterator it = params.begin();
+       it != params.end();
+       ++it) {
+      if (it != params.begin())
+         *gpDebug << " " ;
+
+      *gpDebug << *it ;
    }
+   *gpDebug << std::endl;
 
    /* JOIN */
    if (command == "JOIN")
@@ -247,5 +243,5 @@ msg_factory(const string& rLine, Server& rServer)
       
    }
 
-   return new MsgTellUser(prefix, command, params);
+   return NULL;
 }

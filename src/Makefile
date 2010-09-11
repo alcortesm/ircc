@@ -3,7 +3,6 @@ INSTALL_DIR = ~/bin
 SRCS = \
     msg_factory.cc \
     Msg.cc \
-    MsgTellUser.cc \
     ComEcho.cc \
     ComHelp.cc \
     ComJoin.cc \

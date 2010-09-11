@@ -28,7 +28,6 @@
 #include "Server.h"
 #include "irc.h"
 #include "Msg.h"
-#include "MsgTellUser.h"
 
 using std::string;
 using std::endl;
@@ -139,7 +138,7 @@ process_data_from_server(const string& data, const string& old_data, Server& rSe
       }
       string line(whole, last_line_pos, next_line_pos-last_line_pos);
       Msg* p_msg = msg_factory(line, rServer);
-      p_msg->Run();
+      //      p_msg->Run();
       delete p_msg;
       last_line_pos = next_line_pos + END_OF_MESSAGE.length();
    }
