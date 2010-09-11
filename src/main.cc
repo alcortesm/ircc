@@ -207,7 +207,7 @@ main_loop()
          /* process line: build a command from the line and execute it */
          try {
             string line = fetch_line();
-            if (isatty(1))
+            if (!isatty(STDIN_FD))
                cout << line << endl;
             Command* p_command;
             p_command = com_factory(line, server);
