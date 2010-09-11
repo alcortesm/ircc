@@ -40,6 +40,17 @@ Server::~Server()
    return;
 }
 
+void
+Server::reset_internal_state()
+{
+   mHost = string();
+   mPort = string();
+   mState = Server::DISCONNECTED;
+   mChannel = string();
+   mDesiredChannel = string();
+   mSock = -1;
+}
+
 int
 get_tcp_proto()
 {
@@ -167,15 +178,12 @@ Server::Disconnect()
       throw Server::NotConnectedException();
 
    close(mSock);
-   mSock = -1;
-   mHost = string();
-   mPort = string();
-   mState = Server::DISCONNECTED;
+   reset_internal_state();
    return;
 }
 
 void
-Server::Send(const std::string& msg) const
+Server::Send(const std::string& msg)
    throw (Server::NotConnectedException, Server::SendException)
 {
    *gpDebug << FROM_DEBUG << "Server::Send(\"" << msg.substr(0,msg.length()-2) << "\\r\\n\")" << endl ;
@@ -203,6 +211,8 @@ Server::Send(const std::string& msg) const
       }
       if (nw == 0) {
          free(buf);
+         close(mSock);
+         reset_internal_state();
          throw Server::SendException("connection closed by peer");
       }
       offset += nw ;
@@ -215,7 +225,7 @@ Server::Send(const std::string& msg) const
 }
 
 std::string
-Server::Recv() const
+Server::Recv()
    throw (Server::NotConnectedException, RecvException)
 {
    *gpDebug << FROM_DEBUG << "Server::Recv()" << endl ;
@@ -232,10 +242,17 @@ Server::Recv() const
       free(buf);
       throw RecvException();
    }
+   if (nr == 0) { // server close the connection
+      free(buf);
+      close(mSock);
+      reset_internal_state();
+      throw RecvException("connection closed by peer");
+   }
 
    buf[buf_sz-1] = '\0';
    string r(buf);
    free(buf);
+   *gpDebug << FROM_DEBUG << "Server::Recv()" << endl ;
    return r;
 }
 

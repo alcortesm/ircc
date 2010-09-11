@@ -38,9 +38,9 @@ class Server {
       throw (Server::AlreadyConnectedException, Server::ConnectException);
    void Disconnect()
       throw (Server::NotConnectedException);
-   void Send(const std::string& msg) const
+   void Send(const std::string& msg)
       throw (Server::NotConnectedException, Server::SendException);
-   std::string Recv() const
+   std::string Recv()
       throw (Server::NotConnectedException, Server::RecvException);
 
    bool IsConnected() const;
@@ -69,6 +69,8 @@ class Server {
  private:
    Server(const Server&); // not implemented, prevent copy ctor
    Server& operator=(const Server&); // not implemented, prevent copy ctor
+
+   void reset_internal_state();
 
    std::string mHost;
    std::string mPort;
