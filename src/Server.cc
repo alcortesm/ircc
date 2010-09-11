@@ -11,6 +11,7 @@
 #include <stdlib.h>
 #include <netdb.h>
 #include "ircc.h"
+#include "irc.h"
 #include <sstream>
 
 extern std::ostream* gpDebug;
@@ -177,7 +178,7 @@ Server::Send(const std::string& msg) const
 {
    UNUSED(msg);
 
-   *gpDebug << FROM_DEBUG << "Server::Send(\"" << msg << "\")" << endl ;
+   *gpDebug << FROM_DEBUG << "Server::Send(\"" << msg.substr(0,msg.length()-2) << "\\r\\n\")" << endl ;
 
    if (!IsConnected())
       throw Server::NotConnectedException();

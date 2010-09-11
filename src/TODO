@@ -1,5 +1,4 @@
 - server should not create new channel if a user join a non-existing one
-- Fix Server::Send debug output to avoid \r\n
 - A ComDisconnect is needed
 - A ComServer command must have ComConnect ComNick and its run must run
    its members
