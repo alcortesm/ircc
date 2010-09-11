@@ -158,7 +158,7 @@ new_sleep(const string& rLine)
 Command*
 com_factory(const std::string& rLine, Server& rServer)
 {
-   *gpDebug << "com_factory(\"" << rLine << "\", "
+   *gpDebug << FROM_DEBUG << "com_factory(\"" << rLine << "\", "
             << rServer << ")" << endl;
 
    /* NOP */

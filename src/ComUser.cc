@@ -23,7 +23,7 @@ const std::string ComUser::COMMAND = std::string("USER");
 void
 ComUser::Run() {
 
-   *gpDebug << "ComUser::Run()" << std::endl ;
+   *gpDebug << FROM_DEBUG << "ComUser::Run()" << std::endl ;
 
    try {
 
@@ -47,6 +47,6 @@ ComUser::Run() {
 ComUser::ComUser(const std::string & rUser, Server& rServer)
    : mrServer(rServer), mUser(rUser)
 {
-   *gpDebug << "ComUser::ComUser(" << rServer << ", \""
+   *gpDebug << FROM_DEBUG << "ComUser::ComUser(" << rServer << ", \""
             << rUser << "\")" << std::endl ;   
 }

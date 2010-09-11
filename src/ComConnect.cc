@@ -63,7 +63,7 @@ open_socket()
 void
 ComConnect::Run() {
 
-   *gpDebug << "ComConnect::Run()" << std::endl ;
+   *gpDebug << FROM_DEBUG << "ComConnect::Run()" << std::endl ;
 
    try {
 
@@ -85,6 +85,6 @@ ComConnect::Run() {
 ComConnect::ComConnect(Server& rServer, std::string & host, std::string & port)
    : mrServer(rServer), mHost(host), mPort(port)
 {
-   *gpDebug << "ComConnect::ComConnect(\"" << host
+   *gpDebug << FROM_DEBUG << "ComConnect::ComConnect(\"" << host
             << "\", \"" << port << "\")" << std::endl ;   
 }

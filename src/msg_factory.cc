@@ -47,8 +47,8 @@ prefix_last(const string& rLine)
 string
 get_prefix(const string& rLine)
 {
-   //   *gpDebug << "  prefix_first = " << prefix_first(rLine) << std::endl ;
-   //   *gpDebug << "  prefix_last  = " << prefix_last(rLine) << std::endl ;
+   //   *gpDebug << FROM_DEBUG << "  prefix_first = " << prefix_first(rLine) << std::endl ;
+   //   *gpDebug << FROM_DEBUG << "  prefix_last  = " << prefix_last(rLine) << std::endl ;
    if (there_is_a_prefix) {
       size_t size = prefix_last(rLine) - prefix_first(rLine) + 1;
       return rLine.substr(prefix_first(rLine), size);
@@ -87,8 +87,8 @@ command_last(const string& rLine)
 string
 get_command(const string& rLine)
 {
-   //   *gpDebug << "  command_first = " << command_first(rLine) << std::endl ;
-   //   *gpDebug << "  command_last  = " << command_last(rLine) << std::endl ;
+   //   *gpDebug << FROM_DEBUG << "  command_first = " << command_first(rLine) << std::endl ;
+   //   *gpDebug << FROM_DEBUG << "  command_last  = " << command_last(rLine) << std::endl ;
    return rLine.substr(command_first(rLine),
                        command_last(rLine)-command_first(rLine) + 1);
 }
@@ -113,8 +113,8 @@ get_params(const string& rLine)
 {
    // we will only work with the params portion or the line
    string only_params = rLine.substr(params_first(rLine));
-   //   *gpDebug << "  -- get_param() : rLine = \"" << rLine << "\"" << std::endl;
-   //   *gpDebug << "  -- get_param() : only_params = \"" << only_params << "\"" << std::endl;
+   //   *gpDebug << FROM_DEBUG << "  -- get_param() : rLine = \"" << rLine << "\"" << std::endl;
+   //   *gpDebug << FROM_DEBUG << "  -- get_param() : only_params = \"" << only_params << "\"" << std::endl;
 
    if (only_params.empty())
       return vector<string>();
@@ -145,8 +145,8 @@ get_params(const string& rLine)
          colon_param = only_params.substr(colon_pos + COLON_PARAM_SEPARATOR.length());
       }
    }
-   //   *gpDebug << "  -- get_param() : no_colon_params = \"" << no_colon_params << "\"" << std::endl;
-   //   *gpDebug << "  -- get_param() : colon_param = \"" << colon_param << "\"" << std::endl;
+   //   *gpDebug << FROM_DEBUG << "  -- get_param() : no_colon_params = \"" << no_colon_params << "\"" << std::endl;
+   //   *gpDebug << FROM_DEBUG << "  -- get_param() : colon_param = \"" << colon_param << "\"" << std::endl;
       
    // now, build the vector of params
    vector<string> v;
@@ -161,9 +161,9 @@ get_params(const string& rLine)
             ? no_colon_params.substr(current)
             : no_colon_params.substr(current, (next_space - current));
          
-         //         *gpDebug << "  -- -- get_param() : current = " << current << std::endl;
-         //         *gpDebug << "  -- -- get_param() : next_space = " << next_space << std::endl;
-         //         *gpDebug << "  -- -- get_param() : adding the string \"" << param << "\" to the vector" << std::endl;  
+         //         *gpDebug FROM_DEBUG << << "  -- -- get_param() : current = " << current << std::endl;
+         //         *gpDebug FROM_DEBUG << << "  -- -- get_param() : next_space = " << next_space << std::endl;
+         //         *gpDebug FROM_DEBUG << << "  -- -- get_param() : adding the string \"" << param << "\" to the vector" << std::endl;  
          v.push_back(param);
           
          if (next_space == string::npos)
@@ -174,7 +174,7 @@ get_params(const string& rLine)
    } // end of if there no_colon_params
    // if there is a colon_param
    if (!colon_param.empty()) {
-      //      *gpDebug << "  -- -- get_param() : adding the colon string \"" << colon_param << "\" to the vector" << std::endl;
+      //      *gpDebug << FROM_DEBUG << "  -- -- get_param() : adding the colon string \"" << colon_param << "\" to the vector" << std::endl;
       v.push_back(colon_param);
    }
 
@@ -191,12 +191,12 @@ msg_factory(const string& rLine, Server& rServer)
    string command = get_command(rLine);
    vector<string> params = get_params(rLine);
 
-   //   *gpDebug << "line = \"" << rLine << "\"" << std::endl ;
-   //   *gpDebug << "prefix = \"" << prefix << "\"" << std::endl ;
-   //   *gpDebug << "command = \"" << command << "\"" << std::endl ;
-   //   *gpDebug << "params(0) = \"" << params[0] << "\"" << std::endl ;
+   //   *gpDebug << FROM_DEBUG << "line = \"" << rLine << "\"" << std::endl ;
+   //   *gpDebug << FROM_DEBUG << "prefix = \"" << prefix << "\"" << std::endl ;
+   //   *gpDebug << FROM_DEBUG << "command = \"" << command << "\"" << std::endl ;
+   //   *gpDebug << FROM_DEBUG << "params(0) = \"" << params[0] << "\"" << std::endl ;
 
-   *gpDebug << "msg_factory : prefix=\"" << get_prefix(rLine)
+   *gpDebug << FROM_DEBUG << "msg_factory : prefix=\"" << get_prefix(rLine)
             << "\", command=\"" << get_command(rLine)
             << "\", params=(";
    if (gpDebug != &NullStream::cnull) {

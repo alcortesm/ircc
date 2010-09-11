@@ -175,7 +175,7 @@ main_loop()
 
       int retval;
       retval = select(max_fds+1, &read_fds, NULL, NULL, &tv);
-      //*gpDebug << FROM_PROGRAM << "main_loop's select() returns " << retval << endl ;
+      //*gpDebug << FROM_DEBUG << "main_loop's select() returns " << retval << endl ;
       /* select error: exit */
       if (retval == -1) {
          if (errno == EINTR)
@@ -185,7 +185,7 @@ main_loop()
 
       /* select's timeout expire: reset timer */
       if (retval == 0) {
-         //         *gpDebug << FROM_PROGRAM << "main_loop(): timeout expire!" << endl ;
+         //         *gpDebug << FROM_DEBUG << "main_loop(): timeout expire!" << endl ;
          tv.tv_sec = MAIN_LOOP_TIMEOUT_SECS;
          tv.tv_usec = MAIN_LOOP_TIMEOUT_SECS;
          continue;

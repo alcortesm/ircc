@@ -16,5 +16,6 @@ const char   SPACE = ' ';
 const int    NO_FLAGS = 0;
 const std::string FROM_SERVER("<<< ");
 const std::string FROM_PROGRAM("*** ");
+const std::string FROM_DEBUG("DDD ");
 
 #endif // IRCC_H

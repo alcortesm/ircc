@@ -47,7 +47,7 @@ Args::Build(int argc, char ** argv) throw (Args::InvalidArgumentException)
       if (argv[i] == NULL)
          throw Args::InvalidArgumentException("Args::Build() : argv[" + stringify(i) + "] is NULL");
       
-      *gpDebug << "Args::Build() : argv[" + stringify(i) + "] = " + argv[i] << std::endl ;
+      *gpDebug << FROM_DEBUG << "Args::Build() : argv[" + stringify(i) + "] = " + argv[i] << std::endl ;
    
       if (strcmp("-t", argv[i]) == 0) {
          test = true;

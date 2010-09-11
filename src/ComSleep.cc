@@ -2,6 +2,7 @@
 #include <ostream>
 #include <iostream>
 #include <unistd.h>
+#include "ircc.h"
 
 extern std::ostream* gpDebug;
 
@@ -10,7 +11,7 @@ const int ComSleep::DEFAULT_SLEEP_TIME_SECS = 1;
 
 void
 ComSleep::Run() {
-   *gpDebug << "ComSleep::Run()" << std::endl;
+   *gpDebug << FROM_DEBUG << "ComSleep::Run()" << std::endl;
    sleep(mSecs);
    return ;
 }

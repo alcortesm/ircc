@@ -23,7 +23,7 @@ const std::string ComNick::COMMAND = std::string("NICK");
 void
 ComNick::Run() {
 
-   *gpDebug << "ComNick::Run()" << std::endl ;
+   *gpDebug << FROM_DEBUG << "ComNick::Run()" << std::endl ;
 
    try {
 
@@ -47,6 +47,6 @@ ComNick::Run() {
 ComNick::ComNick(std::string & rNick, Server& rServer)
    : mrServer(rServer), mNick(rNick)
 {
-   *gpDebug << "ComNick::ComNick(" << rServer << ", \""
+   *gpDebug << FROM_DEBUG << "ComNick::ComNick(" << rServer << ", \""
             << rNick << "\")" << std::endl ;   
 }

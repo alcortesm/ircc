@@ -13,7 +13,7 @@ const std::string ComMsg::COMMAND = std::string("PRIVMSG");
 void
 ComMsg::Run() {
 
-   *gpDebug << "ComMsg::Run()" << std::endl ;
+   *gpDebug << FROM_DEBUG << "ComMsg::Run()" << std::endl ;
 
    if (mrServer.GetChannel().empty()) {
       std::cout << FROM_PROGRAM << "Error: you must join a channel first"

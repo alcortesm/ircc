@@ -23,7 +23,7 @@ const std::string ComJoin::COMMAND = std::string("JOIN");
 void
 ComJoin::Run() {
 
-   *gpDebug << "ComJoin::Run()" << std::endl ;
+   *gpDebug << FROM_DEBUG << "ComJoin::Run()" << std::endl ;
 
    try {
 
@@ -47,6 +47,6 @@ ComJoin::Run() {
 ComJoin::ComJoin(const std::string & rChannel, Server& rServer)
    : mrServer(rServer), mChannel(rChannel)
 {
-   *gpDebug << "ComJoin::ComJoin(" << rServer << ", \""
+   *gpDebug << FROM_DEBUG << "ComJoin::ComJoin(" << rServer << ", \""
             << rChannel << "\")" << std::endl ;   
 }

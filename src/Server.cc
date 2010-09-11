@@ -25,13 +25,13 @@ Server::Server()
      mState(Server::DISCONNECTED),
      mSock(-1)
 {
-   *gpDebug << "Server::Server()" << endl ;
+   *gpDebug << FROM_DEBUG << "Server::Server()" << endl ;
    return;
 }
 
 Server::~Server()
 {
-   *gpDebug << "Server::~Server()" << endl ;
+   *gpDebug << FROM_DEBUG << "Server::~Server()" << endl ;
    if (IsConnected())
       Disconnect();
    return;
@@ -74,7 +74,7 @@ void
 Server::Connect(const string & host, const string & port)
    throw (Server::AlreadyConnectedException, Server::ConnectException)
 {
-   *gpDebug << "Server::Connect(\"" << host << "\", \"" << port << "\")" << endl ;
+   *gpDebug << FROM_DEBUG << "Server::Connect(\"" << host << "\", \"" << port << "\")" << endl ;
 
    if (IsConnected())
       throw Server::AlreadyConnectedException();
@@ -158,7 +158,7 @@ void
 Server::Disconnect()
    throw (Server::NotConnectedException)
 {
-   *gpDebug << "Server::Disconnect()" << endl ;
+   *gpDebug << FROM_DEBUG << "Server::Disconnect()" << endl ;
    
    if (!IsConnected())
       throw Server::NotConnectedException();
@@ -177,7 +177,7 @@ Server::Send(const std::string& msg) const
 {
    UNUSED(msg);
 
-   *gpDebug << "Server::Send(\"" << msg << "\")" << endl ;
+   *gpDebug << FROM_DEBUG << "Server::Send(\"" << msg << "\")" << endl ;
 
    if (!IsConnected())
       throw Server::NotConnectedException();
@@ -217,7 +217,7 @@ std::string
 Server::Recv() const
    throw (Server::NotConnectedException, RecvException)
 {
-   *gpDebug << "Server::Recv()" << endl ;
+   *gpDebug << FROM_DEBUG << "Server::Recv()" << endl ;
 
    if (!IsConnected())
       throw Server::NotConnectedException();
@@ -297,17 +297,17 @@ Server::TestOk()
 
    {
       Server server;
-      *gpDebug << server << endl;
+      *gpDebug << FROM_DEBUG << server << endl;
 
       try {
          const string host("localhost");
          const string port("6757");
          
          server.Connect(host, port);
-         *gpDebug << server << endl;
+         *gpDebug << FROM_DEBUG << server << endl;
          
          server.Disconnect();
-         *gpDebug << server << endl;
+         *gpDebug << FROM_DEBUG << server << endl;
 
       } catch (Server::AlreadyConnectedException & e) {
          std::cerr << e.what() << endl;
@@ -328,13 +328,13 @@ Server::TestOk()
          const string port("6757");
 
          p_server = new Server();
-         *gpDebug << *p_server << endl;
+         *gpDebug << FROM_DEBUG << *p_server << endl;
 
          p_server->Connect(host, port);
-         *gpDebug << *p_server << endl;
+         *gpDebug << FROM_DEBUG << *p_server << endl;
 
          p_server->Disconnect();
-         *gpDebug << *p_server << endl;
+         *gpDebug << FROM_DEBUG << *p_server << endl;
 
          delete p_server;
 
@@ -355,17 +355,17 @@ Server::TestOk()
 
    {
       Server server;
-      *gpDebug << server << endl;
+      *gpDebug << FROM_DEBUG << server << endl;
 
       try {
          const string host("badhost");
          const string port("6757");
          
          server.Connect(host, port);
-         *gpDebug << server << endl;
+         *gpDebug << FROM_DEBUG << server << endl;
          
          server.Disconnect();
-         *gpDebug << server << endl;
+         *gpDebug << FROM_DEBUG << server << endl;
 
       } catch (Server::AlreadyConnectedException & e) {
          std::cerr << e.what() << endl;
