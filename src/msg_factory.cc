@@ -7,6 +7,7 @@
 #include "NullStream.h"
 #include <sstream>
 #include <iostream>
+#include "ComJoin.h"
 
 extern std::ostream* gpDebug;
 
@@ -191,12 +192,12 @@ msg_factory(const string& rLine, Server& rServer)
    string command = get_command(rLine);
    vector<string> params = get_params(rLine);
 
-   //   *gpDebug << FROM_DEBUG << "line = \"" << rLine << "\"" << std::endl ;
-   //   *gpDebug << FROM_DEBUG << "prefix = \"" << prefix << "\"" << std::endl ;
-   //   *gpDebug << FROM_DEBUG << "command = \"" << command << "\"" << std::endl ;
-   //   *gpDebug << FROM_DEBUG << "params(0) = \"" << params[0] << "\"" << std::endl ;
+   //   *gpDebug << FROM_DEBUG << "msg_factory() : line = \"" << rLine << "\"" << std::endl ;
+   //   *gpDebug << FROM_DEBUG << "msg_factory() : prefix = \"" << prefix << "\"" << std::endl ;
+   //   *gpDebug << FROM_DEBUG << "msg_factory() : command = \"" << command << "\"" << std::endl ;
+   //   *gpDebug << FROM_DEBUG << "msg_factory() : params(0) = \"" << params[0] << "\"" << std::endl ;
 
-   *gpDebug << FROM_DEBUG << "msg_factory : prefix=\"" << get_prefix(rLine)
+   *gpDebug << FROM_DEBUG << "msg_factory() : prefix=\"" << get_prefix(rLine)
             << "\", command=\"" << get_command(rLine)
             << "\", params=(";
    if (gpDebug != &NullStream::cnull) {
@@ -207,7 +208,7 @@ msg_factory(const string& rLine, Server& rServer)
             *gpDebug << ", ";
          *gpDebug << "\"" << *it << "\"" ;
       }
-      *gpDebug << ")" << std::endl;
+      *gpDebug << "), " << rServer << std::endl;
    }
 
    /* JOIN */
@@ -215,8 +216,14 @@ msg_factory(const string& rLine, Server& rServer)
       rServer.SetChannel(params[0]);
 
    /* PART */
-   if (command == "PART") {   
+   if (command == "PART") {
       rServer.ClearChannel();
+      // if there is a desired channel to join to, join now
+      if (rServer.IsDesiredChannel()) {
+         ComJoin command(rServer.GetDesiredChannel(), rServer);
+         command.Run();
+         rServer.ClearDesiredChannel();
+      }
    }
 
    /* PING */

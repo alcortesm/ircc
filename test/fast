@@ -1,5 +1,5 @@
 /help
-/connect localhost 6757
+/connect localhost 6778
 /nick alcortes
 /user alcortes Alberto Cortes
 /sleep
@@ -7,6 +7,12 @@
 /list
 /sleep
 
+/join #test0
+/sleep
+/join
+/sleep
+/join #test1
+/sleep
 /join #ro2
 /sleep
 

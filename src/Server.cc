@@ -24,6 +24,8 @@ Server::Server()
    : mHost(),
      mPort(),
      mState(Server::DISCONNECTED),
+     mChannel(string()),
+     mDesiredChannel(string()),
      mSock(-1)
 {
    *gpDebug << FROM_DEBUG << "Server::Server()" << endl ;
@@ -176,8 +178,6 @@ void
 Server::Send(const std::string& msg) const
    throw (Server::NotConnectedException, Server::SendException)
 {
-   UNUSED(msg);
-
    *gpDebug << FROM_DEBUG << "Server::Send(\"" << msg.substr(0,msg.length()-2) << "\\r\\n\")" << endl ;
 
    if (!IsConnected())
@@ -283,6 +283,51 @@ Server::ClearChannel()
 {
    mChannel = string();
    return;
+}
+
+bool
+Server::IsChannel()
+{
+   return !IsChannelClear();
+}
+
+bool
+Server::IsChannelClear()
+{
+   return mChannel.empty();
+}
+
+const string&
+Server::GetDesiredChannel() const
+{
+   return mDesiredChannel;
+}
+
+void
+Server::SetDesiredChannel(const std::string& rChannel)
+{
+   *gpDebug << FROM_DEBUG << "desired channel : " << rChannel<< endl ;
+   mDesiredChannel = rChannel;
+   return;
+}
+
+void
+Server::ClearDesiredChannel()
+{
+   mDesiredChannel = string();
+   return;
+}
+
+bool
+Server::IsDesiredChannel()
+{
+   return !IsDesiredChannelClear();
+}
+
+bool
+Server::IsDesiredChannelClear()
+{
+   return mDesiredChannel.empty();
 }
 
 int
@@ -394,10 +439,14 @@ operator<<(std::ostream & os, Server & server) {
       os << "CONNECTED";
       os << ", host=" << server.GetHost();
       os << ", port=" << server.GetPort();
-      if (!server.GetChannel().empty())
+      if (server.IsChannel())
          os << ", channel=" << server.GetChannel();
       else
          os << ", not in a channel";
+      if (server.IsDesiredChannel())
+         os << ", desired=" << server.GetDesiredChannel();
+      else
+         os << ", no desired channel";
    } else {
       os << "DISCONNECTED";
    }

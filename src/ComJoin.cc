@@ -27,8 +27,27 @@ ComJoin::Run() {
 
    try {
 
+      std::string chan_to_join;
+      // if we are leaving all channels, just send "JOIN 0"
+      if (mChannel == "0") {
+         chan_to_join = "0";
+      }
+      // if we are joinning some actual channel...
+      else {
+         // if we are not member of any channel, just send the "JOIN channel" command
+         if (mrServer.IsChannelClear()) {
+            chan_to_join = mChannel;
+         } else {
+            // if we are already members of a channel, send a "JOIN 0"
+            // command now to leave the current channel and set the desired
+            // channel to remind we must send a "JOIN desired" command when
+            // the notification of leaving the current channel arraives
+            chan_to_join = "0";
+            mrServer.SetDesiredChannel(mChannel);
+         }
+      }
       std::stringstream ss;
-      ss << ComJoin::COMMAND << MESSAGE_SEPARATOR << mChannel << END_OF_MESSAGE;
+      ss << ComJoin::COMMAND << MESSAGE_SEPARATOR << chan_to_join << END_OF_MESSAGE;
       std::string s = ss.str();
       mrServer.Send(s);
 
