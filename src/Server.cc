@@ -180,18 +180,31 @@ Server::Disconnect()
    return;
 }
 
+string
+textify_terminators(string str)
+{
+   size_t current;
+   while (true) {
+      current = str.find(END_OF_MESSAGE);
+      if (current == string::npos)
+         break;
+      str.replace(current, END_OF_MESSAGE.length(), "\\r\\n");
+   }
+   return str;
+}
+
 void
-Server::Send(const std::string& msg)
+Server::Send(const std::string& str)
    throw (Server::NotConnectedException, Server::SendException, Server::ConnectionClosedByPeerException)
 {
-   *gpDebug << FROM_DEBUG << "Server::Send(\"" << msg.substr(0,msg.length()-2) << "\\r\\n\")" << endl ;
+   *gpDebug << FROM_DEBUG << "Server::Send(\"" << textify_terminators(str) << "\")" << endl ;
 
    if (!IsConnected())
       throw Server::NotConnectedException();
 
-   size_t buf_sz = msg.length();
+   size_t buf_sz = str.length();
    char* buf = (char*) xmalloc(buf_sz);
-   memcpy(buf, msg.c_str(), buf_sz);
+   memcpy(buf, str.c_str(), buf_sz);
 
    size_t offset = 0;
    while (true) {
@@ -214,7 +227,7 @@ Server::Send(const std::string& msg)
          throw ConnectionClosedByPeerException();
       }
       offset += nw ;
-      if (offset == msg.length())
+      if (offset == str.length())
          break;
    }
 
