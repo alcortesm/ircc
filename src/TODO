@@ -1,3 +1,4 @@
+- Remove internal state : desired channel
 - A ComDisconnect is needed
 - A ComServer command must have ComConnect ComNick and its run must run
    its members
