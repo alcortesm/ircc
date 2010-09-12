@@ -1,7 +1,6 @@
 /help
 /connect localhost 6778
-/nick alcortes
-/user alcortes Alberto Cortes
+/auth alcortes
 /sleep
 
 /list

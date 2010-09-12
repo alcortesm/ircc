@@ -15,6 +15,16 @@ class Server {
       NotConnectedException() : std::runtime_error("Server not connected") { }
       NotConnectedException(std::string s) : std::runtime_error("Server not connected: " + s) { }
    };
+   class AlreadyAuthenticatedException : public std::runtime_error {
+   public:
+      AlreadyAuthenticatedException() : std::runtime_error("Already authenticated") { }
+      AlreadyAuthenticatedException(std::string s) : std::runtime_error("Already authenticated: " + s) { }
+   };
+   class NotAuthenticatedException : public std::runtime_error {
+   public:
+      NotAuthenticatedException() : std::runtime_error("Not authenticated") { }
+      NotAuthenticatedException(std::string s) : std::runtime_error("Not authenticated: " + s) { }
+   };
    class ConnectException : public std::runtime_error {
    public:
       ConnectException() : std::runtime_error("Server can not connect") { }
@@ -49,6 +59,7 @@ class Server {
 
    const std::string & GetHost() const throw (Server::NotConnectedException);
    const std::string & GetPort() const throw (Server::NotConnectedException);
+   const std::string & GetNick() const throw (Server::NotAuthenticatedException);
    int  GetSock() const;
 
    const std::string & GetChannel() const;
@@ -59,10 +70,12 @@ class Server {
 
    bool IsConnected() const;
    bool IsAuthenticated() const;
-   void SetAuthenticated();
+   void SetAuthenticated(const std::string& rNick);
 
    static bool TestOk();
    static bool TestFail() { return ! Server::TestOk(); };
+
+   friend std::ostream & operator<<(std::ostream & os, Server & server);
 
  private:
    Server(const Server&); // not implemented, prevent copy ctor
@@ -72,11 +85,10 @@ class Server {
 
    std::string mHost;
    std::string mPort;
+   std::string mChannel; // current channel
+   std::string mNick;
    enum state {DISCONNECTED, CONNECTED, AUTHENTICATED} mState;
-   std::string mChannel;  // current channel
    int mSock;
 };
-
-std::ostream & operator<<(std::ostream & os, Server & server);
 
 #endif // SERVER_H

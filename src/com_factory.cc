@@ -1,3 +1,4 @@
+#include "ComAuth.h"
 #include "ComEcho.h"
 #include "ComHelp.h"
 #include "ComEcho.h"
@@ -104,6 +105,17 @@ new_msg(Server& rServer, const string& rLine)
 }
 
 Command*
+new_auth(Server& rServer, const string& rLine)
+{
+   // if line is just "/auth" -> error
+   if (there_is_no_args(rLine))
+      return new ComError("The nick command needs and argument");
+
+   string nick(rLine, ComNick::STR.length()+1);
+   return new ComAuth(nick, rServer);
+}
+
+Command*
 new_nick(Server& rServer, const string& rLine)
 {
    // if line is just "/nick" -> error
@@ -176,6 +188,10 @@ com_factory(const std::string& rLine, Server& rServer)
       return new ComMsg(rLine, rServer);
    if (starts_with(rLine, ComMsg::STR))
       return new_msg(rServer, rLine);
+
+   /* AUTH */
+   if (starts_with(rLine, ComAuth::STR))
+      return new_auth(rServer, rLine);
 
    /* NICK */
    if (starts_with(rLine, ComNick::STR))

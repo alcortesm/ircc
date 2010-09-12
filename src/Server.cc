@@ -23,8 +23,9 @@ using std::string;
 Server::Server()
    : mHost(),
      mPort(),
-     mState(Server::DISCONNECTED),
      mChannel(string()),
+     mNick(string()),
+     mState(Server::DISCONNECTED),
      mSock(-1)
 {
    *gpDebug << FROM_DEBUG << "Server::Server()" << endl ;
@@ -44,8 +45,9 @@ Server::reset_internal_state()
 {
    mHost = string();
    mPort = string();
-   mState = Server::DISCONNECTED;
    mChannel = string();
+   mNick = string();
+   mState = Server::DISCONNECTED;
    mSock = -1;
 }
 
@@ -267,8 +269,13 @@ Server::Recv()
 }
 
 void
-Server::SetAuthenticated()
+Server::SetAuthenticated(const std::string& rNick)
 {
+   if (IsAuthenticated())
+      throw Server::AlreadyAuthenticatedException();
+   if (!IsConnected())
+      throw Server::NotConnectedException();
+   mNick = rNick;
    mState = Server::AUTHENTICATED;
 }
 
@@ -302,6 +309,16 @@ Server::GetPort() const
       throw Server::NotConnectedException();
    
    return mPort;
+}
+
+const string&
+Server::GetNick() const
+   throw (Server::NotAuthenticatedException)
+{
+   if (!IsAuthenticated())
+      throw Server::NotAuthenticatedException();
+   
+   return mNick;
 }
 
 const string&
@@ -437,16 +454,21 @@ Server::TestOk()
    return true;
 }
 
-std::ostream &
-operator<<(std::ostream & os, Server & server) {
+std::ostream&
+operator<<(std::ostream& os, Server& rServer) {
    os << "[Server state=" ;
 
-   if (server.IsConnected()) {
-      os << "CONNECTED";
-      os << ", host=" << server.GetHost();
-      os << ", port=" << server.GetPort();
-      if (server.IsChannel())
-         os << ", channel=" << server.GetChannel();
+   if (rServer.IsConnected()) {
+      if (rServer.IsAuthenticated())
+         os << "AUTHENTICATED";
+      else
+         os << "CONNECTED";
+      os << ", host=" << rServer.GetHost();
+      os << ", port=" << rServer.GetPort();
+      if (rServer.IsAuthenticated())
+         os << "nick=" << rServer.GetNick();
+      if (rServer.IsChannel())
+         os << ", channel=" << rServer.GetChannel();
       else
          os << ", not in a channel";
    } else {

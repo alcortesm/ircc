@@ -18,4 +18,34 @@ const int  MESSAGE_MAX_LENGTH      = 152;  /* RFC2812 2.3 */
 const char MESSAGE_SEPARATOR       = ' ';  /* RFC2812 2.3 */
 const std::string END_OF_MESSAGE("\r\n");  /* RFC2812 2.3 */
 const std::string LEAVE_ALL_CHANNELS_CHANNEL("0"); /* RFC2812 3.2.1 */
+
+const std::string COM_NICK      = "NICK"; /* RFC2812 3.1.2 */
+const std::string COM_USER      = "USER"; /* RFC2812 3.1.3 */
+
+/* RFC2812 5.1 Command responses */
+const std::string RPL_WELCOME           = "001";
+const std::string RPL_YOURHOST          = "002";
+const std::string RPL_CREATED           = "003";
+const std::string RPL_MYINFO            = "004";
+// 250 is unknown to RFC2812
+const std::string RPL_LUSERCLIENT       = "251";
+const std::string RPL_LUSERCHANNELS     = "254";
+const std::string RPL_LUSERME           = "255";
+// 265 is unknown to RFC2812
+// 266 is unknown to RFC2812
+const std::string RPL_MOTD              = "372";
+// 375 is unknown to RFC2812
+const std::string RPL_TOPIC             = "332";
+// 333 is unknown to RFC2812
+const std::string RPL_NAMREPLY          = "353";
+const std::string RPL_ENDOFNAMES        = "366";
+const std::string RPL_ENDOFMOTD         = "376";
+const std::string ERR_NONICKNAMEGIVEN   = "431";
+const std::string ERR_ERRONEUSNICKNAME  = "432";
+const std::string ERR_NICKNAMEINUSE     = "433";
+const std::string ERR_NICKCOLLISION     = "436";
+const std::string ERR_UNAVAILRESOURCE   = "437";
+const std::string ERR_RESTRICTED        = "484";
+const std::string ERR_NEEDMOREPARAMS    = "461";
+const std::string ERR_ALREADYREGISTRED  = "462";
 #endif
