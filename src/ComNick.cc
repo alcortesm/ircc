@@ -38,6 +38,8 @@ ComNick::Run() {
    } catch (Server::SendException & e) {
       cout << FROM_PROGRAM << "Can not set nick: " << e.what()
            << endl;
+   } catch (Server::ConnectionClosedByPeerException & e) {
+      std::cout << FROM_PROGRAM << e.what() << std::endl;
    }
 
    return ;

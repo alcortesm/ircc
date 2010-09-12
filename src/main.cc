@@ -199,6 +199,8 @@ main_loop()
             // that's OK, keep looping
          } catch (Server::RecvException& e) {
             cout << FROM_PROGRAM << "error receiving data from server: " << e.what() << endl;
+         } catch (Server::ConnectionClosedByPeerException & e) {
+            std::cout << FROM_PROGRAM << e.what() << std::endl;
          }
       }
 

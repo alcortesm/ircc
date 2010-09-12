@@ -22,13 +22,17 @@ class Server {
    };
    class SendException : public std::runtime_error {
    public:
-      SendException() : std::runtime_error("can not send") { }
+      SendException() : std::runtime_error("Can not send") { }
       SendException(std::string s) : std::runtime_error("Can not send: " + s) { }
    };
    class RecvException : public std::runtime_error {
    public:
-      RecvException() : std::runtime_error("can not recv") { }
+      RecvException() : std::runtime_error("Can not recv") { }
       RecvException(std::string s) : std::runtime_error("Can not recv: " + s) { }
+   };
+   class ConnectionClosedByPeerException : public std::runtime_error {
+   public:
+      ConnectionClosedByPeerException() : std::runtime_error("Connection closed by peer") { }
    };
 
    Server();
@@ -39,9 +43,9 @@ class Server {
    void Disconnect()
       throw (Server::NotConnectedException);
    void Send(const std::string& msg)
-      throw (Server::NotConnectedException, Server::SendException);
+      throw (Server::NotConnectedException, Server::SendException, Server::ConnectionClosedByPeerException);
    std::string Recv()
-      throw (Server::NotConnectedException, Server::RecvException);
+      throw (Server::NotConnectedException, Server::RecvException, Server::ConnectionClosedByPeerException);
 
    bool IsConnected() const;
 

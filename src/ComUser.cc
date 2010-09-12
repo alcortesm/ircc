@@ -38,6 +38,8 @@ ComUser::Run() {
    } catch (Server::SendException & e) {
       cout << FROM_PROGRAM << "Can not set user: " << e.what()
            << endl;
+   } catch (Server::ConnectionClosedByPeerException & e) {
+      std::cout << FROM_PROGRAM << e.what() << std::endl;
    }
 
    return ;

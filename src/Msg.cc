@@ -49,6 +49,8 @@ Msg::Run(Server& rServer) const
       } catch (Server::SendException & e) {
          std::cout << FROM_PROGRAM << "Can not send message: " << e.what()
                    << std::endl;
+      } catch (Server::ConnectionClosedByPeerException & e) {
+         std::cout << FROM_PROGRAM << e.what() << std::endl;
       }
 
    }
