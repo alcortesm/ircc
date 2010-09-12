@@ -38,7 +38,7 @@ VALGRIND_FLAGS = --tool=memcheck --show-reachable=yes --leak-check=full -q
 
 
 
-.PHONY: all install clean nuke test valgrind debugvalgrind debugtestvalgrind upload
+.PHONY: all install uninstall dist TAGS test testdebug valgrind valgrinddebug selftest selftestdebug clean nuke upload
 
 all: $(BIN)
 
@@ -49,29 +49,27 @@ uninstall:
 	- rm -f $(INSTALL_BIN)
 
 dist:
-	tar -cvzf $(BIN).tgz $(SRCS) *.h Makefile
+	tar -cvzf $(BIN).tgz $(SRCS) *.h Makefile TODO
 
 TAGS:
 	cscope -b -q *.cc *.h
 
-test: fast
+test: $(BIN)
+	valgrind $(VALGRIND_FLAGS) ./$(BIN) < ../test/full
 
-fast: $(BIN)
-	valgrind $(VALGRIND_FLAGS) ./$(BIN) < ../test/fast
-
-debugfast: $(BIN)
-	valgrind $(VALGRIND_FLAGS) ./$(BIN) -d < ../test/fast
+testdebug: $(BIN)
+	valgrind $(VALGRIND_FLAGS) ./$(BIN) -d < ../test/full
 
 valgrind: $(BIN)
 	valgrind $(VALGRIND_FLAGS) ./$(BIN)
 
-debugvalgrind: $(BIN)
+valgrinddebug: $(BIN)
 	valgrind $(VALGRIND_FLAGS) ./$(BIN) -d
 
-testvalgrind: $(BIN)
+selftest: $(BIN)
 	valgrind $(VALGRIND_FLAGS) ./$(BIN) -t
 
-debugtestvalgrind: $(BIN)
+selftestdebug: $(BIN)
 	valgrind $(VALGRIND_FLAGS) ./$(BIN) -t -d
 
 
