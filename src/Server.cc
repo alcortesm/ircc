@@ -266,10 +266,22 @@ Server::Recv()
    return r;
 }
 
+void
+Server::SetAuthenticated()
+{
+   mState = Server::AUTHENTICATED;
+}
+
 bool
 Server::IsConnected() const
 {
-   return mState == Server::CONNECTED;
+   return mState >= Server::CONNECTED;
+}
+
+bool
+Server::IsAuthenticated() const
+{
+   return mState >= Server::AUTHENTICATED;
 }
 
 const string&

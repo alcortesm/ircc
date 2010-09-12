@@ -47,10 +47,9 @@ class Server {
    std::string Recv()
       throw (Server::NotConnectedException, Server::RecvException, Server::ConnectionClosedByPeerException);
 
-   bool IsConnected() const;
-
    const std::string & GetHost() const throw (Server::NotConnectedException);
    const std::string & GetPort() const throw (Server::NotConnectedException);
+   int  GetSock() const;
 
    const std::string & GetChannel() const;
    void                SetChannel(const std::string& rChannel);
@@ -58,7 +57,9 @@ class Server {
    bool                IsChannel();
    bool                IsChannelClear();
 
-   int                 GetSock() const;
+   bool IsConnected() const;
+   bool IsAuthenticated() const;
+   void SetAuthenticated();
 
    static bool TestOk();
    static bool TestFail() { return ! Server::TestOk(); };
@@ -71,7 +72,7 @@ class Server {
 
    std::string mHost;
    std::string mPort;
-   enum state {DISCONNECTED, CONNECTED} mState;
+   enum state {DISCONNECTED, CONNECTED, AUTHENTICATED} mState;
    std::string mChannel;  // current channel
    int mSock;
 };
