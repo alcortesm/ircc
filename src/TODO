@@ -1,4 +1,3 @@
-- clarify Makefile targer (fast should be test, test should be selftest)
 - remove /nick and make /user do all the work
 - add message for numeric responses:
   *** bla has left channel #ro2 (bla)
