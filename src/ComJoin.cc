@@ -27,9 +27,9 @@ ComJoin::Run() {
 
    try {
       std::stringstream ss;
-      // if we are already members of a channel, send a "JOIN 0"
-      // and then a "JOIN channel"
-      if (mrServer.IsChannel()) {
+      // if we want to join a channel and we are already members of a
+      // channel, send a "JOIN 0" and then a "JOIN channel"
+      if (mChannel != "0" && mrServer.IsChannel()) {
          ss << ComJoin::COMMAND << MESSAGE_SEPARATOR << "0" << END_OF_MESSAGE;
       }
       ss << ComJoin::COMMAND << MESSAGE_SEPARATOR << mChannel << END_OF_MESSAGE;

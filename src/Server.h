@@ -54,14 +54,7 @@ class Server {
    bool                IsChannel();
    bool                IsChannelClear();
 
-   const std::string & GetDesiredChannel() const;
-   void                SetDesiredChannel(const std::string& rChannel);
-   void                ClearDesiredChannel();
-   bool                IsDesiredChannel();
-   bool                IsDesiredChannelClear();
-
    int                 GetSock() const;
-
 
    static bool TestOk();
    static bool TestFail() { return ! Server::TestOk(); };
@@ -76,7 +69,6 @@ class Server {
    std::string mPort;
    enum state {DISCONNECTED, CONNECTED} mState;
    std::string mChannel;  // current channel
-   std::string mDesiredChannel;
    int mSock;
 };
 

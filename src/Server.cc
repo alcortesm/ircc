@@ -25,7 +25,6 @@ Server::Server()
      mPort(),
      mState(Server::DISCONNECTED),
      mChannel(string()),
-     mDesiredChannel(string()),
      mSock(-1)
 {
    *gpDebug << FROM_DEBUG << "Server::Server()" << endl ;
@@ -47,7 +46,6 @@ Server::reset_internal_state()
    mPort = string();
    mState = Server::DISCONNECTED;
    mChannel = string();
-   mDesiredChannel = string();
    mSock = -1;
 }
 
@@ -313,39 +311,6 @@ Server::IsChannelClear()
    return mChannel.empty();
 }
 
-const string&
-Server::GetDesiredChannel() const
-{
-   return mDesiredChannel;
-}
-
-void
-Server::SetDesiredChannel(const std::string& rChannel)
-{
-   *gpDebug << FROM_DEBUG << "desired channel : " << rChannel<< endl ;
-   mDesiredChannel = rChannel;
-   return;
-}
-
-void
-Server::ClearDesiredChannel()
-{
-   mDesiredChannel = string();
-   return;
-}
-
-bool
-Server::IsDesiredChannel()
-{
-   return !IsDesiredChannelClear();
-}
-
-bool
-Server::IsDesiredChannelClear()
-{
-   return mDesiredChannel.empty();
-}
-
 int
 Server::GetSock() const
 {
@@ -459,10 +424,6 @@ operator<<(std::ostream & os, Server & server) {
          os << ", channel=" << server.GetChannel();
       else
          os << ", not in a channel";
-      if (server.IsDesiredChannel())
-         os << ", desired=" << server.GetDesiredChannel();
-      else
-         os << ", no desired channel";
    } else {
       os << "DISCONNECTED";
    }

@@ -18,17 +18,18 @@ void
 Msg::Run(Server& rServer) const
 {
    /* JOIN */
-   if (mCommand == "JOIN")
+   if (mCommand == "JOIN") {
       rServer.SetChannel(mParams[0]);
+      std::cout << FROM_PROGRAM << "you have join channel "
+                << mParams[0] << std::endl ;
+   }
 
    /* PART */
    if (mCommand == "PART") {
-      rServer.ClearChannel();
-      // if there is a desired channel to join to, join now
-      if (rServer.IsDesiredChannel()) {
-         ComJoin command(rServer.GetDesiredChannel(), rServer);
-         command.Run();
-         rServer.ClearDesiredChannel();
+      if (rServer.GetChannel() == mParams[0]) {
+         std::cout << FROM_PROGRAM << "you have leave channel "
+                   << mParams[0] << std::endl ;
+         rServer.ClearChannel();
       }
    }
 
