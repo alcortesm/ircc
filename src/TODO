@@ -1,6 +1,10 @@
 - clarify Makefile targer (fast should be test, test should be selftest)
 - remove /nick and make /user do all the work
-- add message for numeric responses
+- add message for numeric responses:
+  *** bla has left channel #ro2 (bla)
+  *** bla (~alcortes@localhost) has joined channel #ro2
+  *** Topic for #ro2: RO2 Channel
+  *** #ro2 -Server- 1284296339
 - add /disconnect
 - add /list
 - The line processed by CommandFactory must be cleaned if command is not /msg
