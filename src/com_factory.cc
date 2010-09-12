@@ -57,10 +57,10 @@ new_connect(Server& rServer, const string& rLine)
    size_t space1 = rLine.find(SPACE, 0);
    size_t space2 = rLine.find(SPACE, space1+1);
    if (space2 == string::npos)
-      return new ComError("The /connect command needs a hots and a port");
+      return new ComError("The /connect command needs a host and a port");
    size_t space3 =  rLine.find(SPACE, space2+1);
    if (space3 != string::npos)
-      return new ComError("The /connect command only needs a hots and a port");
+      return new ComError("The /connect command only needs a host and a port");
 
    size_t host_start = space1 + 1;
    size_t host_len = space2 - host_start;

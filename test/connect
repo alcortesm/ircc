@@ -1,0 +1,7 @@
+/connect
+/connect localhost
+/connect localhostbla 6778
+/connect localhost 9999
+/connect localhost 6778
+/connect localhost 9999
+/quit

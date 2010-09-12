@@ -68,23 +68,27 @@ ComConnect::Run() {
    try {
 
       mrServer.Connect(mHost, mPort);
+      cout << FROM_PROGRAM << "Connected to server " << mHost << ":" << mPort << endl;
 
    } catch (Server::AlreadyConnectedException & e) {
-      cout << FROM_PROGRAM << "Can not connect to " << mHost << ":" << mPort
-           << ": Already connected to " << mrServer.GetHost()
+      cout << FROM_PROGRAM << "Already connected to " << mrServer.GetHost()
            << ":" << mrServer.GetPort() << endl;
    } catch (Server::ConnectException & e) {
-      cout << FROM_PROGRAM << "Can not connect to "  << mHost << ":" << mPort
-           << ": " << e.what() << endl ;
+      *gpDebug << FROM_DEBUG << "Unable to connect to server "
+               << mHost << ":" << mPort << " : "
+               << e.what() << endl ;
+      cout << FROM_PROGRAM << "Unable to connect to server "
+           << mHost << ":" << mPort << endl ;
    }
 
    return ;
 }
 
 
-ComConnect::ComConnect(Server& rServer, std::string & host, std::string & port)
-   : mrServer(rServer), mHost(host), mPort(port)
+ComConnect::ComConnect(Server& rServer, std::string & rHost, std::string & rPort)
+   : mrServer(rServer), mHost(rHost), mPort(rPort)
 {
-   *gpDebug << FROM_DEBUG << "ComConnect::ComConnect(\"" << host
-            << "\", \"" << port << "\")" << std::endl ;   
+   *gpDebug << FROM_DEBUG << "ComConnect::ComConnect(" << rServer
+            << ", \"" << rHost
+            << "\", \"" << rPort << "\")" << std::endl ;   
 }
