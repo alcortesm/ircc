@@ -1,6 +1,9 @@
+- remove /nick and make /user do all the work
+- change /help message: remove /nick and /user, add /auth
+- remove /nick and /user, auth is now doing all the work
+- msg_factory must return a Msg not a Msg*
 - add user message for all commands
 - add debug messages to all Com... ctors
-- remove /nick and make /user do all the work
 - add message for numeric responses:
   *** bla has left channel #ro2 (bla)
   *** bla (~alcortes@localhost) has joined channel #ro2
