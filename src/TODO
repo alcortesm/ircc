@@ -1,3 +1,4 @@
+- add user message for all commands
 - add debug messages to all Com... ctors
 - remove /nick and make /user do all the work
 - add message for numeric responses:
