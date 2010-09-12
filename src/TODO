@@ -1,7 +1,7 @@
-- Remove internal state : desired channel
-- A ComDisconnect is needed
-- A ComServer command must have ComConnect ComNick and its run must run
-   its members
+- remove /nick and make /user do all the work
+- add message for numeric responses
+- add /disconnect
+- add /list
 - The line processed by CommandFactory must be cleaned if command is not /msg
 - CommandFactory return a pointer, but I would like to return a
    reference to avoid deleting the object afterwards, let the scope
