@@ -8,8 +8,7 @@ const std::string ComHelp::STR("/help");
 const std::string ComHelp::MSG("*** A typical user session goes like this:\n\
 *** \n\
 ***     /connect localhost 6757\n\
-***     /nick alcortes\n\
-***     /user alcortes Alberto Cortes\n\
+***     /auth alcortes\n\
 ***     /list\n\
 ***     /join #ro2\n\
 ***     /who\n\
@@ -22,8 +21,8 @@ const std::string ComHelp::MSG("*** A typical user session goes like this:\n\
 *** The full list of available commands are\n\
 *** \n\
 ***     /connect <host> <port>   - connect to a server\n\
-***     /nick <nick>             - send your nick to the server\n\
-***     /user <nick> <full name> - send your auth to the server\n\
+***     /auth <nick>             - authenticate to the server.\n\
+***                                set nick, username & real name)\n\
 ***     /list                    - list the channels in the server\n\
 ***     /who                     - list users in your channel\n\
 ***     /join [<channel>]        - join a channel or leave the channel\n\

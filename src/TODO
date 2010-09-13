@@ -1,6 +1,4 @@
-- remove /nick and make /user do all the work
 - change /help message: remove /nick and /user, add /auth
-- remove /nick and /user, auth is now doing all the work
 - add /leave
 - make /join with no argument show the channel "*** You are not on any
    channels" o "*** Current channel #test0"

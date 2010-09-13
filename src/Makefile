@@ -8,8 +8,6 @@ SRCS = \
     ComHelp.cc \
     ComJoin.cc \
     ComSleep.cc \
-    ComUser.cc \
-    ComNick.cc \
     ComMsg.cc \
     ComError.cc \
     Server.cc \

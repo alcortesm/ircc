@@ -8,8 +8,6 @@
 #include "ComConnect.h"
 #include "ComError.h"
 #include "ComMsg.h"
-#include "ComNick.h"
-#include "ComUser.h"
 #include "ComSleep.h"
 #include "ComJoin.h"
 #include <ostream>
@@ -111,19 +109,8 @@ new_auth(Server& rServer, const string& rLine)
    if (there_is_no_args(rLine))
       return new ComError("The nick command needs and argument");
 
-   string nick(rLine, ComNick::STR.length()+1);
+   string nick(rLine, ComAuth::STR.length()+1);
    return new ComAuth(nick, rServer);
-}
-
-Command*
-new_nick(Server& rServer, const string& rLine)
-{
-   // if line is just "/nick" -> error
-   if (there_is_no_args(rLine))
-      return new ComError("can not set nick: what is your nick?");
-
-   string nick(rLine, ComNick::STR.length()+1);
-   return new ComNick(nick, rServer);
 }
 
 Command*
@@ -133,20 +120,8 @@ new_join(Server& rServer, const string& rLine)
    if (there_is_no_args(rLine))
       return new ComJoin(LEAVE_ALL_CHANNELS_CHANNEL, rServer);
 
-   string channel(rLine, ComNick::STR.length()+1);
+   string channel(rLine, ComJoin::STR.length()+1);
    return new ComJoin(channel, rServer);
-}
-
-Command*
-new_user(Server& rServer, const string& rLine)
-{
-   // if line is just "/user" -> error
-   if (there_is_no_args(rLine))
-      return new ComError("can not set user: what is your user and realname");
-
-   //   string user(rLine, ComUser::STR.length()+1);
-   const string user("alcortes 0 * :Alberto Cortes");
-   return new ComUser(user, rServer);
 }
 
 Command*
@@ -156,7 +131,7 @@ new_sleep(const string& rLine)
    if (there_is_no_args(rLine))
       return new ComSleep(ComSleep::DEFAULT_SLEEP_TIME_SECS);
 
-   const string duration_str(rLine, ComUser::STR.length()+1);
+   const string duration_str(rLine, ComSleep::STR.length()+1);
    int duration_int;
    try {
       duration_int = string_to_int(duration_str);
@@ -193,10 +168,6 @@ com_factory(const std::string& rLine, Server& rServer)
    if (starts_with(rLine, ComAuth::STR))
       return new_auth(rServer, rLine);
 
-   /* NICK */
-   if (starts_with(rLine, ComNick::STR))
-      return new_nick(rServer, rLine);
-
    /* ECHO */
    if (starts_with(rLine, ComEcho::STR))
       return new ComEcho(rLine.substr(ComEcho::STR.length()+1));
@@ -208,10 +179,6 @@ com_factory(const std::string& rLine, Server& rServer)
    /* JOIN */
    if (starts_with(rLine, ComJoin::STR))
       return new_join(rServer, rLine);
-
-   /* USER */
-   if (starts_with(rLine, ComUser::STR))
-      return new_user(rServer, rLine);
 
    /* QUIT */
    if (starts_with(rLine,ComQuit::STR))
