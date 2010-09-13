@@ -10,7 +10,7 @@ extern std::ostream* gpDebug;
 ComLeave::ComLeave(Server& rServer)
    : mrServer(rServer)
 {
-   *gpDebug << "ComLeave::ComLeave()" << std::endl;
+   *gpDebug << FROM_DEBUG << "ComLeave::ComLeave()" << std::endl;
 }
 
 /* static */
