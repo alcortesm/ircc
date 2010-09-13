@@ -1,4 +1,5 @@
 - add /list
+- add /who
 - The line processed by CommandFactory must be cleaned if command is not /msg
 - CommandFactory return a pointer, but I would like to return a
    reference to avoid deleting the object afterwards, let the scope
