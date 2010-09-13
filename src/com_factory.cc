@@ -1,8 +1,6 @@
 #include "ComLeave.h"
 #include "ComAuth.h"
-#include "ComEcho.h"
 #include "ComHelp.h"
-#include "ComEcho.h"
 #include "ComNop.h"
 #include "ComUnknown.h"
 #include "ComQuit.h"
@@ -168,10 +166,6 @@ com_factory(const std::string& rLine, Server& rServer)
    /* AUTH */
    if (starts_with(rLine, ComAuth::STR))
       return new_auth(rServer, rLine);
-
-   /* ECHO */
-   if (starts_with(rLine, ComEcho::STR))
-      return new ComEcho(rLine.substr(ComEcho::STR.length()+1));
 
    /* HELP */
    if (starts_with(rLine, ComHelp::STR))

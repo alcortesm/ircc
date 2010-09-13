@@ -5,7 +5,6 @@ SRCS = \
     Msg.cc \
     ComLeave.cc \
     ComAuth.cc \
-    ComEcho.cc \
     ComHelp.cc \
     ComJoin.cc \
     ComSleep.cc \
