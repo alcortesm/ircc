@@ -30,13 +30,13 @@ Msg::Run(Server& rServer) const
 
    /* PART */
    if (mCommand == "PART") {
-      if (mParams.size() != 4) {
+      if (mParams.size() != 2) {
          std::cout << FROM_PROGRAM << "Received invalid message from server!: "
                    << *((Msg*) this) << std::endl;
          return;
       }
       if (rServer.GetChannel() == mParams[0]) {
-         std::cout << FROM_PROGRAM << "you have leave channel "
+         std::cout << FROM_PROGRAM << mParams[1] << " has left channel "
                    << mParams[0] << std::endl ;
          rServer.ClearChannel();
       }
