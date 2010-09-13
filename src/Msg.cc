@@ -193,6 +193,19 @@ Msg::Run(Server& rServer) const
       return;
    }
 
+   /* Common commands unknown to RFC2812 */
+   if (
+       mCommand == "250" ||
+       mCommand == "265" ||
+       mCommand == "266" ||
+       mCommand == "375" ||
+       mCommand == "333"
+       ) {
+      std::cout << FROM_PROGRAM
+                << "Message received with a command unknown to RFC2812 ("
+                << mCommand << ")" << std::endl;
+   }
+
    /* other commands */
    std::cout << FROM_PROGRAM << "Unknown message from server with command <"
              << mCommand << ">" << std::endl;
