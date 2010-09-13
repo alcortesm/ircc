@@ -24,6 +24,7 @@ const std::string COM_USER      = "USER";    /* RFC2812 3.1.3 */
 const std::string COM_JOIN      = "JOIN";    /* RFC2812 3.2.1 */
 const std::string COM_PRIVMSG   = "PRIVMSG"; /* RFC2812 3.3.1 */
 const std::string COM_LIST      = "LIST";    /* RFC2812 3.2.6 */
+const std::string COM_WHO       = "WHO";     /* RFC2812 3.6.1 */
 
 /* RFC2812 5.1 Command responses */
 const std::string RPL_WELCOME           = "001";
@@ -36,9 +37,11 @@ const std::string RPL_LUSERCHANNELS     = "254";
 const std::string RPL_LUSERME           = "255";
 // 265 is unknown to RFC2812
 // 266 is unknown to RFC2812
+const std::string RPL_ENDOFWHO          = "315";
 const std::string RPL_LIST              = "322";
 const std::string RPL_LISTEND           = "323";
 const std::string RPL_TOPIC             = "332";
+const std::string RPL_WHOREPLY          = "352";
 const std::string RPL_MOTD              = "372";
 // 375 is unknown to RFC2812
 // 333 is unknown to RFC2812

@@ -1,3 +1,4 @@
+#include "ComWho.h"
 #include "ComList.h"
 #include "ComDisconnect.h"
 #include "ComLeave.h"
@@ -193,6 +194,10 @@ com_factory(const std::string& rLine, Server& rServer)
    /* LEAVE */
    if (starts_with(rLine, ComLeave::STR))
       return new ComLeave(rServer);
+
+   /* WHO */
+   if (starts_with(rLine, ComWho::STR))
+      return new ComWho(rServer);
 
    /* QUIT */
    if (starts_with(rLine,ComQuit::STR))

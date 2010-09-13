@@ -155,6 +155,17 @@ Msg::Run() const
       return;
    }
 
+   /* RPL_ENDOFWHO */
+   if (mCommand == RPL_ENDOFWHO) {
+      if (mParams.size() != 3) {
+         std::cout << FROM_PROGRAM << "Received invalid message from server!: "
+                   << *((Msg*) this) << std::endl;
+         return;
+      }
+      // do nothing
+      return;
+   }
+
    /* RPL_LIST */
    if (mCommand == RPL_LIST) {
       if (mParams.size() != 4) {
@@ -204,6 +215,19 @@ Msg::Run() const
       std::cout << FROM_PROGRAM
                 << "Topic for " << mParams[1]
                 << ": " << mParams[2] << std::endl;
+      return;
+   }
+
+   /* RPL_WHOREPLY */
+   if (mCommand == RPL_WHOREPLY) {
+      if (mParams.size() != 8) {
+         std::cout << FROM_PROGRAM << "Received invalid message from server!: "
+                   << *((Msg*) this) << std::endl;
+         return;
+      }
+      std::cout << FROM_PROGRAM << mParams[1]
+                << "\t\t" << mParams[5]
+                << std::endl;
       return;
    }
 
