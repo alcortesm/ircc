@@ -1,5 +1,9 @@
 /help
+
+
 /connect localhost 6778
+
+
 /auth alcortes
 /sleep
 
@@ -8,10 +12,16 @@
 
 /join #test0
 /sleep
+
+
 /join
 /sleep
+
+
 /join #test1
 /sleep
+
+
 /join #ro2
 /sleep
 
