@@ -12,22 +12,15 @@
 /sleep
 
 
-/join #test0
+/join #ro2
 /sleep
+
+
 /join
+/sleep
 
 
 /leave
-/sleep
-/join
-
-
-/join #test1
-/sleep
-/join
-
-
-/join #ro2
 /sleep
 /join
 
@@ -35,16 +28,21 @@
 /who
 /sleep
 
+
 hello
 /sleep
 
-/msg hello again
-/sleep
 
 /leave
 /sleep
 
+
+/join
+/sleep
+
+
 /disconnect
 /sleep
+
 
 /quit
