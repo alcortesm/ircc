@@ -45,7 +45,7 @@ Msg::Run() const
 
    /* PING */
    if (mCommand == "PING") {
-      if (mParams.size() != 4) {
+      if (mParams.size() != 1) {
          std::cout << FROM_PROGRAM << "Received invalid message from server!: "
                    << *((Msg*) this) << std::endl;
          return;

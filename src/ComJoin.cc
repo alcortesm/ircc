@@ -37,10 +37,10 @@ ComJoin::Run() {
       mrServer.Send(s);
 
    } catch (Server::NotConnectedException & e) {
-      cout << FROM_PROGRAM << "Can not set nick: not connected to server"
+      cout << FROM_PROGRAM << "Unable to join channel: not connected to server"
            << endl;
    } catch (Server::SendException & e) {
-      cout << FROM_PROGRAM << "Can not set nick: " << e.what()
+      cout << FROM_PROGRAM << "Unable to join channel: " << e.what()
            << endl;
    } catch (Server::ConnectionClosedByPeerException& e) {
       cout << FROM_PROGRAM << e.what() << endl;

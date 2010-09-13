@@ -110,7 +110,7 @@ new_auth(Server& rServer, const string& rLine)
 {
    // if line is just "/auth" -> error
    if (there_is_no_args(rLine))
-      return new ComError("The nick command needs and argument");
+      return new ComError("The /auth command needs and argument");
 
    string nick(rLine, ComAuth::STR.length()+1);
    return new ComAuth(nick, rServer);

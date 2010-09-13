@@ -30,10 +30,10 @@ ComList::Run() {
       mrServer.Send(s);
 
    } catch (Server::NotConnectedException & e) {
-      std::cout << FROM_PROGRAM << "Can not set nick: not connected to server"
+      std::cout << FROM_PROGRAM << "Unable to list channels: not connected to server"
                 << std::endl;
    } catch (Server::SendException & e) {
-      std::cout << FROM_PROGRAM << "Can not set nick: " << e.what()
+      std::cout << FROM_PROGRAM << "Unable to list channels: " << e.what()
                 << std::endl;
    } catch (Server::ConnectionClosedByPeerException& e) {
       std::cout << FROM_PROGRAM << e.what() << std::endl;
