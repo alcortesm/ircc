@@ -8,7 +8,6 @@
 extern std::ostream* gpDebug;
 
 const std::string ComMsg::STR = std::string("/msg");
-const std::string ComMsg::COMMAND = std::string("PRIVMSG");
 
 void
 ComMsg::Run() {
@@ -24,7 +23,7 @@ ComMsg::Run() {
    try {
 
       std::stringstream ss;
-      ss << ComMsg::COMMAND << MESSAGE_SEPARATOR
+      ss << COM_PRIVMSG << MESSAGE_SEPARATOR
          << mrServer.GetChannel() << MESSAGE_SEPARATOR
          << ":" << mMsg << END_OF_MESSAGE;
       std::string s = ss.str();

@@ -9,7 +9,6 @@ class ComJoin : public Command {
    ComJoin(const std::string & rChannel, Server& rServer);
    void Run();
    static const std::string STR;
-   static const std::string COMMAND;
  private:
    Server& mrServer;
    const std::string mChannel;

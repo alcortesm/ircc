@@ -18,7 +18,6 @@ using std::endl;
 
 /* static */
 const std::string ComJoin::STR = std::string("/join");
-const std::string ComJoin::COMMAND = std::string("JOIN");
 
 void
 ComJoin::Run() {
@@ -30,10 +29,10 @@ ComJoin::Run() {
       // if we want to join a channel and we are already members of a
       // channel, first send a "JOIN 0" and then a "JOIN channel"
       if (mChannel != LEAVE_ALL_CHANNELS_CHANNEL && mrServer.IsChannel()) {
-         ss << ComJoin::COMMAND << MESSAGE_SEPARATOR
+         ss << COM_JOIN << MESSAGE_SEPARATOR
             << LEAVE_ALL_CHANNELS_CHANNEL << END_OF_MESSAGE;
       }
-      ss << ComJoin::COMMAND << MESSAGE_SEPARATOR << mChannel << END_OF_MESSAGE;
+      ss << COM_JOIN << MESSAGE_SEPARATOR << mChannel << END_OF_MESSAGE;
       std::string s = ss.str();
       mrServer.Send(s);
 
