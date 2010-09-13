@@ -15,15 +15,9 @@ Msg::Msg(const std::string& rPrefix, const std::string& rCommand, const std::vec
 void
 Msg::Run(Server& rServer) const
 {
-   if (rServer.IsAuthenticated() && mParams[0] != rServer.GetNick()) {
-         std::cout << "Received a message not for you!: "
-                   << *((Msg*) this) << std::endl;
-         return;
-   }
-
    /* JOIN */
    if (mCommand == "JOIN") {
-      if (mParams.size() != 2) {
+      if (mParams.size() != 1) {
          std::cout << "Received invalid message from server!: "
                    << *((Msg*) this) << std::endl;
          return;
