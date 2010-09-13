@@ -27,6 +27,7 @@ ComDisconnect::Run() {
       std::string s = ss.str();
       mrServer.Send(s);
       mrServer.Disconnect();
+      std::cout << FROM_PROGRAM << "Disconnected from server" << std::endl;
 
    } catch (Server::NotConnectedException& e) {
       std::cout << FROM_PROGRAM << "Not connected to any server"
