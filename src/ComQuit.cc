@@ -4,7 +4,10 @@
 
 extern std::ostream* gpDebug;
 
-ComQuit::ComQuit() {}
+ComQuit::ComQuit()
+{
+   *gpDebug << FROM_DEBUG << "ComQuit::ComQuit()" << std::endl;
+}
 
 /* static */
 const std::string ComQuit::STR = std::string("/quit");

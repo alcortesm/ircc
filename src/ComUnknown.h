@@ -7,8 +7,8 @@ class ComUnknown : public Command {
  protected:
    const std::string mOriginal; /* the original command that is unknown */
  public:
-   ComUnknown(const std::string& original) : mOriginal(original) {};
-    void Run();
+   ComUnknown(const std::string& original);
+   void Run();
 };
 
 #endif /* COMUNKNOWN_H */

@@ -7,6 +7,7 @@ class ComHelp : public Command {
  protected:
    static const std::string MSG;
  public:
+   ComHelp();
    static const std::string STR;
    void Run();
 };

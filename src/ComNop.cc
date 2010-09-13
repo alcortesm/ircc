@@ -4,7 +4,10 @@
 
 extern std::ostream* gpDebug;
 
-ComNop::ComNop() {}
+ComNop::ComNop()
+{
+   *gpDebug << FROM_DEBUG << "ComNop::ComNop()" << std::endl;
+}
 
 /* static */
 const std::string ComNop::STR = std::string("/nop");

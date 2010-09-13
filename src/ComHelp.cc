@@ -1,6 +1,7 @@
 #include "ComHelp.h"
 #include <ostream>
 #include <iostream>
+#include "ircc.h"
 
 extern std::ostream* gpDebug;
 
@@ -56,4 +57,8 @@ void
 ComHelp::Run() {
    std::cout << ComHelp::MSG << std::endl ;
    return ;
+}
+
+ComHelp::ComHelp() {
+   *gpDebug << FROM_DEBUG << "ComHelp::ComHelp()" << std::endl;
 }

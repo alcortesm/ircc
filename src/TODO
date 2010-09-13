@@ -1,4 +1,3 @@
-- add debug messages to all Com... ctors
 - add /disconnect
 - add /list
 - The line processed by CommandFactory must be cleaned if command is not /msg

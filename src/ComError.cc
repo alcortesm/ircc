@@ -11,3 +11,10 @@ ComError::Run() {
    std::cout << FROM_PROGRAM << mMsg << std::endl ;
    return ;
 }
+
+ComError::ComError(const std::string& msg)
+  : mMsg(msg)
+{
+   *gpDebug << FROM_DEBUG << "ComError::ComError(\""
+            << msg << "\")" ;
+}

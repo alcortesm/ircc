@@ -10,8 +10,7 @@ class ComMsg : public Command {
    Server& mrServer;
    static const std::string COMMAND;
  public:
-   ComMsg(const std::string& rMsg, Server& rServer)
-      : mMsg(rMsg), mrServer(rServer) {};
+   ComMsg(const std::string& rMsg, Server& rServer);
    static const std::string STR;
    void Run();
 };

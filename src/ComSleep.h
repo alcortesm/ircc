@@ -7,7 +7,7 @@ class ComSleep : public Command {
  protected:
    const int mSecs; /* seconds to sleep */
  public:
-   ComSleep(int secs) : mSecs(secs) {};
+   ComSleep(int secs);
    static const std::string STR;
    static const int DEFAULT_SLEEP_TIME_SECS;
    void Run();

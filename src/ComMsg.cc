@@ -42,3 +42,12 @@ ComMsg::Run() {
 
    return ;
 }
+
+ComMsg::ComMsg(const std::string& rMsg, Server& rServer)
+   : mMsg(rMsg), mrServer(rServer)
+{
+   *gpDebug << FROM_DEBUG << "ComMsg::ComMsg(\""
+            << rMsg << "\", "
+            << rServer << ")" << std::endl;
+}
+

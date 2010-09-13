@@ -15,3 +15,9 @@ ComSleep::Run() {
    sleep(mSecs);
    return ;
 }
+
+ComSleep::ComSleep(int secs)
+  : mSecs(secs)
+{
+   *gpDebug << FROM_DEBUG << "ComSleep::ComSleep(" << secs << ")" << std::endl;
+}

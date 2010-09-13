@@ -7,7 +7,7 @@ class ComError : public Command {
  protected:
    const std::string mMsg; /* the message to show to the user */
  public:
-   ComError(const std::string& msg) : mMsg(msg) {};
+   ComError(const std::string& msg);
    void Run();
 };
 
