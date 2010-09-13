@@ -155,6 +155,31 @@ Msg::Run() const
       return;
    }
 
+   /* RPL_LIST */
+   if (mCommand == RPL_LIST) {
+      if (mParams.size() != 4) {
+         std::cout << FROM_PROGRAM << "Received invalid message from server!: "
+                   << *((Msg*) this) << std::endl;
+         return;
+      }
+      std::cout << FROM_PROGRAM << mParams[1]
+                << "\t\t" << mParams[2]
+                << "\t" << mParams[3]
+                << std::endl;
+      return;
+   }
+
+   /* RPL_LISTEND */
+   if (mCommand == RPL_LISTEND) {
+      if (mParams.size() != 2) {
+         std::cout << FROM_PROGRAM << "Received invalid message from server!: "
+                   << *((Msg*) this) << std::endl;
+         return;
+      }
+      // do nothing
+      return;
+   }
+
    /* RPL_MOTD */
    if (mCommand == RPL_MOTD) {
       if (mParams.size() != 2) {

@@ -1,3 +1,4 @@
+#include "ComList.h"
 #include "ComDisconnect.h"
 #include "ComLeave.h"
 #include "ComAuth.h"
@@ -163,6 +164,10 @@ com_factory(const std::string& rLine, Server& rServer)
    if (starts_with(rLine,ComNop::STR))
       return new ComNop();
    
+   /* LIST */
+   if (starts_with(rLine, ComList::STR))
+      return new ComList(rServer);
+
    /* SLEEP */
    if (starts_with(rLine, ComSleep::STR))
       return new_sleep(rLine);

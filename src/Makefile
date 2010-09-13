@@ -3,6 +3,7 @@ INSTALL_DIR = ~/bin
 SRCS = \
     msg_factory.cc \
     Msg.cc \
+    ComList.cc \
     ComDisconnect.cc \
     ComLeave.cc \
     ComAuth.cc \
