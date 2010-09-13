@@ -94,7 +94,8 @@ Server::Connect(const string & host, const string & port)
       throw Server::AlreadyConnectedException();
 
    // learn what proto is for TCP
-   int tcp_proto = get_tcp_proto();
+   //   int tcp_proto = get_tcp_proto();
+   int tcp_proto = 0;
 
    // create the socket
    mSock = socket(AF_INET, SOCK_STREAM, tcp_proto);
