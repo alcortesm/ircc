@@ -1,3 +1,4 @@
+#include "ComLeave.h"
 #include "ComAuth.h"
 #include "ComEcho.h"
 #include "ComHelp.h"
@@ -179,6 +180,10 @@ com_factory(const std::string& rLine, Server& rServer)
    /* JOIN */
    if (starts_with(rLine, ComJoin::STR))
       return new_join(rServer, rLine);
+
+   /* LEAVE */
+   if (starts_with(rLine, ComLeave::STR))
+      return new ComLeave(rServer);
 
    /* QUIT */
    if (starts_with(rLine,ComQuit::STR))

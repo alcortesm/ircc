@@ -21,6 +21,7 @@ const std::string LEAVE_ALL_CHANNELS_CHANNEL("0"); /* RFC2812 3.2.1 */
 
 const std::string COM_NICK      = "NICK"; /* RFC2812 3.1.2 */
 const std::string COM_USER      = "USER"; /* RFC2812 3.1.3 */
+const std::string COM_JOIN      = "JOIN"; /* RFC2812 3.2.1 */
 
 /* RFC2812 5.1 Command responses */
 const std::string RPL_WELCOME           = "001";
