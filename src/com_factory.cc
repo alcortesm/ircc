@@ -153,6 +153,23 @@ new_sleep(const string& rLine)
    return new ComSleep(duration_int);
 }
 
+std::string
+clean_line(std::string line)
+{
+   // replace 2 spaces with 1 space
+   size_t two_spaces_pos;
+   while (true) {
+      two_spaces_pos = line.find("  ");
+      if (two_spaces_pos == string::npos)
+         break;
+      line.replace(two_spaces_pos, 2, " ");
+   }
+   // remove last space
+   if (line.at(line.length()-1) == ' ')
+      line.erase(line.length()-1, 1);
+   return line;
+}
+
 Command*
 com_factory(const std::string& rLine, Server& rServer)
 {
@@ -165,50 +182,54 @@ com_factory(const std::string& rLine, Server& rServer)
    if (starts_with(rLine,ComNop::STR))
       return new ComNop();
    
-   /* LIST */
-   if (starts_with(rLine, ComList::STR))
-      return new ComList(rServer);
-
-   /* SLEEP */
-   if (starts_with(rLine, ComSleep::STR))
-      return new_sleep(rLine);
-
    /* MESG */
    if (rLine.at(0) != '/')
       return new ComMsg(rLine, rServer);
    if (starts_with(rLine, ComMsg::STR))
       return new_msg(rServer, rLine);
 
+   /* clean the line to be nice with the other commands */
+   string clean = clean_line(rLine);
+   *gpDebug << "com_factory() : clean = \"" << clean << "\"" << std::endl;
+
+   /* LIST */
+   if (starts_with(clean, ComList::STR))
+      return new ComList(rServer);
+
+   /* SLEEP */
+   if (starts_with(clean, ComSleep::STR))
+      return new_sleep(clean);
+
    /* AUTH */
-   if (starts_with(rLine, ComAuth::STR))
-      return new_auth(rServer, rLine);
+   if (starts_with(clean, ComAuth::STR))
+      return new_auth(rServer, clean);
 
    /* HELP */
-   if (starts_with(rLine, ComHelp::STR))
+   if (starts_with(clean, ComHelp::STR))
       return new ComHelp();
 
    /* JOIN */
-   if (starts_with(rLine, ComJoin::STR))
-      return new_join(rServer, rLine);
+   if (starts_with(clean, ComJoin::STR))
+      return new_join(rServer, clean);
 
    /* LEAVE */
-   if (starts_with(rLine, ComLeave::STR))
+   if (starts_with(clean, ComLeave::STR))
       return new ComLeave(rServer);
 
    /* WHO */
-   if (starts_with(rLine, ComWho::STR))
+   if (starts_with(clean, ComWho::STR))
       return new ComWho(rServer);
 
    /* QUIT */
-   if (starts_with(rLine,ComQuit::STR))
+   if (starts_with(clean,ComQuit::STR))
       return new ComQuit();
 
    /* CONNECT */
-   if (starts_with(rLine, ComConnect::STR))
-      return new_connect(rServer, rLine);
+   if (starts_with(clean, ComConnect::STR))
+      return new_connect(rServer, clean);
 
    /* DISCONNECT */
-   if (starts_with(rLine, ComDisconnect::STR))
+   if (starts_with(clean, ComDisconnect::STR))
       return new ComDisconnect(rServer);
 
    /* UNKNOWN */
