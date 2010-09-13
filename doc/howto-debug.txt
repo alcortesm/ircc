@@ -1,0 +1,115 @@
+Run the irc server locally:
+
+  ##################################
+  monitor01; ${HOME}/opt/ngircd/sbin/ngircd -f ${HOME}/opt/ngircd/etc/ngircd.conf -n -p
+  [3663:5    0] ngircd 16-x86_64/unknown/linux-gnu started.
+  [3663:6    0] Activating: no-daemon-mode, passive-mode.
+  [3663:6    0] Reading configuration from "/home/alcortes/opt/ngircd/etc/ngircd.conf" ...
+  [3663:6    0] ServerUID must not be 0, using "nobody" instead.
+  [3663:3    0] Can't change group ID to 65534: Operation not permitted
+  [3663:3    0] Can't change user ID to 65534: Operation not permitted
+  [3663:6    0] Running as user alcortes(1000), group alcortes(1000), with PID 3663.
+  [3663:6    0] Not running with changed root directory.
+  [3663:6    0] Created pre-defined channel "#ro2"
+  [3663:6    0] Created pre-defined channel "#test0"
+  [3663:6    0] Created pre-defined channel "#test1"
+  [3663:6    0] IO subsystem: select (initial maxfd 100).
+  [3663:6    0] Now listening on [0.0.0.0]:6778 (socket 3).
+  ...
+  ##################################
+
+Run a commercial irc client and connect it to the server:
+
+  ##################################
+  monitor01; ircII -p 6778 debug-user localhost -q -d
+  *** Connecting to port 6778 of server localhost
+  *** Connection closed from localhost: Connection refused
+  *** Trying next IP address for localhost...
+  *** Connecting to port 6778 of server localhost
+  *** Welcome to the Internet Relay Network user!~alcortes@localhost (from group101.ro2.uc3m.irc.net)
+  *** /etc/irc/script/local V0.5 for Debian finished. Welcome to ircII.
+  *** Your host is group101.ro2.uc3m.irc.net, running version ngircd-16 (x86_64/unknown/linux-gnu)
+  *** This server has been started Mon Sep 13 2010 at 15: 01:37 (CEST)
+  *** umodes available aiorsw, channel modes available biIklmnoPstvz
+  *** RFC2812 IRCD=ngIRCd CASEMAPPING=ascii PREFIX=(ov)@+ CHANTYPES=#&+ CHANMODES=bI,k,l,imnPst CHANLIMIT=#&+: 10 are supported on this server
+  *** CHANNELLEN=50 NICKLEN=9 TOPICLEN=490 AWAYLEN=127 KICKLEN=400 PENALTY are supported on this server
+  *** There are 1 users and 0 services on 1 servers
+  *** 4 channels have been formed
+  *** This server has 1 users, 0 services and 0 servers connected
+  *** 1 2 Current local users:  1, Max: 2
+  *** 1 2 Current global users:  1, Max: 2
+  *** Highest connection count:  2 (11 connections received)
+  *** - group101.ro2.uc3m.irc.net message of the day
+  *** - "Today's MOTD is irrelevant"
+  ##################################
+
+Now run some commands in your commercial irc client to keep an eye on
+your client:
+
+  ##################################
+  /set novice off
+  *** Value of NOVICE set to OFF
+  /join #test0,#test1,#ro2
+  *** user (~alcortes@localhost) has joined channel #test0
+  *** Topic for #test0: Test channel 0
+  *** #test0 -Server- 1284382897
+  *** user (~alcortes@localhost) has joined channel #test1
+  *** Topic for #test1: Test channel 1
+  *** #test1 -Server- 1284382897
+  *** user (~alcortes@localhost) has joined channel #ro2
+  *** Topic for #ro2: RO2 Channel
+  *** #ro2 -Server- 1284382897
+  ##################################
+
+When you connect and join groups with your client you will see
+notifications the commercial client. For example, if you run the
+followin in your client:
+
+  ##################################
+  /help
+  /connect localhost 6778
+  /auth alcortes
+  /sleep
+  
+  /list
+  /sleep
+  
+  /join #test0
+  /sleep
+  /join
+  /sleep
+  /join #test1
+  /sleep
+  /join #ro2
+  /sleep
+  
+  /who
+  /sleep
+  
+  hello
+  /sleep
+  
+  /msg hello again
+  /sleep
+  
+  /join
+  /sleep
+  
+  /disconnect
+  /sleep
+  
+  /quit
+  ##################################
+
+You will get this in the commercial client:
+
+  ##################################
+  *** alcortes (~alcortes@localhost) has joined channel #test0
+  *** alcortes has left channel #test0 (alcortes)
+  *** alcortes (~alcortes@localhost) has joined channel #test1
+  *** alcortes has left channel #test1 (alcortes)
+  *** alcortes (~alcortes@localhost) has joined channel #ro2
+  <alcortes> hello
+  <alcortes> hello again
+  *** alcortes has left channel #ro2 (alcortes)
+  ##################################
