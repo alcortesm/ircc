@@ -16,5 +16,5 @@ ComError::ComError(const std::string& msg)
   : mMsg(msg)
 {
    *gpDebug << FROM_DEBUG << "ComError::ComError(\""
-            << msg << "\")" ;
+            << msg << "\")" << std::endl;
 }
