@@ -18,7 +18,7 @@ Msg::Run(Server& rServer) const
    /* JOIN */
    if (mCommand == "JOIN") {
       if (mParams.size() != 1) {
-         std::cout << "Received invalid message from server!: "
+         std::cout << FROM_PROGRAM << "Received invalid message from server!: "
                    << *((Msg*) this) << std::endl;
          return;
       }
@@ -31,7 +31,7 @@ Msg::Run(Server& rServer) const
    /* PART */
    if (mCommand == "PART") {
       if (mParams.size() != 4) {
-         std::cout << "Received invalid message from server!: "
+         std::cout << FROM_PROGRAM << "Received invalid message from server!: "
                    << *((Msg*) this) << std::endl;
          return;
       }
@@ -46,7 +46,7 @@ Msg::Run(Server& rServer) const
    /* PING */
    if (mCommand == "PING") {
       if (mParams.size() != 4) {
-         std::cout << "Received invalid message from server!: "
+         std::cout << FROM_PROGRAM << "Received invalid message from server!: "
                    << *((Msg*) this) << std::endl;
          return;
       }
@@ -74,7 +74,7 @@ Msg::Run(Server& rServer) const
    /* RPL_WELCOME */
    if (mCommand == RPL_WELCOME) {
       if (mParams.size() != 2) {
-         std::cout << "Received invalid message from server!: "
+         std::cout << FROM_PROGRAM << "Received invalid message from server!: "
                    << *((Msg*) this) << std::endl;
          return;
       }
@@ -88,7 +88,7 @@ Msg::Run(Server& rServer) const
    /* RPL_YOURHOST */
    if (mCommand == RPL_YOURHOST) {
       if (mParams.size() != 2) {
-         std::cout << "Received invalid message from server!: "
+         std::cout << FROM_PROGRAM << "Received invalid message from server!: "
                    << *((Msg*) this) << std::endl;
          return;
       }
@@ -99,7 +99,7 @@ Msg::Run(Server& rServer) const
    /* RPL_CREATED */
    if (mCommand == RPL_CREATED) {
       if (mParams.size() != 2) {
-         std::cout << "Received invalid message from server!: "
+         std::cout << FROM_PROGRAM << "Received invalid message from server!: "
                    << *((Msg*) this) << std::endl;
          return;
       }
@@ -110,7 +110,7 @@ Msg::Run(Server& rServer) const
    /* RPL_MYINFO */
    if (mCommand == RPL_MYINFO) {
       if (mParams.size() != 5) {
-         std::cout << "Received invalid message from server!: "
+         std::cout << FROM_PROGRAM << "Received invalid message from server!: "
                    << *((Msg*) this) << std::endl;
          return;
       }
@@ -124,7 +124,7 @@ Msg::Run(Server& rServer) const
    /* RPL_LUSERCLIENT */
    if (mCommand == RPL_LUSERCLIENT) {
       if (mParams.size() != 2) {
-         std::cout << "Received invalid message from server!: "
+         std::cout << FROM_PROGRAM << "Received invalid message from server!: "
                    << *((Msg*) this) << std::endl;
          return;
       }
@@ -135,7 +135,7 @@ Msg::Run(Server& rServer) const
    /* RPL_LUSERCHANNELS */
    if (mCommand == RPL_LUSERCHANNELS) {
       if (mParams.size() != 3) {
-         std::cout << "Received invalid message from server!: "
+         std::cout << FROM_PROGRAM << "Received invalid message from server!: "
                    << *((Msg*) this) << std::endl;
          return;
       }
@@ -147,7 +147,7 @@ Msg::Run(Server& rServer) const
    /* RPL_LUSERME */
    if (mCommand == RPL_LUSERME) {
       if (mParams.size() != 2) {
-         std::cout << "Received invalid message from server!: "
+         std::cout << FROM_PROGRAM << "Received invalid message from server!: "
                    << *((Msg*) this) << std::endl;
          return;
       }
@@ -158,7 +158,7 @@ Msg::Run(Server& rServer) const
    /* RPL_MOTD */
    if (mCommand == RPL_MOTD) {
       if (mParams.size() != 2) {
-         std::cout << "Received invalid message from server!: "
+         std::cout << FROM_PROGRAM << "Received invalid message from server!: "
                    << *((Msg*) this) << std::endl;
          return;
       }
@@ -172,7 +172,7 @@ Msg::Run(Server& rServer) const
    /* RPL_TOPIC */
    if (mCommand == RPL_TOPIC) {
       if (mParams.size() != 3) {
-         std::cout << "Received invalid message from server!: "
+         std::cout << FROM_PROGRAM << "Received invalid message from server!: "
                    << *((Msg*) this) << std::endl;
          return;
       }
@@ -185,7 +185,7 @@ Msg::Run(Server& rServer) const
    /* RPL_NAMREPLY */
    if (mCommand == RPL_NAMREPLY) {
       if (mParams.size() != 4) {
-         std::cout << "Received invalid message from server!: "
+         std::cout << FROM_PROGRAM << "Received invalid message from server!: "
                    << *((Msg*) this) << std::endl;
          return;
       }
@@ -198,7 +198,7 @@ Msg::Run(Server& rServer) const
    /* RPL_ENDOFNAMES */
    if (mCommand == RPL_ENDOFNAMES) {
       if (mParams.size() != 3) {
-         std::cout << "Received invalid message from server!: "
+         std::cout << FROM_PROGRAM << "Received invalid message from server!: "
                    << *((Msg*) this) << std::endl;
          return;
       }
@@ -209,7 +209,7 @@ Msg::Run(Server& rServer) const
    /* RPL_ENDOFMOTD */
    if (mCommand == RPL_ENDOFMOTD) {
       if (mParams.size() != 2) {
-         std::cout << "Received invalid message from server!: "
+         std::cout << FROM_PROGRAM << "Received invalid message from server!: "
                    << *((Msg*) this) << std::endl;
          return;
       }
