@@ -1,6 +1,8 @@
 #include "ComDisconnect.h"
 #include "ircc.h"
+#include "irc.h"
 #include <ostream>
+#include <sstream>
 #include <iostream>
 
 extern std::ostream* gpDebug;
@@ -19,7 +21,13 @@ const std::string ComDisconnect::STR = std::string("/disconnect");
 void
 ComDisconnect::Run() {
    try {
+
+      std::stringstream ss;
+      ss << COM_QUIT << END_OF_MESSAGE;
+      std::string s = ss.str();
+      mrServer.Send(s);
       mrServer.Disconnect();
+
    } catch (Server::NotConnectedException& e) {
       std::cout << FROM_PROGRAM << "Not connected to any server"
                 << std::endl;

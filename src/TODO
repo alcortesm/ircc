@@ -2,4 +2,3 @@
 - CommandFactory return a pointer, but I would like to return a
    reference to avoid deleting the object afterwards, let the scope
    rules do the work for me.
-- Modify QUIT to notify server
