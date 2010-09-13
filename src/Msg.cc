@@ -169,6 +169,19 @@ Msg::Run(Server& rServer) const
       return;
    }
 
+   /* RPL_TOPIC */
+   if (mCommand == RPL_TOPIC) {
+      if (mParams.size() != 3) {
+         std::cout << "Received invalid message from server!: "
+                   << *((Msg*) this) << std::endl;
+         return;
+      }
+      std::cout << FROM_PROGRAM
+                << "Topic for " << mParams[1]
+                << ": " << mParams[2] << std::endl;
+      return;
+   }
+
    /* RPL_ENDOFMOTD */
    if (mCommand == RPL_ENDOFMOTD) {
       if (mParams.size() != 2) {
