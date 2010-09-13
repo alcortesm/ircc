@@ -23,7 +23,7 @@ Msg::Run(Server& rServer) const
          return;
       }
       rServer.SetChannel(mParams[0]);
-      std::cout << FROM_PROGRAM << "you have join channel "
+      std::cout << FROM_PROGRAM << "You have joined channel "
                 << mParams[0] << std::endl ;
       return;
    }
