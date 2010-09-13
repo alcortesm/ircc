@@ -195,6 +195,17 @@ Msg::Run(Server& rServer) const
       return;
    }
 
+   /* RPL_ENDOFNAMES */
+   if (mCommand == RPL_ENDOFNAMES) {
+      if (mParams.size() != 3) {
+         std::cout << "Received invalid message from server!: "
+                   << *((Msg*) this) << std::endl;
+         return;
+      }
+      // do nothing
+      return;
+   }
+
    /* RPL_ENDOFMOTD */
    if (mCommand == RPL_ENDOFMOTD) {
       if (mParams.size() != 2) {
