@@ -41,7 +41,7 @@ hello
 /msg hello again
 /sleep
 
-/join
+/leave
 /sleep
 
 /disconnect

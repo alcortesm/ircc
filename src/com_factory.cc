@@ -1,3 +1,4 @@
+#include "ComDisconnect.h"
 #include "ComLeave.h"
 #include "ComAuth.h"
 #include "ComHelp.h"
@@ -195,6 +196,10 @@ com_factory(const std::string& rLine, Server& rServer)
    /* CONNECT */
    if (starts_with(rLine, ComConnect::STR))
       return new_connect(rServer, rLine);
+
+   /* DISCONNECT */
+   if (starts_with(rLine, ComDisconnect::STR))
+      return new ComDisconnect(rServer);
 
    /* UNKNOWN */
    return new ComUnknown(rLine);
