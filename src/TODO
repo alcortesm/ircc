@@ -2,13 +2,7 @@
 - make /join with no argument show the channel "*** You are not on any
    channels" o "*** Current channel #test0"
 - msg_factory must return a Msg not a Msg*
-- add user message for all commands
 - add debug messages to all Com... ctors
-- add message for numeric responses:
-  *** bla has left channel #ro2 (bla)
-  *** bla (~alcortes@localhost) has joined channel #ro2
-  *** Topic for #ro2: RO2 Channel
-  *** #ro2 -Server- 1284296339
 - add /disconnect
 - add /list
 - The line processed by CommandFactory must be cleaned if command is not /msg
