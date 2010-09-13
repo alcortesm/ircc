@@ -12,7 +12,7 @@ class Msg {
 
    void Run(Server& rServer) const ;
 
-   friend std::ostream& operator<<(std::ostream& os, Msg& msg);
+   friend std::ostream& operator<<(std::ostream& os, const Msg& msg);
 
  protected:
    std::string mPrefix;

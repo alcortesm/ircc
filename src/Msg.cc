@@ -238,14 +238,14 @@ Msg::Run(Server& rServer) const
 }
 
 std::ostream &
-operator<<(std::ostream & os, Msg& msg) {
+operator<<(std::ostream & os, const Msg& msg) {
 
    os << "[ Msg ";
    if (!msg.mPrefix.empty())
       os << "(" << msg.mPrefix << ") ";
 
    os << "<" << msg.mCommand << "> " ;
-   for(std::vector<std::string>::iterator it = msg.mParams.begin();
+   for(std::vector<std::string>::const_iterator it = msg.mParams.begin();
        it != msg.mParams.end();
        ++it) {
       if (it != msg.mParams.begin())
