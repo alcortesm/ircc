@@ -25,6 +25,9 @@ const std::string COM_JOIN      = "JOIN";    /* RFC2812 3.2.1 */
 const std::string COM_PRIVMSG   = "PRIVMSG"; /* RFC2812 3.3.1 */
 const std::string COM_LIST      = "LIST";    /* RFC2812 3.2.6 */
 const std::string COM_WHO       = "WHO";     /* RFC2812 3.6.1 */
+const std::string COM_PART      = "PART";    /* RFC2812 3.2.2 */
+const std::string COM_PING      = "PING";    /* RFC2812 3.7.2 */
+const std::string COM_PONG      = "PONG";    /* RFC2812 3.7.3 */
 
 /* RFC2812 5.1 Command responses */
 const std::string RPL_WELCOME           = "001";

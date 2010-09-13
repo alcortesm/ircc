@@ -24,7 +24,7 @@ void
 Msg::Run() const
 {
    /* JOIN */
-   if (mCommand == "JOIN") {
+   if (mCommand == COM_JOIN) {
       if (mParams.size() != 1) {
          std::cout << FROM_PROGRAM << "Received invalid message from server!: "
                    << *((Msg*) this) << std::endl;
@@ -37,7 +37,7 @@ Msg::Run() const
    }
 
    /* PRIVMSG */
-   if (mCommand == "PRIVMSG") {
+   if (mCommand == COM_PRIVMSG) {
       if (mParams.size() != 2) {
          std::cout << FROM_PROGRAM << "Received invalid message from server!: "
                    << *((Msg*) this) << std::endl;
@@ -51,7 +51,7 @@ Msg::Run() const
    }
 
    /* PART */
-   if (mCommand == "PART") {
+   if (mCommand == COM_PART) {
       if (mParams.size() != 2) {
          std::cout << FROM_PROGRAM << "Received invalid message from server!: "
                    << *((Msg*) this) << std::endl;
@@ -66,7 +66,7 @@ Msg::Run() const
    }
 
    /* PING */
-   if (mCommand == "PING") {
+   if (mCommand == COM_PING) {
       if (mParams.size() != 1) {
          std::cout << FROM_PROGRAM << "Received invalid message from server!: "
                    << *((Msg*) this) << std::endl;
@@ -76,7 +76,7 @@ Msg::Run() const
       try {
 
          std::stringstream ss;
-         ss << "PONG" << MESSAGE_SEPARATOR
+         ss << COM_PONG << MESSAGE_SEPARATOR
             << ":" << mParams[0] << END_OF_MESSAGE;
          std::string s = ss.str();
          mrServer.Send(s);
