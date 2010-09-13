@@ -5,6 +5,6 @@
 #include "Msg.h"
 #include "Server.h"
 
-const Msg msg_factory(const std::string& rLine);
+const Msg msg_factory(const std::string& rLine, Server& rServer);
 
 #endif // MSG_FACTORY_H

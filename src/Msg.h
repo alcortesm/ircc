@@ -7,10 +7,10 @@
 
 class Msg {
  public:
-   Msg(const std::string& rPrefix, const std::string& rCommand, const std::vector<std::string>& rParams);
+   Msg(const std::string& rPrefix, const std::string& rCommand, const std::vector<std::string>& rParams, Server& rServer);
    virtual ~Msg() {};
 
-   void Run(Server& rServer) const ;
+   void Run() const ;
 
    friend std::ostream& operator<<(std::ostream& os, const Msg& msg);
 
@@ -18,6 +18,7 @@ class Msg {
    std::string mPrefix;
    std::string mCommand;
    std::vector<std::string> mParams;
+   Server& mrServer;
 };
 
 

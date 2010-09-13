@@ -137,9 +137,9 @@ process_data_from_server(const string& data, const string& old_data, Server& rSe
          break;
       }
       string line(whole, last_line_pos, next_line_pos-last_line_pos);
-      const Msg msg = msg_factory(line);
+      const Msg msg = msg_factory(line, rServer);
       *gpDebug << FROM_DEBUG << FROM_SERVER << msg << std::endl ;
-      msg.Run(rServer);
+      msg.Run();
       last_line_pos = next_line_pos + END_OF_MESSAGE.length();
    }
 

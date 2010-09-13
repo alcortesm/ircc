@@ -8,12 +8,12 @@
 
 extern std::ostream* gpDebug;
 
-Msg::Msg(const std::string& rPrefix, const std::string& rCommand, const std::vector<std::string>& rParams)
-   : mPrefix(rPrefix), mCommand(rCommand), mParams(rParams)
+Msg::Msg(const std::string& rPrefix, const std::string& rCommand, const std::vector<std::string>& rParams, Server& rServer)
+   : mPrefix(rPrefix), mCommand(rCommand), mParams(rParams), mrServer(rServer)
 {}
 
 void
-Msg::Run(Server& rServer) const
+Msg::Run() const
 {
    /* JOIN */
    if (mCommand == "JOIN") {
@@ -22,8 +22,8 @@ Msg::Run(Server& rServer) const
                    << *((Msg*) this) << std::endl;
          return;
       }
-      rServer.SetChannel(mParams[0]);
-      std::cout << FROM_PROGRAM << rServer.GetNick() << " has joined channel "
+      mrServer.SetChannel(mParams[0]);
+      std::cout << FROM_PROGRAM << mrServer.GetNick() << " has joined channel "
                 << mParams[0] << std::endl ;
       return;
    }
@@ -35,10 +35,10 @@ Msg::Run(Server& rServer) const
                    << *((Msg*) this) << std::endl;
          return;
       }
-      if (rServer.GetChannel() == mParams[0]) {
+      if (mrServer.GetChannel() == mParams[0]) {
          std::cout << FROM_PROGRAM << mParams[1] << " has left channel "
                    << mParams[0] << std::endl ;
-         rServer.ClearChannel();
+         mrServer.ClearChannel();
       }
       return;
    }
@@ -57,7 +57,7 @@ Msg::Run(Server& rServer) const
          ss << "PONG" << MESSAGE_SEPARATOR
             << ":" << mParams[0] << END_OF_MESSAGE;
          std::string s = ss.str();
-         rServer.Send(s);
+         mrServer.Send(s);
 
       } catch (Server::NotConnectedException & e) {
          std::cout << FROM_PROGRAM << "Can not send message: not connected to server"
@@ -81,7 +81,7 @@ Msg::Run(Server& rServer) const
       std::cout << FROM_PROGRAM << mParams[1];
       if (!mPrefix.empty())
          std::cout << " (from " << mPrefix << ")" << std::endl;
-      rServer.SetAuthenticated(mParams[0]);
+      mrServer.SetAuthenticated(mParams[0]);
       return;
    }
 

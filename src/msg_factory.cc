@@ -184,13 +184,13 @@ get_params(const string& rLine)
 
 
 const Msg
-msg_factory(const string& rLine)
+msg_factory(const string& rLine, Server& rServer)
 {
    //   *gpDebug << FROM_DEBUG << "msg_factory(\"" << rLine.substr(0, rLine.rfind(END_OF_MESSAGE)) << "\", " << rServer << ")" << std::endl ;
 
    string prefix = get_prefix(rLine);
    string command = get_command(rLine);
    vector<string> params = get_params(rLine);
-   const Msg msg = Msg(prefix, command, params);
+   const Msg msg = Msg(prefix, command, params, rServer);
    return msg;
 }
