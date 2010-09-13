@@ -463,14 +463,14 @@ operator<<(std::ostream& os, Server& rServer) {
          os << "AUTHENTICATED";
       else
          os << "CONNECTED";
-      os << ", host=" << rServer.GetHost();
-      os << ", port=" << rServer.GetPort();
+      os << ", host=\"" << rServer.GetHost() << "\"";
+      os << ", port=\"" << rServer.GetPort() << "\"";
       if (rServer.IsAuthenticated())
-         os << "nick=" << rServer.GetNick();
+         os << ", nick=\"" << rServer.GetNick() << "\"";
       if (rServer.IsChannel())
-         os << ", channel=" << rServer.GetChannel();
+         os << ", channel=\"" << rServer.GetChannel() << "\"";
       else
-         os << ", not in a channel";
+         os << ", --no channel--";
    } else {
       os << "DISCONNECTED";
    }
