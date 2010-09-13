@@ -19,32 +19,23 @@ const std::string ComHelp::MSG("*** A typical user session goes like this:\n\
 *** \n\
 *** The full list of available commands are\n\
 *** \n\
-***     /help                    - show this text\n\
-*** \n\
-***     /connect <host> <port>   - connect to a server\n\
-***\n\
-***     /auth <nick>             - authenticate with the server,\n\
-***                                sets nick, username & real name\n\
-***\n\
-***     /list                    - list available public channels\n\
-***\n\
-***     /who                     - list users in your channel\n\
-***\n\
-***     /join [<channel>]        - join a channel or tell what channel\n\
-***                                you are on\n\
-***\n\
-***     /leave                   - leaves your current channel\n\
-***\n\
-***     /msg <txt>               - send <txt> to the channel\n\
-***\n\
-***     /disconnect              - disconnect from server\n\
-***\n\
-***     /quit                    - close program\n\
-***\n\
-***     /nop [<text>]            - (debugging) no operation,\n\
-***                                just echoes <text> back\n\
-***\n\
-***     /sleep [<secs>]          - (debugging) pause for <secs> seconds\n\
+***     /help                    Show this text.\n\
+***     /connect <host> <port>   Connect to a server.\n\
+***     /auth <nick>             Authenticate with the server,\n\
+***                              sets nick, username & real name.\n\
+***     /list                    Lists all current irc channels,\n\
+***                              number of users, and topic.\n\
+***     /join [<channel>]        Join a channel or tell which is\n\
+***                              the current channel.\n\
+***     /leave                   Leaves your current channel.\n\
+***     /who                     List users in current channel.\n\
+***     /msg <txt>               Send <txt> to the channel.\n\
+***     /disconnect              Disconnect from server.\n\
+***     /quit                    Close program.\n\
+***     /nop [<text>]            (debugging) no operation,\n\
+***                              just echoes <text> back.\n\
+***     /sleep [<secs>]          (debugging) pause for <secs>\n\
+***                              seconds.\n\
 ***\n\
 *** Lines from the user that don't begin with '/' are equivalent to\n\
 *** \n\
