@@ -7,23 +7,30 @@
 /auth alcortes
 /sleep
 
+
 /list
 /sleep
 
+
 /join #test0
 /sleep
+/join
 
 
 /leave
 /sleep
+/join
 
 
 /join #test1
 /sleep
+/join
 
 
 /join #ro2
 /sleep
+/join
+
 
 /who
 /sleep

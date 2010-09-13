@@ -10,6 +10,7 @@
 #include "ComSleep.h"
 #include "ComJoin.h"
 #include <ostream>
+#include <sstream>
 #include <stdexcept>
 #include "ircc.h"
 #include "irc.h"
@@ -115,9 +116,17 @@ new_auth(Server& rServer, const string& rLine)
 Command*
 new_join(Server& rServer, const string& rLine)
 {
-   // if line is just "/join" -> leave all channels
-   if (there_is_no_args(rLine))
-      return new ComJoin(LEAVE_ALL_CHANNELS_CHANNEL, rServer);
+   // if line is just "/join" -> tell which channel you are on
+   if (there_is_no_args(rLine)) {
+      if (rServer.IsChannel()) {
+         std::stringstream ss;
+         ss << "You are on channel "
+            << rServer.GetChannel() << std::endl;
+         return new ComError(ss.str());
+      } else {
+         return new ComError("You are not on any channel");
+      }
+   }
 
    string channel(rLine, ComJoin::STR.length()+1);
    return new ComJoin(channel, rServer);

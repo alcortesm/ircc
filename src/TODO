@@ -1,5 +1,3 @@
-- make /join with no argument show the channel "*** You are not on any
-   channels" o "*** Current channel #test0"
 - msg_factory must return a Msg not a Msg*
 - add debug messages to all Com... ctors
 - add /disconnect
