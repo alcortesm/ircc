@@ -204,6 +204,7 @@ Msg::Run(Server& rServer) const
       std::cout << FROM_PROGRAM
                 << "Message received with a command unknown to RFC2812 ("
                 << mCommand << ")" << std::endl;
+      return;
    }
 
    /* other commands */
