@@ -44,6 +44,7 @@ const std::string ComHelp::MSG("*** A typical user session goes like this:\n\
 *** Lines beginning with \"*** \" are messages from the program.\n\
 *** Lines beginning with \"<user> \" are messages from <user>.\n\
 *** Lines beginning with \"DDD \" are debug messages from the program.\n\
+*** Lines beginning with \"> \" are your messages to other users.\n\
 *** The rest of the lines are echoes of the user commands.");
 
 void

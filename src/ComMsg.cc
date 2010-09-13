@@ -28,6 +28,7 @@ ComMsg::Run() {
          << ":" << mMsg << END_OF_MESSAGE;
       std::string s = ss.str();
       mrServer.Send(s);
+      std::cout << "> " << mMsg << std::endl;
 
    } catch (Server::NotConnectedException & e) {
       std::cout << FROM_PROGRAM << "Can not send message: not connected to server"
