@@ -33,6 +33,8 @@ const std::string ComHelp::MSG("*** A typical user session goes like this:\n\
 ***     /join [<channel>]        - join a channel or tell what channel\n\
 ***                                you are on\n\
 ***\n\
+***     /leave                   - leaves your current channel\n\
+***\n\
 ***     /msg <txt>               - send <txt> to the channel\n\
 ***\n\
 ***     /disconnect              - disconnect from server\n\
