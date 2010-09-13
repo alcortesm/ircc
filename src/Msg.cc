@@ -182,6 +182,19 @@ Msg::Run(Server& rServer) const
       return;
    }
 
+   /* RPL_NAMREPLY */
+   if (mCommand == RPL_NAMREPLY) {
+      if (mParams.size() != 4) {
+         std::cout << "Received invalid message from server!: "
+                   << *((Msg*) this) << std::endl;
+         return;
+      }
+      std::cout << FROM_PROGRAM
+                << "Users in channel " << mParams[2]
+                << ": " << mParams[3] << std::endl;
+      return;
+   }
+
    /* RPL_ENDOFMOTD */
    if (mCommand == RPL_ENDOFMOTD) {
       if (mParams.size() != 2) {
