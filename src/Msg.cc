@@ -12,6 +12,14 @@ Msg::Msg(const std::string& rPrefix, const std::string& rCommand, const std::vec
    : mPrefix(rPrefix), mCommand(rCommand), mParams(rParams), mrServer(rServer)
 {}
 
+std::string
+get_nick_from_prefix(const std::string& rPrefix)
+{
+   size_t exclam_pos = rPrefix.find("!");
+   std::string nick = rPrefix.substr(0, exclam_pos);
+   return nick;
+}
+
 void
 Msg::Run() const
 {
@@ -25,6 +33,20 @@ Msg::Run() const
       mrServer.SetChannel(mParams[0]);
       std::cout << FROM_PROGRAM << mrServer.GetNick() << " has joined channel "
                 << mParams[0] << std::endl ;
+      return;
+   }
+
+   /* PRIVMSG */
+   if (mCommand == "PRIVMSG") {
+      if (mParams.size() != 2) {
+         std::cout << FROM_PROGRAM << "Received invalid message from server!: "
+                   << *((Msg*) this) << std::endl;
+         return;
+      }
+      if (mrServer.GetChannel() == mParams[0]) {
+         std::string nick = get_nick_from_prefix(mPrefix);
+         std::cout << "<" << nick << "> " << mParams[1] <<  std::endl;
+      }
       return;
    }
 
