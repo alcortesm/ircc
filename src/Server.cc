@@ -12,6 +12,7 @@
 #include <netdb.h>
 #include "ircc.h"
 #include "irc.h"
+#include "ctcp.h"
 #include <sstream>
 
 extern std::ostream* gpDebug;
@@ -184,14 +185,20 @@ Server::Disconnect()
 }
 
 string
-textify_terminators(string str)
+textify(string str)
 {
    size_t current;
    while (true) {
       current = str.find(END_OF_MESSAGE);
       if (current == string::npos)
          break;
-      str.replace(current, END_OF_MESSAGE.length(), "\\r\\n");
+      str.replace(current, END_OF_MESSAGE.length(), "[\\r][\\n]");
+   }
+   while (true) {
+      current = str.find(CTCP_X_DELIM);
+      if (current == string::npos)
+         break;
+      str.replace(current, CTCP_X_DELIM.length(), "[\\001]");
    }
    return str;
 }
@@ -200,7 +207,7 @@ void
 Server::Send(const std::string& str)
    throw (Server::NotConnectedException, Server::SendException, Server::ConnectionClosedByPeerException)
 {
-   *gpDebug << FROM_DEBUG << "Server::Send(\"" << textify_terminators(str) << "\")" << endl ;
+   *gpDebug << FROM_DEBUG << "Server::Send(\"" << textify(str) << "\")" << endl ;
 
    if (!IsConnected())
       throw Server::NotConnectedException();

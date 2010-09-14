@@ -3,6 +3,6 @@
 
 #include <string>
 
-const std::string CTCP_X_DELIM = "\\001";
+const std::string CTCP_X_DELIM = "\001";
 
 #endif // CTCP_H

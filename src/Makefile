@@ -58,10 +58,10 @@ TAGS:
 	cscope -b -q *.cc *.h
 
 test: $(BIN)
-	valgrind $(VALGRIND_FLAGS) ./$(BIN) < ../test/full
+	valgrind $(VALGRIND_FLAGS) ./$(BIN) < ../test/upload
 
 testdebug: $(BIN)
-	valgrind $(VALGRIND_FLAGS) ./$(BIN) -d < ../test/full
+	valgrind $(VALGRIND_FLAGS) ./$(BIN) -d < ../test/upload
 
 valgrind: $(BIN)
 	valgrind $(VALGRIND_FLAGS) ./$(BIN)

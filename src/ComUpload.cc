@@ -7,6 +7,7 @@
 #include <stdexcept>
 #include "ircc.h"
 #include "irc.h"
+#include "ctcp.h"
 #include "utils.h"
 #include <sstream>
 #include <iostream>
@@ -25,14 +26,28 @@ ComUpload::Run() {
    *gpDebug << FROM_DEBUG << "ComUpload::Run()" << std::endl ;
 
    try {
+      std::string host = "192.168.0.1"; // TODO don't make this up
+      std::string host_str = "2130706433"; // TODO don't make this up
+      std::string port = "12345"; // TODO don't make this up
+      std::string file_size = "12354123"; // TODO don't make this up
       std::stringstream ss;
       ss << COM_PRIVMSG << MESSAGE_SEPARATOR
          << mNick << MESSAGE_SEPARATOR
-         << ":\\001DCC SEND " << mFileName
-         << " 21341234123412 123 41234\\001" << END_OF_MESSAGE;
+         << ":" << CTCP_X_DELIM << "DCC SEND "
+         << mFileName << MESSAGE_SEPARATOR
+         << host_str << MESSAGE_SEPARATOR
+         << port << MESSAGE_SEPARATOR
+         << file_size
+         << CTCP_X_DELIM << END_OF_MESSAGE;
       std::string s = ss.str();
       mrServer.Send(s);
-      std::cout << "> " << s << std::endl;
+      std::cout << FROM_PROGRAM
+                << "Sent upload "
+                << "[" << host
+                << ":" << port
+                << "] request to "
+                << mNick
+                << std::endl;
 
    } catch (Server::NotConnectedException & e) {
       std::cout << FROM_PROGRAM << "Can not send message: not connected to server"

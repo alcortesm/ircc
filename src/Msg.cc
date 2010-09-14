@@ -48,7 +48,8 @@ Msg::Run() const
       // check it's a private message with DCC content
       if (mParams[1].find(CTCP_X_DELIM) == 0) {
          // check if it's a known DCC message (we only support DCC SEND) */
-         if (mParams[1].find(DCC_SEND_PREFIX) != 0) {
+         if (mParams[1].find(DCC_SEND_PREFIX, CTCP_X_DELIM.length())
+             != CTCP_X_DELIM.length()) {
             std::cout << "Received unsupported DCC message: "
                       << *this << std::endl;
          }
@@ -57,18 +58,18 @@ Msg::Run() const
          std::string file_size = "123123"; // TODO extract from msg
          std::string host = "127.0.0.1"; // TODO extract from msg
          std::string port = "53037"; // TODO extract from msg
-         std::cout << FROM_PROGRAM
-                   << "DCC SEND (" << file_name << " "
-                   << file_size << ") request received from "
+         *gpDebug << FROM_DEBUG
+                   << "DCC SEND request (" << file_name << " "
+                   << file_size << ") received from "
                    << sender << " ["
                    << host << ":" << port << "]"
                    << std::endl;
          std::cout << FROM_PROGRAM
-                   << "Use \"/download "
+                   << "(from user "<< sender
+                   << ") please download"
                    << " " << file_name
-                   << " " << host
-                   << " " << port
-                   << "\" to download"
+                   << " from " << host
+                   << ":" << port
                    << std::endl;
             return;
       }
