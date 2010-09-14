@@ -1,6 +1,7 @@
 BIN = ircc
 INSTALL_DIR = ~/bin
 SRCS = \
+    DccServer.cc \
     msg_factory.cc \
     Msg.cc \
     ComUpload.cc \

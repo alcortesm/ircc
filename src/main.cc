@@ -28,6 +28,7 @@
 #include "Server.h"
 #include "irc.h"
 #include "Msg.h"
+#include "DccServer.h"
 
 using std::string;
 using std::endl;
@@ -153,6 +154,8 @@ main_loop()
    Server server;
    // we need to remember the still unprocessed data from the server
    std::string old_data;
+   // a DccServer is needed
+   DccServer dcc_server;
 
    /* wakeup timer: there is no need to use one at all */
    struct timeval tv;
@@ -171,10 +174,15 @@ main_loop()
          FD_SET(server.GetSock(), &read_fds);
          max_fds = MAX(max_fds, server.GetSock());
       }
+      if (dcc_server.IsServing()) {
+         FD_SET(dcc_server.GetSocket(), &read_fds);
+         max_fds = MAX(max_fds, dcc_server.GetSocket());
+      }
 
       int retval;
       retval = select(max_fds+1, &read_fds, NULL, NULL, &tv);
-      //*gpDebug << FROM_DEBUG << "main_loop's select() returns " << retval << endl ;
+      //*gpDebug << FROM_DEBUG << "main_loop's select() returns "
+      //         << retval << endl ;
       /* select error: exit */
       if (retval == -1) {
          if (errno == EINTR)
@@ -184,28 +192,37 @@ main_loop()
 
       /* select's timeout expire: reset timer */
       if (retval == 0) {
-         //         *gpDebug << FROM_DEBUG << "main_loop(): timeout expire!" << endl ;
+         //*gpDebug << FROM_DEBUG << "main_loop(): timeout expire!" << endl ;
          tv.tv_sec = MAIN_LOOP_TIMEOUT_SECS;
          tv.tv_usec = MAIN_LOOP_TIMEOUT_SECS;
          continue;
       }
 
       /* some fd was ready: which one?, read and process data */
-      if (server.IsConnected()) {
-         if (FD_ISSET(server.GetSock(), &read_fds)) { /* server socket */
-            try {
-               string data = server.Recv();
-               old_data = process_data_from_server(data, old_data, server);
-            } catch (Server::NotConnectedException& e) {
-               // that's OK, keep looping
-            } catch (Server::RecvException& e) {
-               cout << FROM_PROGRAM << "error receiving data from server: " << e.what() << endl;
-            } catch (Server::ConnectionClosedByPeerException & e) {
-               std::cout << FROM_PROGRAM << e.what() << std::endl;
-            }
+      /* IRC SERVER */
+      if (server.IsConnected()
+          && FD_ISSET(server.GetSock(), &read_fds)) {
+         try {
+            string data = server.Recv();
+            old_data = process_data_from_server(data, old_data, server);
+         } catch (Server::NotConnectedException& e) {
+            // that's OK, keep looping
+         } catch (Server::RecvException& e) {
+            cout << FROM_PROGRAM << "error receiving data from server: "
+                 << e.what() << endl;
+         } catch (Server::ConnectionClosedByPeerException & e) {
+            std::cout << FROM_PROGRAM << e.what() << std::endl;
          }
       }
 
+      /* DCC server */
+      if (dcc_server.IsServing()
+          && FD_ISSET(dcc_server.GetSocket(), &read_fds)) {
+         *gpDebug << FROM_DEBUG << dcc_server << std::endl;
+      }
+      *gpDebug << FROM_DEBUG << dcc_server << std::endl;
+
+      /* STDIN */
       if (FD_ISSET(STDIN_FD, &read_fds)) {
          /* process line: build a command from the line and execute it */
          try {
