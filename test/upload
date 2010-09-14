@@ -1,0 +1,12 @@
+/connect localhost 6691
+/auth user1
+/sleep 2
+
+
+
+/upload user1 main.cc
+
+
+
+/sleep 2
+/quit

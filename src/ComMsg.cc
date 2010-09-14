@@ -15,7 +15,7 @@ ComMsg::Run() {
    *gpDebug << FROM_DEBUG << "ComMsg::Run()" << std::endl ;
 
    if (mrServer.GetChannel().empty()) {
-      std::cout << FROM_PROGRAM << "Error: you must join a channel first"
+      std::cout << FROM_PROGRAM << "You must join a channel first"
                 << std::endl;
       return;
    }

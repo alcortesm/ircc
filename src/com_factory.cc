@@ -1,3 +1,4 @@
+#include "ComUpload.h"
 #include "ComWho.h"
 #include "ComList.h"
 #include "ComDisconnect.h"
@@ -74,6 +75,34 @@ new_connect(Server& rServer, const string& rLine)
    string port(rLine, port_start, port_len);
 
    return new ComConnect(rServer, host, port);
+}
+
+Command*
+new_upload(Server& rServer, const string& rLine)
+{
+   // if rLine is just the /connect command without arguments
+   if (rLine == ComUpload::STR)
+      return new ComError("The /upload command needs a nick and a file name");
+   
+   // there must be exactly 2 spaces in "/upload nick filename"
+   size_t space1 = rLine.find(SPACE, 0);
+   size_t space2 = rLine.find(SPACE, space1+1);
+   if (space2 == string::npos)
+      return new ComError("The /upload command needs a nick and a file name");
+   size_t space3 =  rLine.find(SPACE, space2+1);
+   if (space3 != string::npos)
+      return new ComError("The /upload command needs a nick and a file name");
+
+   size_t nick_start = space1 + 1;
+   size_t nick_len = space2 - nick_start;
+
+   size_t file_name_start = space2 + 1;
+   size_t file_name_len = rLine.length() - file_name_start;
+
+   string nick(rLine, nick_start, nick_len);
+   string file_name(rLine, file_name_start, file_name_len);
+
+   return new ComUpload(rServer, nick, file_name);
 }
 
 // Returns true if the line is just: "word [ ' ' ]" the check for the
@@ -223,6 +252,10 @@ com_factory(const std::string& rLine, Server& rServer)
    /* QUIT */
    if (starts_with(clean,ComQuit::STR))
       return new ComQuit();
+
+   /* UPLOAD */
+   if (starts_with(clean, ComUpload::STR))
+      return new_upload(rServer, clean);
 
    /* CONNECT */
    if (starts_with(clean, ComConnect::STR))
