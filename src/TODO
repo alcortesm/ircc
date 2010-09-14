@@ -1,3 +1,6 @@
+- Msg should have a Factory static method instead of msg_factory.cc
+- Server should not have nick or channel, there should be a User class
+- Msg should not need a Server or User at ctor, only Run need them
 - remove com_factory clean debug message
 - CommandFactory return a pointer, but I would like to return a
    reference to avoid deleting the object afterwards, let the scope
