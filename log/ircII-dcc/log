@@ -1,0 +1,122 @@
+Run server on host it003:
+
+    it003; ${HOME}/opt/ngircd/sbin/ngircd -f ${HOME}/opt/ngircd/etc/ngircd.conf -n -p
+    [17462:5    0] ngircd 16-i686/pc/linux-gnu started.
+    [17462:6    0] Activating: no-daemon-mode, passive-mode.
+    [17462:6    0] Reading configuration from "/usr/lab/alum/0012082/opt/ngircd/etc/ngircd.conf" ...
+    [17462:6    0] ServerUID must not be 0, using "nobody" instead.
+    [17462:3    0] Can't change group ID to 65534: Operation not permitted
+    [17462:3    0] Can't change user ID to 65534: Operation not permitted
+    [17462:6    0] Running as user 0012082(12082), group unknown(12082), with PID 17462.
+    [17462:6    0] Not running with changed root directory.
+    [17462:6    0] Created pre-defined channel "#ro2"
+    [17462:6    0] Created pre-defined channel "#test0"
+    [17462:6    0] Created pre-defined channel "#test1"
+    [17462:6    0] IO subsystem: select (initial maxfd 100).
+    [17462:6    0] Now listening on [0.0.0.0]:6691 (socket 3).
+    ...
+    
+
+
+Run an ircII client on it004 at ${HOME}:
+
+    it004; cd
+    it004; ircII -p 6691 user1 it003.lab.it.uc3m.es -d
+    *** Connecting to port 6691 of server it003.lab.it.uc3m.es
+    *** Welcome to the Internet Relay Network user1!~0012082@it004.lab.it.uc3m.es (from group021.ro2.uc3m.irc.net)
+    *** /etc/irc/script/local V0.5 for Debian finished. Welcome to ircII.
+    *** If you have not already done so, please read the new user information with /HELP NEWUSER
+    *** Your host is group021.ro2.uc3m.irc.net, running version ngircd-16 (i686/pc/linux-gnu)
+    *** This server has been started Tue Sep 14 2010 at 14: 28:59 (CEST)
+    *** umodes available aiorsw, channel modes available biIklmnoPstvz
+    *** RFC2812 IRCD=ngIRCd CASEMAPPING=ascii PREFIX=(ov)@+ CHANTYPES=#&+ CHANMODES=bI,k,l,imnPst CHANLIMIT=#&+: 10 are supported on this server
+    *** CHANNELLEN=50 NICKLEN=9 TOPICLEN=490 AWAYLEN=127 KICKLEN=400 PENALTY are supported on this server
+    *** There are 1 users and 0 services on 1 servers
+    *** 4 channels have been formed
+    *** This server has 1 users, 0 services and 0 servers connected
+    *** 1 1 Current local users:  1, Max: 1
+    *** 1 1 Current global users:  1, Max: 1
+    *** Highest connection count:  1 (1 connections received)
+    *** - group021.ro2.uc3m.irc.net message of the day
+    *** - "Today's MOTD is irrelevant"
+    
+
+
+
+Run tcpdump in it005:
+
+    it005; sudo tcpdump -i eth0 -s 0 -w /tmp/dcc.cap host it003.lab.it.uc3m.es and host it004.lab.it.uc3m.es
+    tcpdump: listening on eth0, link-type EN10MB (Ethernet), capture size 65535 bytes
+    
+
+
+Run another ircII on it005:
+
+    it005; cd ~/tmp
+    it005; ircII -p 6691 user2 it003.lab.it.uc3m.es -d
+    *** Connecting to port 6691 of server it003.lab.it.uc3m.es
+    *** Welcome to the Internet Relay Network user2!~0012082@it005.lab.it.uc3m.es (from group021.ro2.uc3m.irc.net)
+    *** /etc/irc/script/local V0.5 for Debian finished. Welcome to ircII.
+    *** If you have not already done so, please read the new user information with /HELP NEWUSER
+    *** Your host is group021.ro2.uc3m.irc.net, running version ngircd-16 (i686/pc/linux-gnu)
+    *** This server has been started Tue Sep 14 2010 at 14: 28:59 (CEST)
+    *** umodes available aiorsw, channel modes available biIklmnoPstvz
+    *** RFC2812 IRCD=ngIRCd CASEMAPPING=ascii PREFIX=(ov)@+ CHANTYPES=#&+ CHANMODES=bI,k,l,imnPst CHANLIMIT=#&+: 10 are supported on this server
+    *** CHANNELLEN=50 NICKLEN=9 TOPICLEN=490 AWAYLEN=127 KICKLEN=400 PENALTY are supported on this server
+    *** There are 2 users and 0 services on 1 servers
+    *** 4 channels have been formed
+    *** This server has 2 users, 0 services and 0 servers connected
+    *** 2 2 Current local users:  2, Max: 2
+    *** 2 2 Current global users:  2, Max: 2
+    *** Highest connection count:  2 (2 connections received)
+    *** - group021.ro2.uc3m.irc.net message of the day
+    *** - "Today's MOTD is irrelevant"
+    
+
+
+Send dcc request from user1 to user2:
+
+    /dcc send user2 .emacs
+    *** Sent DCC SEND [163.117.144.204:33728] request to user2
+    
+
+
+Download file from user2:
+
+    *** DCC SEND (_emacs 10210) request received from user1 [163.117.144.204:33728]
+    /dcc get user1 _emacs
+    *** DCC GET connection with user1[163.117.144.204:33728] established
+    *** DCC GET:_emacs from user1 completed 9.971 kb/sec
+    
+
+
+Back in user1:
+
+    *** DCC SEND:/var/home/lab/alum0/00/12/082/.emacs to user2 completed 9.971 kb/sec
+    
+
+
+Now quit both clients, first user2, then user1
+
+    /quit
+    it005;
+
+    /quit
+    it004;
+
+
+
+Kill tcpdump
+
+    ^C77 packets captured
+    77 packets received by filter
+    0 packets dropped by kernel
+    it005; cp /tmp/dcc.cap ~/dcc.cap
+    
+
+
+Compare:
+
+    it005; diff -sq ~/tmp/_emacs ~/.emacs
+    Files /usr/lab/alum/0012082/tmp/_emacs and /usr/lab/alum/0012082/.emacs are identical
+    
