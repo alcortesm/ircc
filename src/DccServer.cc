@@ -4,6 +4,11 @@
 #include "utils.h"
 #include "ircc.h"
 #include <ostream>
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <cstring>
+#include <cerrno>
+#include <stdlib.h>
 
 extern std::ostream* gpDebug;
 
@@ -45,15 +50,31 @@ DccServer::IsConnected() const
 }
 
 void
-DccServer::Listen(std::string& rFileName)
-   throw (DccServer::ListenException)
+DccServer::Listen(const std::string& rFileName)
+   throw (DccServer::FileException, DccServer::ListenException)
 {
    *gpDebug << FROM_DEBUG
-            << "DccServer::Liste("
+            << "DccServer::Listen("
             << "\"" << rFileName << "\""
             << ")" << std::endl;
 
+   // check if rFileName exists
+   std::string path("./");
+   path.append(rFileName);
+   int fd = open(path.c_str(), O_RDONLY);
+   if (fd == -1) {
+      size_t buf_sz = 1024; /* I hope is enough for errstr */
+      char* buf = (char *) xmalloc(buf_sz);
+      char* r;
+      r = strerror_r(errno, buf, buf_sz);
+      DccServer::FileException e(rFileName, r);
+      free(buf);
+      throw e;
+   }
+   close(fd);
    mFileName = rFileName;
+
+
    mHost = std::string("192.168.1.1");
    mPort = 2345;
    mSocket = socket(AF_INET, SOCK_STREAM, 0);

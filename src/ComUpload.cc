@@ -28,10 +28,8 @@ ComUpload::Run() {
    *gpDebug << FROM_DEBUG << "ComUpload::Run()" << std::endl ;
 
    try {
-      std::string file_name = "main.cc"; // TODO don't make this up
-
       // boot up DCC server
-      mrDccServer.Listen(file_name);
+      mrDccServer.Listen(mFileName);
       int         host_int  = mrDccServer.GetHostInt();
       std::string host_str  = mrDccServer.GetHost();
       int         port      = mrDccServer.GetPort();
@@ -59,6 +57,10 @@ ComUpload::Run() {
                 << mNick
                 << std::endl;
 
+   } catch (DccServer::FileException& e) {
+      std::cout << FROM_PROGRAM
+                << e.what()
+                << std::endl;
    } catch (DccServer::ListenException& e) {
       std::cout << FROM_PROGRAM
                 << e.what()

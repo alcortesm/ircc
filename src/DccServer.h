@@ -35,12 +35,17 @@ class DccServer {
    ListenException() : std::runtime_error("Unable to launch DCC server") { }
    ListenException(std::string s) : std::runtime_error("Unable to launch DCC server: " + s) { }
    };
+   class FileException : public std::runtime_error {
+   public:
+   FileException(std::string fileName, std::string err)
+      : std::runtime_error(fileName.append(": ").append(err)) { }
+   };
 
    DccServer();
    ~DccServer();
 
-   void Listen(std::string& rFileName)
-      throw (DccServer::ListenException);
+   void Listen(const std::string& rFileName)
+      throw (DccServer::FileException, DccServer::ListenException);
    void Sleep();
 
    const std::string& GetHost() const
