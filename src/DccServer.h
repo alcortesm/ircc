@@ -49,17 +49,17 @@ class DccServer {
    void Sleep();
 
    const std::string& GetHost() const
-             throw (DccServer::NotServingException);
+      throw (DccServer::NotServingException);
    int                GetHostInt() const
-             throw (DccServer::NotServingException);
+      throw (DccServer::NotServingException);
    int                GetPort() const
-             throw (DccServer::NotServingException);
+      throw (DccServer::NotServingException);
    int                GetSocket() const
-             throw (DccServer::NotServingException);
+      throw (DccServer::NotServingException);
    const std::string& GetFileName() const
-             throw (DccServer::NotServingException);
-   int                GetFileSize() const
-             throw (DccServer::NotServingException);
+      throw (DccServer::NotServingException);
+   unsigned long      GetFileSize() const
+      throw (DccServer:: FileException, DccServer::NotServingException);
 
    void Send(const char* buf, size_t bufSize)
       throw (DccServer::NotConnectedException

@@ -1,5 +1,7 @@
 #include <sys/types.h>
 #include <sys/socket.h>
+#include <sys/stat.h>
+#include <unistd.h>
 #include "DccServer.h"
 #include "utils.h"
 #include "ircc.h"
@@ -9,6 +11,7 @@
 #include <cstring>
 #include <cerrno>
 #include <stdlib.h>
+#include <climits>
 
 extern std::ostream* gpDebug;
 
@@ -73,7 +76,6 @@ DccServer::Listen(const std::string& rFileName)
    }
    close(fd);
    mFileName = rFileName;
-
 
    mHost = std::string("192.168.1.1");
    mPort = 2345;
@@ -145,22 +147,31 @@ DccServer::GetFileName() const
    return mFileName;
 }
 
-int
-get_file_size(const std::string& file_name)
-{
-   UNUSED(file_name);
-   return 1234567;
-}
-
-int
+unsigned long
 DccServer::GetFileSize() const
-   throw (DccServer::NotServingException)
+   throw (DccServer::FileException, DccServer::NotServingException)
 {
    if (!IsListening())
       throw DccServer::NotServingException();
 
-   int file_size = get_file_size(mFileName);
-   return file_size;
+   std::string file_path_string("./");
+   file_path_string.append(GetFileName());
+   const char* file_path = file_path_string.c_str();
+
+   struct stat file_stats;
+   int r;
+   r = stat(file_path, &file_stats);
+   if (r == -1) {
+      size_t buf_sz = 1024; /* I hope is enough for errstr */
+      char* buf = (char *) xmalloc(buf_sz);
+      char* r;
+      r = strerror_r(errno, buf, buf_sz);
+      DccServer::FileException e(mFileName, r);
+      free(buf);
+      throw e;
+   }
+
+   return (unsigned long) file_stats.st_size;
 }
 
 std::ostream&
