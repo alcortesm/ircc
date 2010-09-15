@@ -20,40 +20,56 @@ using std::endl;
 /* static */
 const std::string ComUpload::STR = std::string("/upload");
 
+// boot up the DCC server and send PRIVMSG to victim with download
+// instructions
 void
 ComUpload::Run() {
 
    *gpDebug << FROM_DEBUG << "ComUpload::Run()" << std::endl ;
 
    try {
-      std::string host = "192.168.0.1"; // TODO don't make this up
-      std::string host_str = "2130706433"; // TODO don't make this up
-      std::string port = "12345"; // TODO don't make this up
-      std::string file_size = "12354123"; // TODO don't make this up
+      std::string file_name = "main.cc"; // TODO don't make this up
+
+      // boot up DCC server
+      mrDccServer.Listen(file_name);
+      int         host_int  = mrDccServer.GetHostInt();
+      std::string host_str  = mrDccServer.GetHost();
+      int         port      = mrDccServer.GetPort();
+      int         file_size = mrDccServer.GetFileSize();
+
+      // send PRIVMSG to victim with download instructions
       std::stringstream ss;
       ss << COM_PRIVMSG << MESSAGE_SEPARATOR
          << mNick << MESSAGE_SEPARATOR
          << ":" << CTCP_X_DELIM << "DCC SEND "
          << mFileName << MESSAGE_SEPARATOR
-         << host_str << MESSAGE_SEPARATOR
+         << host_int << MESSAGE_SEPARATOR
          << port << MESSAGE_SEPARATOR
          << file_size
          << CTCP_X_DELIM << END_OF_MESSAGE;
       std::string s = ss.str();
       mrServer.Send(s);
+
+      // message to user
       std::cout << FROM_PROGRAM
                 << "Sent upload "
-                << "[" << host
+                << "[" << host_str
                 << ":" << port
                 << "] request to "
                 << mNick
                 << std::endl;
 
+   } catch (DccServer::ListenException& e) {
+      std::cout << FROM_PROGRAM
+                << e.what()
+                << std::endl;
    } catch (Server::NotConnectedException & e) {
-      std::cout << FROM_PROGRAM << "Can not send message: not connected to server"
+      std::cout << FROM_PROGRAM
+                << "Can not send message: not connected to server"
                 << std::endl;
    } catch (Server::SendException & e) {
-      std::cout << FROM_PROGRAM << "Can not send message: " << e.what()
+      std::cout << FROM_PROGRAM
+                << "Can not send message: " << e.what()
                 << std::endl;
    } catch (Server::ConnectionClosedByPeerException & e) {
       std::cout << FROM_PROGRAM << e.what() << std::endl;

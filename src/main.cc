@@ -174,7 +174,7 @@ main_loop()
          FD_SET(server.GetSock(), &read_fds);
          max_fds = MAX(max_fds, server.GetSock());
       }
-      if (dcc_server.IsServing()) {
+      if (dcc_server.IsListening()) {
          FD_SET(dcc_server.GetSocket(), &read_fds);
          max_fds = MAX(max_fds, dcc_server.GetSocket());
       }
@@ -198,7 +198,6 @@ main_loop()
          continue;
       }
 
-      /* some fd was ready: which one?, read and process data */
       /* IRC SERVER */
       if (server.IsConnected()
           && FD_ISSET(server.GetSock(), &read_fds)) {
@@ -216,11 +215,12 @@ main_loop()
       }
 
       /* DCC server */
-      if (dcc_server.IsServing()
+      if (dcc_server.IsListening()
           && FD_ISSET(dcc_server.GetSocket(), &read_fds)) {
-         *gpDebug << FROM_DEBUG << dcc_server << std::endl;
+         *gpDebug << FROM_DEBUG
+                  << "DCC server is listening: "
+                  << dcc_server << std::endl;
       }
-      *gpDebug << FROM_DEBUG << dcc_server << std::endl;
 
       /* STDIN */
       if (FD_ISSET(STDIN_FD, &read_fds)) {
