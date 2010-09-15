@@ -230,7 +230,7 @@ main_loop()
             if (!isatty(STDIN_FD))
                cout << line << endl;
             Command* p_command;
-            p_command = com_factory(line, server);
+            p_command = com_factory(line, server, dcc_server);
             p_command->Run();
             if (p_command->MustQuit()) {
                delete p_command;

@@ -3,13 +3,15 @@
 
 #include "Command.h"
 #include "Server.h"
+#include "DccServer.h"
 
 class ComUpload : public Command {
  public:
-   ComUpload(Server& server, std::string & nick, std::string & fileName);
+   ComUpload(DccServer& rDccServer, Server& server, std::string & nick, std::string & fileName);
    void Run();
    static const std::string STR;
  private:
+   DccServer& mrDccServer;
    Server& mrServer;
    const std::string mNick;
    const std::string mFileName;

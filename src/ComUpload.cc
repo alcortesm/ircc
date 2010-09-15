@@ -63,12 +63,16 @@ ComUpload::Run() {
 }
 
 
-ComUpload::ComUpload(Server& rServer,
+ComUpload::ComUpload(DccServer& rDccServer,
+                     Server& rServer,
                      std::string & rNick,
                      std::string & rFileName)
-   : mrServer(rServer), mNick(rNick), mFileName(rFileName)
+   : mrDccServer(rDccServer), mrServer(rServer), mNick(rNick), mFileName(rFileName)
 {
-   *gpDebug << FROM_DEBUG << "ComUpload::ComUpload(" << rServer
-            << ", \"" << rNick
-            << "\", \"" << rFileName << "\")" << std::endl ;   
+   *gpDebug << FROM_DEBUG << "ComUpload::ComUpload("
+            << mrDccServer << ", "
+            << mrServer << ", "
+            << mNick << ", "
+            << "\"" << rFileName << "\")"
+            << std::endl ;   
 }

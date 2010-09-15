@@ -78,7 +78,7 @@ new_connect(Server& rServer, const string& rLine)
 }
 
 Command*
-new_upload(Server& rServer, const string& rLine)
+new_upload(DccServer& rDccServer, Server& rServer, const string& rLine)
 {
    // if rLine is just the /connect command without arguments
    if (rLine == ComUpload::STR)
@@ -102,7 +102,7 @@ new_upload(Server& rServer, const string& rLine)
    string nick(rLine, nick_start, nick_len);
    string file_name(rLine, file_name_start, file_name_len);
 
-   return new ComUpload(rServer, nick, file_name);
+   return new ComUpload(rDccServer, rServer, nick, file_name);
 }
 
 // Returns true if the line is just: "word [ ' ' ]" the check for the
@@ -200,7 +200,7 @@ clean_line(std::string line)
 }
 
 Command*
-com_factory(const std::string& rLine, Server& rServer)
+com_factory(const std::string& rLine, Server& rServer, DccServer& rDccServer)
 {
    *gpDebug << FROM_DEBUG << "com_factory(\"" << rLine << "\", "
             << rServer << ")" << endl;
@@ -255,7 +255,7 @@ com_factory(const std::string& rLine, Server& rServer)
 
    /* UPLOAD */
    if (starts_with(clean, ComUpload::STR))
-      return new_upload(rServer, clean);
+      return new_upload(rDccServer, rServer, clean);
 
    /* CONNECT */
    if (starts_with(clean, ComConnect::STR))
