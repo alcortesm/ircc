@@ -95,7 +95,7 @@ DccServer::GetFileSize() const
 std::ostream&
 operator<<(std::ostream& os, const DccServer& server)
 {
-   os << "[ DccServer state=";
+   os << "[DccServer state=";
 
    if (server.IsSleeping()) {
       os << "SLEEPING";
@@ -109,6 +109,6 @@ operator<<(std::ostream& os, const DccServer& server)
          << "\", host=" << server.mHost
          << ", port=" << server.mPort;
    }
-   os << " ]";
+   os << "]";
    return os;
 }

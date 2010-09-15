@@ -342,7 +342,7 @@ Msg::Run() const
 std::ostream &
 operator<<(std::ostream & os, const Msg& msg) {
 
-   os << "[ Msg ";
+   os << "[Msg ";
    if (!msg.mPrefix.empty())
       os << "(" << msg.mPrefix << ") ";
 

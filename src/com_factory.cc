@@ -219,7 +219,9 @@ com_factory(const std::string& rLine, Server& rServer, DccServer& rDccServer)
 
    /* clean the line to be nice with the other commands */
    string clean = clean_line(rLine);
-   *gpDebug << "com_factory() : clean = \"" << clean << "\"" << std::endl;
+   /*   *gpDebug << FROM_DEBUG
+            << "com_factory() : clean = \""
+            << clean << "\"" << std::endl; */
 
    /* LIST */
    if (starts_with(clean, ComList::STR))
