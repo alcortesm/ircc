@@ -253,9 +253,9 @@ Msg::Run() const
                    << *((Msg*) this) << std::endl;
          return;
       }
-      std::cout << FROM_PROGRAM << "- "
-                << mPrefix << "message of the day" << std::endl;
-      std::cout << FROM_PROGRAM
+      std::cout << FROM_PROGRAM << "Message of the day from " 
+                << mPrefix << ":\n"
+                << FROM_PROGRAM
                 << mParams[1] << std::endl;
       return;
    }

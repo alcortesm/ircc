@@ -1,3 +1,4 @@
+- MOTd with more than one line might not work!
 - Msg should have a Factory static method instead of msg_factory.cc
 - Server should not have nick or channel, there should be a User class
 - CommandFactory return a pointer, but I would like to return a
