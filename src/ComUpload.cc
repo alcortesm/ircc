@@ -28,6 +28,9 @@ ComUpload::Run() {
    *gpDebug << FROM_DEBUG << "ComUpload::Run()" << std::endl ;
 
    try {
+      if (!mrDccServer.IsSleeping())
+         mrDccServer.Sleep();
+
       // boot up DCC server
       mrDccServer.Listen(mFileName);
       int         host_int  = mrDccServer.GetHostInt();
@@ -57,6 +60,10 @@ ComUpload::Run() {
                 << mNick
                 << std::endl;
 
+   } catch (DccServer::AlreadyListeningException& e) {
+      std::cout << FROM_PROGRAM
+                << "Already uploading a file"
+                << std::endl;
    } catch (DccServer::FileException& e) {
       std::cout << FROM_PROGRAM
                 << e.what()

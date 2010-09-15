@@ -54,12 +54,19 @@ DccServer::IsConnected() const
 
 void
 DccServer::Listen(const std::string& rFileName)
-   throw (DccServer::FileException, DccServer::ListenException)
+   throw (DccServer::AlreadyListeningException
+          , DccServer::FileException
+          , DccServer::ListenException)
 {
    *gpDebug << FROM_DEBUG
             << "DccServer::Listen("
             << "\"" << rFileName << "\""
             << ")" << std::endl;
+
+
+   if (!IsSleeping())
+      throw DccServer::AlreadyListeningException();
+
 
    // check if rFileName exists
    std::string path("./");
@@ -77,9 +84,30 @@ DccServer::Listen(const std::string& rFileName)
    close(fd);
    mFileName = rFileName;
 
+
+
+   // launch server, get listen socket
+   int default_proto = 0; // use default
+
+   // create the socket
+   mSocket = socket(AF_INET, SOCK_STREAM, default_proto);
+   if (mSocket == -1) {
+      size_t buf_sz = 1024; /* I hope is enough for errstr */
+      char* buf = (char *) xmalloc(buf_sz);
+      char* r;
+      r = strerror_r(errno, buf, buf_sz);
+      DccServer::ListenException e(r);
+      free(buf);
+      throw e;
+   }
+
+   // bind (DCC doc Implementation section)
+
+
    mHost = std::string("192.168.1.1");
    mPort = 2345;
    mSocket = socket(AF_INET, SOCK_STREAM, 0);
+
    mState = DccServer::LISTENING;
 }
 

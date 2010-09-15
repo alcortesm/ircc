@@ -40,12 +40,19 @@ class DccServer {
    FileException(std::string fileName, std::string err)
       : std::runtime_error(fileName.append(": ").append(err)) { }
    };
+   class AlreadyListeningException : public std::runtime_error {
+   public:
+   AlreadyListeningException()
+      : std::runtime_error("") { }
+   };
 
    DccServer();
    ~DccServer();
 
    void Listen(const std::string& rFileName)
-      throw (DccServer::FileException, DccServer::ListenException);
+      throw (DccServer::AlreadyListeningException,
+             DccServer::FileException,
+             DccServer::ListenException);
    void Sleep();
 
    const std::string& GetHost() const

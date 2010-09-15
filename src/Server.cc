@@ -110,9 +110,6 @@ Server::Connect(const string & host, const string & port)
       throw e;
    }
 
-   // bind to localport
-   // TODO
-
    // get the list of addr where we want to connect (server's addr)
    // open the socket and connect
    {
