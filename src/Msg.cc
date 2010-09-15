@@ -65,11 +65,13 @@ Msg::Run() const
                    << host << ":" << port << "]"
                    << std::endl;
          std::cout << FROM_PROGRAM
-                   << "(from user "<< sender
-                   << ") please download"
-                   << " " << file_name
-                   << " from " << host
-                   << ":" << port
+                   << "Upload offer from "<< sender
+                   << "\n"
+                   << FROM_PROGRAM
+                   << "use \"/download " << file_name
+                   << " " << host
+                   << " " << port
+                   << "\" to download"
                    << std::endl;
             return;
       }
