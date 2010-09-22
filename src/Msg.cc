@@ -65,7 +65,7 @@ Msg::Run() const
                    << host << ":" << port << "]"
                    << std::endl;
          std::cout << FROM_PROGRAM
-                   << "Upload offer from "<< sender
+                   << "Download offer from "<< sender
                    << "\n"
                    << FROM_PROGRAM
                    << "use \"/download " << file_name

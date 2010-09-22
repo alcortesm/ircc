@@ -93,14 +93,14 @@ new_offer(DccServer& rDccServer, Server& rServer, const string& rLine)
    if (space3 != string::npos)
       return new ComError("The /upload command needs a nick and a file name");
 
-   size_t nick_start = space1 + 1;
-   size_t nick_len = space2 - nick_start;
+   size_t file_name_start = space1 + 1;
+   size_t file_name_len = space2 - file_name_start;
 
-   size_t file_name_start = space2 + 1;
-   size_t file_name_len = rLine.length() - file_name_start;
+   size_t nick_start = space2 + 1;
+   size_t nick_len = rLine.length() - nick_start;
 
-   string nick(rLine, nick_start, nick_len);
    string file_name(rLine, file_name_start, file_name_len);
+   string nick(rLine, nick_start, nick_len);
 
    return new ComOffer(rDccServer, rServer, nick, file_name);
 }
