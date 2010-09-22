@@ -321,6 +321,14 @@ Msg::Run() const
       return;
    }
 
+   /* ERR_NOTREGISTERED */
+   if (mCommand == ERR_NOTREGISTERED) {
+      std::cout << FROM_PROGRAM << "Error: You have not registered"
+                << std::endl;
+      return;
+   }
+
+
    /* Common commands unknown to RFC2812 */
    if (
        mCommand == "250" ||

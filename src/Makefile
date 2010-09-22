@@ -4,7 +4,7 @@ SRCS = \
     DccServer.cc \
     msg_factory.cc \
     Msg.cc \
-    ComUpload.cc \
+    ComOffer.cc \
     ComWho.cc \
     ComList.cc \
     ComDisconnect.cc \
@@ -59,10 +59,10 @@ TAGS:
 	cscope -b -q *.cc *.h
 
 test: $(BIN)
-	valgrind $(VALGRIND_FLAGS) ./$(BIN) < ../test/upload
+	valgrind $(VALGRIND_FLAGS) ./$(BIN) < ../test/offer
 
 testdebug: $(BIN)
-	valgrind $(VALGRIND_FLAGS) ./$(BIN) -d < ../test/upload
+	valgrind $(VALGRIND_FLAGS) ./$(BIN) -d < ../test/offer
 
 valgrind: $(BIN)
 	valgrind $(VALGRIND_FLAGS) ./$(BIN)

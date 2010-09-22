@@ -1,4 +1,4 @@
-#include "ComUpload.h"
+#include "ComOffer.h"
 #include <ostream>
 #include <sys/types.h>
 #include <sys/socket.h>
@@ -18,14 +18,14 @@ using std::cout;
 using std::endl;
 
 /* static */
-const std::string ComUpload::STR = std::string("/upload");
+const std::string ComOffer::STR = std::string("/offer");
 
 // boot up the DCC server and send PRIVMSG to victim with download
 // instructions
 void
-ComUpload::Run() {
+ComOffer::Run() {
 
-   *gpDebug << FROM_DEBUG << "ComUpload::Run()" << std::endl ;
+   *gpDebug << FROM_DEBUG << "ComOffer::Run()" << std::endl ;
 
    try {
       if (!mrDccServer.IsSleeping())
@@ -53,10 +53,9 @@ ComUpload::Run() {
 
       // message to user
       std::cout << FROM_PROGRAM
-                << "Sent upload "
-                << "[" << host_str
-                << ":" << port
-                << "] request to "
+                << "Sending offer of file "
+                << mFileName
+                << " to "
                 << mNick
                 << std::endl;
 
@@ -88,13 +87,13 @@ ComUpload::Run() {
 }
 
 
-ComUpload::ComUpload(DccServer& rDccServer,
+ComOffer::ComOffer(DccServer& rDccServer,
                      Server& rServer,
                      std::string & rNick,
                      std::string & rFileName)
    : mrDccServer(rDccServer), mrServer(rServer), mNick(rNick), mFileName(rFileName)
 {
-   *gpDebug << FROM_DEBUG << "ComUpload::ComUpload("
+   *gpDebug << FROM_DEBUG << "ComOffer::ComOffer("
             << mrDccServer << ", "
             << mrServer << ", "
             << mNick << ", "

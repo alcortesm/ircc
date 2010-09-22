@@ -1,4 +1,4 @@
-#include "ComUpload.h"
+#include "ComOffer.h"
 #include "ComWho.h"
 #include "ComList.h"
 #include "ComDisconnect.h"
@@ -78,10 +78,10 @@ new_connect(Server& rServer, const string& rLine)
 }
 
 Command*
-new_upload(DccServer& rDccServer, Server& rServer, const string& rLine)
+new_offer(DccServer& rDccServer, Server& rServer, const string& rLine)
 {
    // if rLine is just the /connect command without arguments
-   if (rLine == ComUpload::STR)
+   if (rLine == ComOffer::STR)
       return new ComError("The /upload command needs a nick and a file name");
    
    // there must be exactly 2 spaces in "/upload nick filename"
@@ -102,7 +102,7 @@ new_upload(DccServer& rDccServer, Server& rServer, const string& rLine)
    string nick(rLine, nick_start, nick_len);
    string file_name(rLine, file_name_start, file_name_len);
 
-   return new ComUpload(rDccServer, rServer, nick, file_name);
+   return new ComOffer(rDccServer, rServer, nick, file_name);
 }
 
 // Returns true if the line is just: "word [ ' ' ]" the check for the
@@ -256,8 +256,8 @@ com_factory(const std::string& rLine, Server& rServer, DccServer& rDccServer)
       return new ComQuit();
 
    /* UPLOAD */
-   if (starts_with(clean, ComUpload::STR))
-      return new_upload(rDccServer, rServer, clean);
+   if (starts_with(clean, ComOffer::STR))
+      return new_offer(rDccServer, rServer, clean);
 
    /* CONNECT */
    if (starts_with(clean, ComConnect::STR))

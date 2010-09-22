@@ -1,0 +1,31 @@
+/offer user1 main.cc
+/sleep
+
+
+/connect localhost:6691
+/sleep
+
+
+/offer user1 main.cc
+/sleep
+
+
+/auth user1
+/sleep 2
+
+
+/offer user1 fasdfasdf.cc
+/sleep
+
+
+/offer user1 main.cc
+/sleep
+
+
+/disconnect
+
+
+/offer user1 main.cc
+
+
+/quit

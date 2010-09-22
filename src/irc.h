@@ -58,6 +58,7 @@ const std::string ERR_NICKNAMEINUSE     = "433";
 const std::string ERR_NICKCOLLISION     = "436";
 const std::string ERR_UNAVAILRESOURCE   = "437";
 const std::string ERR_RESTRICTED        = "484";
+const std::string ERR_NOTREGISTERED     = "451";
 const std::string ERR_NEEDMOREPARAMS    = "461";
 const std::string ERR_ALREADYREGISTRED  = "462";
 #endif

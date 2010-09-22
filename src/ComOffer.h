@@ -1,13 +1,13 @@
-#ifndef COMUPLOAD_H
-#define COMUPLOAD_H
+#ifndef COMOFFER_H
+#define COMOFFER_H
 
 #include "Command.h"
 #include "Server.h"
 #include "DccServer.h"
 
-class ComUpload : public Command {
+class ComOffer : public Command {
  public:
-   ComUpload(DccServer& rDccServer, Server& server, std::string & nick, std::string & fileName);
+   ComOffer(DccServer& rDccServer, Server& server, std::string & nick, std::string & fileName);
    void Run();
    static const std::string STR;
  private:
@@ -17,4 +17,4 @@ class ComUpload : public Command {
    const std::string mFileName;
 };
 
-#endif /* COMUPLOAD_H */
+#endif /* COMOFFER_H */
