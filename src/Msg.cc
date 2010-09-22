@@ -70,7 +70,7 @@ Msg::Run() const
                    << FROM_PROGRAM
                    << "use \"/download " << file_name
                    << " " << host
-                   << " " << port
+                   << IRCC_HOST_PORT_SEPARATOR << port
                    << "\" to download"
                    << std::endl;
             return;
