@@ -33,7 +33,7 @@ Msg::Run() const
          return;
       }
       mrServer.SetChannel(mParams[0]);
-      std::cout << FROM_PROGRAM << mrServer.GetNick() << " has joined channel "
+      std::cout << FROM_PROGRAM << get_nick_from_prefix(mPrefix) << " has joined channel "
                 << mParams[0] << std::endl ;
       return;
    }
