@@ -17,5 +17,5 @@ const int    NO_FLAGS = 0;
 const std::string FROM_SERVER("<<< ");
 const std::string FROM_PROGRAM("*** ");
 const std::string FROM_DEBUG("DDD ");
-
+const std::string IRCC_HOST_PORT_SEPARATOR(":");
 #endif // IRCC_H

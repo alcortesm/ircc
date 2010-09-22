@@ -8,7 +8,7 @@ extern std::ostream* gpDebug;
 const std::string ComHelp::STR("/help");
 const std::string ComHelp::MSG("*** A typical user session goes like this:\n\
 *** \n\
-***     /connect localhost 6757\n\
+***     /connect localhost:6691\n\
 ***     /auth alcortes\n\
 ***     /list\n\
 ***     /join #ro2\n\
@@ -20,7 +20,7 @@ const std::string ComHelp::MSG("*** A typical user session goes like this:\n\
 *** The full list of available commands are\n\
 *** \n\
 ***     /help                    Show this text.\n\
-***     /connect <host> <port>   Connect to a server.\n\
+***     /connect <host>:<port>   Connect to a server.\n\
 ***     /auth <nick>             Authenticate with the server,\n\
 ***                              sets nick, username & real name.\n\
 ***     /list                    Lists all current irc channels,\n\
@@ -28,7 +28,7 @@ const std::string ComHelp::MSG("*** A typical user session goes like this:\n\
 ***     /join [<channel>]        Join a channel or tell which is\n\
 ***                              the current channel.\n\
 ***     /leave                   Leaves your current channel.\n\
-***     /who                     List users in current channel.\n\
+***     /who                  g   List users in current channel.\n\
 ***     /msg <txt>               Send <txt> to the channel.\n\
 ***     /disconnect              Disconnect from server.\n\
 ***     /quit                    Close program.\n\

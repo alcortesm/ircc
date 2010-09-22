@@ -54,21 +54,21 @@ new_connect(Server& rServer, const string& rLine)
 {
    // if rLine is just the /connect command without arguments
    if (rLine == ComConnect::STR)
-      return new ComError("The /connect command needs a hots and a port");
+      return new ComError("The /connect command needs a host:port");
    
-   // there must be exactly 2 spaces in "/command host port"
-   size_t space1 = rLine.find(SPACE, 0);
-   size_t space2 = rLine.find(SPACE, space1+1);
-   if (space2 == string::npos)
-      return new ComError("The /connect command needs a host and a port");
-   size_t space3 =  rLine.find(SPACE, space2+1);
-   if (space3 != string::npos)
-      return new ComError("The /connect command only needs a host and a port");
+   // there must be exactly 1 space in "/command host:port"
+   size_t space = rLine.find(SPACE, 0);
+   size_t colon = rLine.find(IRCC_HOST_PORT_SEPARATOR, space+1);
+   if (colon == string::npos)
+      return new ComError("The /connect command also needs a port");
+   size_t more_space =  rLine.find(SPACE, space+1);
+   if (more_space != string::npos)
+      return new ComError("The /connect command only needs a host:port");
 
-   size_t host_start = space1 + 1;
-   size_t host_len = space2 - host_start;
+   size_t host_start = space + 1;
+   size_t host_len = colon - host_start;
 
-   size_t port_start = space2 + 1;
+   size_t port_start = colon + 1;
    size_t port_len = rLine.length() - port_start;
 
    string host(rLine, host_start, host_len);

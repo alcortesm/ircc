@@ -1,7 +1,25 @@
 /connect
+
+
 /connect localhost
-/connect localhostbla 6778
-/connect localhost 9999
-/connect localhost 6778
-/connect localhost 9999
+
+
+/connect ____:6691
+
+
+/connect localhost:____
+
+
+/connect localhost:9999
+
+
+/connect localhost:6691 more_arguments
+
+
+/connect localhost:6691
+
+
+/connect localhost:9999
+
+
 /quit

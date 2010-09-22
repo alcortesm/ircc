@@ -1,4 +1,4 @@
-/connect localhost 6691
+/connect localhost:6691
 /auth user1
 /sleep 2
 
