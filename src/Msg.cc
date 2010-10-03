@@ -46,10 +46,14 @@ Msg::Run() const
          return;
       }
       // check it's a private message with DCC content
-      if (mParams[1].find(CTCP_X_DELIM) == 0) {
+      if (is_ctcp_msg(mParams[1])) {
+         // check if it's a DCC message (we only support DCC messges for CTCP)
+         if (!is_dcc_msg(mParams[1])) {
+            std::cout << "Received unsupported CTCP message: "
+                      << *this << std::endl;
+         }
          // check if it's a known DCC message (we only support DCC SEND) */
-         if (mParams[1].find(DCC_SEND_PREFIX, CTCP_X_DELIM.length())
-             != CTCP_X_DELIM.length()) {
+         if (!is_dcc_send_msg(mParams[1])) {
             std::cout << "Received unsupported DCC message: "
                       << *this << std::endl;
          }

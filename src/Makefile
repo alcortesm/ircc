@@ -1,6 +1,8 @@
 BIN = ircc
 INSTALL_DIR = ~/bin
 SRCS = \
+    dcc.cc \
+    ctcp.cc \
     DccServer.cc \
     msg_factory.cc \
     Msg.cc \
