@@ -1,3 +1,4 @@
+- move the code to get TCP protocol to a new function in utils
 - Replace the DCC parse functions with a tokenizer in dcc.cc
 - MOTd with more than one line might not work!
 - Server should not have nick or channel, there should be a User class
