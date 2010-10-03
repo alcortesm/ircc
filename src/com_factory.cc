@@ -209,7 +209,7 @@ Command*
 com_factory(const std::string& rLine, Server& rServer, DccServer& rDccServer)
 {
    *gpDebug << FROM_DEBUG << "com_factory(\"" << rLine << "\", "
-            << rServer << ")" << endl;
+            << rServer << ", " << rDccServer << ")" << endl;
 
    /* NOP */
    if (rLine.empty())
