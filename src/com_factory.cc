@@ -102,6 +102,12 @@ new_offer(DccServer& rDccServer, Server& rServer, const string& rLine)
    string file_name(rLine, file_name_start, file_name_len);
    string nick(rLine, nick_start, nick_len);
 
+   if (!rServer.IsConnected())
+      return new ComError("Not connected to a server");
+
+   if (!rServer.IsAuthenticated())
+      return new ComError("Not authenticated with the server");
+
    return new ComOffer(rDccServer, rServer, nick, file_name);
 }
 
