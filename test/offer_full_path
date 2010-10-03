@@ -1,4 +1,4 @@
-/offer main.cc user1
+/offer /etc/passwd user1
 /sleep
 
 
@@ -6,7 +6,7 @@
 /sleep
 
 
-/offer main.cc user1
+/offer /etc/passwd user1
 /sleep
 
 
@@ -14,18 +14,18 @@
 /sleep 2
 
 
-/offer -------.cc user1
+/offer /etc/file-that-not-exists user1
 /sleep
 
 
-/offer main.cc user1
+/offer /etc/passwd user1
 /sleep
 
 
 /disconnect
 
 
-/offer main.cc user1
+/offer /etc/passwd user1
 
 
 /quit
