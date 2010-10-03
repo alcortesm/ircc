@@ -4,7 +4,7 @@
 /connect localhost
 
 
-/connect ____:6691
+/connect ____:7101
 
 
 /connect localhost:____
@@ -13,10 +13,10 @@
 /connect localhost:9999
 
 
-/connect localhost:6691 more_arguments
+/connect localhost:7101 more_arguments
 
 
-/connect localhost:6691
+/connect localhost:7101
 
 
 /connect localhost:9999
