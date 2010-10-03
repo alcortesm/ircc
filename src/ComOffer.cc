@@ -67,6 +67,18 @@ ComOffer::Run() {
       std::cout << FROM_PROGRAM
                 << e.what()
                 << std::endl;
+   } catch (DccServer::SocketException& e) {
+      std::cout << FROM_PROGRAM
+                << e.what()
+                << std::endl;
+   } catch (DccServer::AddrException& e) {
+      std::cout << FROM_PROGRAM
+                << e.what()
+                << std::endl;
+   } catch (DccServer::BindException& e) {
+      std::cout << FROM_PROGRAM
+                << e.what()
+                << std::endl;
    } catch (DccServer::ListenException& e) {
       std::cout << FROM_PROGRAM
                 << e.what()

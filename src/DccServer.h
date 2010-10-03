@@ -32,8 +32,23 @@ class DccServer {
    };
    class ListenException : public std::runtime_error {
    public:
-   ListenException() : std::runtime_error("Unable to launch DCC server") { }
-   ListenException(std::string s) : std::runtime_error("Unable to launch DCC server: " + s) { }
+   ListenException() : std::runtime_error("Unable to launch DCC server: can not listen") { }
+   ListenException(std::string s) : std::runtime_error("Unable to launch DCC server: can not listen: " + s) { }
+   };
+   class SocketException : public std::runtime_error {
+   public:
+   SocketException() : std::runtime_error("Unable to launch DCC server: can not open socket") { }
+   SocketException(std::string s) : std::runtime_error("Unable to launch DCC server: can not open socket: " + s) { }
+   };
+   class AddrException : public std::runtime_error {
+   public:
+   AddrException() : std::runtime_error("Unable to launch DCC server: can not get local addr") { }
+   AddrException(std::string s) : std::runtime_error("Unable to launch DCC server: can not get local addr: " + s) { }
+   };
+   class BindException : public std::runtime_error {
+   public:
+   BindException() : std::runtime_error("Unable to launch DCC server: can not bind") { }
+   BindException(std::string s) : std::runtime_error("Unable to launch DCC server: can not bind: " + s) { }
    };
    class FileException : public std::runtime_error {
    public:
@@ -52,6 +67,9 @@ class DccServer {
    void Listen(const std::string& rFileName)
       throw (DccServer::AlreadyListeningException,
              DccServer::FileException,
+             DccServer::SocketException,
+             DccServer::AddrException,
+             DccServer::BindException,
              DccServer::ListenException);
    void Sleep();
 

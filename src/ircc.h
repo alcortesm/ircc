@@ -19,4 +19,5 @@ const std::string FROM_PROGRAM("*** ");
 const std::string FROM_DEBUG("DDD ");
 const std::string IRCC_HOST_PORT_SEPARATOR(":");
 const int BACK_LOG = 10;
+const std::string DCC_SERVER_PORT("8101"); // 8000 + group id
 #endif // IRCC_H

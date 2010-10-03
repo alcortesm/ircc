@@ -60,6 +60,9 @@ void
 DccServer::Listen(const std::string& rFileName)
    throw (DccServer::AlreadyListeningException
           , DccServer::FileException
+          , DccServer::SocketException
+          , DccServer::AddrException
+          , DccServer::BindException
           , DccServer::ListenException)
 {
    *gpDebug << FROM_DEBUG
@@ -134,7 +137,7 @@ DccServer::Listen(const std::string& rFileName)
       char* buf = (char *) xmalloc(buf_sz);
       char* r;
       r = strerror_r(errno, buf, buf_sz);
-      DccServer::ListenException e(r);
+      DccServer::SocketException e(r);
       free(buf);
       throw e;
    }
@@ -152,9 +155,9 @@ DccServer::Listen(const std::string& rFileName)
    {
       struct addrinfo* p_ai;
       int error;
-      error = getaddrinfo(NULL, NULL, &hints, &p_ai);
+      error = getaddrinfo(NULL, DCC_SERVER_PORT.c_str(), &hints, &p_ai);
       if (error) {
-         DccServer::ListenException e(gai_strerror(error));
+         DccServer::AddrException e(gai_strerror(error));
          throw e;
       }
       memcpy(&my_addr, p_ai->ai_addr, sizeof my_addr);
@@ -171,7 +174,7 @@ DccServer::Listen(const std::string& rFileName)
          char* buf = (char *) xmalloc(buf_sz);
          char* r;
          r = strerror_r(errno, buf, buf_sz);
-         DccServer::ListenException e(r);
+         DccServer::BindException e(r);
          free(buf);
          throw e;
       }
