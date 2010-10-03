@@ -67,7 +67,8 @@ argument_pos(const string& str)
    return space_after_type + 1;
 }
 
-std::string get_file_name_from_dcc_send_msg(const std::string& str)
+std::string
+get_file_name_from_dcc_send_msg(const std::string& str)
 {
    if (!is_dcc_send_msg(str))
       return string();
@@ -82,5 +83,47 @@ std::string get_file_name_from_dcc_send_msg(const std::string& str)
    if (space_after_argument == string::npos)
       return string();
 
-   return str.substr(argument, space_after_argument -1);
+   size_t argument_length = space_after_argument - argument;
+   return str.substr(argument, argument_length);
+}
+
+size_t
+addr_pos(const string& str)
+{
+   size_t argument = argument_pos(str);
+
+   // no argument found
+   if (argument == string::npos)
+      return string::npos;
+
+   size_t space_after_argument = str.find(" ", argument);
+
+   if (space_after_argument == string::npos)
+      return string::npos;
+
+   // check if no addr after argument
+   if (space_after_argument + 1 >= str.length())
+      return string::npos;
+
+   return space_after_argument + 1;
+}
+
+std::string
+get_addr_from_dcc_msg(const std::string& str)
+{
+   if (!is_dcc_msg(str))
+      return string();
+
+   size_t addr = addr_pos(str);
+   if (addr == string::npos)
+      return string();
+
+   size_t space_after_addr = str.find(" ", addr);
+
+   // malformed DCC SEND, nothing after addr
+   if (space_after_addr == string::npos)
+      return string();
+
+   size_t addr_length = space_after_addr - addr;
+   return str.substr(addr, addr_length);
 }

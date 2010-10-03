@@ -60,15 +60,37 @@ Msg::Run() const
             return;
          }
          std::string sender = mParams[0];
+
          std::string file_name = get_file_name_from_dcc_send_msg(mParams[1]);
          if (file_name.empty()) {
-            std::cout << "Received malformed DCC SEND message: "
+            std::cout << "Received malformed DCC SEND message: no file name"
                       << *this << std::endl;
             return;
          }
-         std::string file_size = "123123"; // TODO extract from msg
-         std::string host = "127.0.0.1"; // TODO extract from msg
-         std::string port = "53037"; // TODO extract from msg
+         *gpDebug << FROM_DEBUG
+                  << "DCC SEND file name: \"" << file_name << "\""
+                  << std::endl;
+
+         std::string file_size = "TODO_file_size"; // TODO extract from msg
+         *gpDebug << FROM_DEBUG
+                  << "DCC SEND file size: \"" << file_size << "\""
+                  << std::endl;
+
+         std::string host = get_addr_from_dcc_msg(mParams[1]);
+         if (host.empty()) {
+            std::cout << "Received malformed DCC SEND message: no addr"
+                      << *this << std::endl;
+            return;
+         }
+         *gpDebug << FROM_DEBUG
+                  << "DCC SEND addr: \"" << host << "\""
+                  << std::endl;
+
+         std::string port = "TODO_port"; // TODO extract from msg
+         *gpDebug << FROM_DEBUG
+                  << "DCC SEND port: \"" << port << "\""
+                  << std::endl;
+
          *gpDebug << FROM_DEBUG
                    << "DCC SEND request (" << file_name << " "
                    << file_size << ") received from "
