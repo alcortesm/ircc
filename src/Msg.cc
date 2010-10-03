@@ -51,14 +51,21 @@ Msg::Run() const
          if (!is_dcc_msg(mParams[1])) {
             std::cout << "Received unsupported CTCP message: "
                       << *this << std::endl;
+            return;
          }
          // check if it's a known DCC message (we only support DCC SEND) */
          if (!is_dcc_send_msg(mParams[1])) {
             std::cout << "Received unsupported DCC message: "
                       << *this << std::endl;
+            return;
          }
          std::string sender = mParams[0];
-         std::string file_name = ".emacs"; // TODO extract from msg
+         std::string file_name = get_file_name_from_dcc_send_msg(mParams[1]);
+         if (file_name.empty()) {
+            std::cout << "Received malformed DCC SEND message: "
+                      << *this << std::endl;
+            return;
+         }
          std::string file_size = "123123"; // TODO extract from msg
          std::string host = "127.0.0.1"; // TODO extract from msg
          std::string port = "53037"; // TODO extract from msg

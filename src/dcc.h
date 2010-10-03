@@ -9,4 +9,6 @@ const std::string DCC_SEND_PREFIX = "DCC SEND ";
 bool is_dcc_msg(const std::string& str);
 bool is_dcc_send_msg(const std::string& str);
 
+std::string get_file_name_from_dcc_send_msg(const std::string& str);
+
 #endif // DCC_H
