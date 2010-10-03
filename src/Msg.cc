@@ -49,13 +49,13 @@ Msg::Run() const
       if (is_ctcp_msg(mParams[1])) {
          // check if it's a DCC message (we only support DCC messges for CTCP)
          if (!is_dcc_msg(mParams[1])) {
-            std::cout << "Received unsupported CTCP message: "
+            std::cout << FROM_PROGRAM << "Received unsupported CTCP message: "
                       << *this << std::endl;
             return;
          }
          // check if it's a known DCC message (we only support DCC SEND) */
          if (!is_dcc_send_msg(mParams[1])) {
-            std::cout << "Received unsupported DCC message: "
+            std::cout << FROM_PROGRAM << "Received unsupported DCC message: "
                       << *this << std::endl;
             return;
          }
@@ -63,7 +63,7 @@ Msg::Run() const
 
          std::string file_name = get_file_name_from_dcc_send_msg(mParams[1]);
          if (file_name.empty()) {
-            std::cout << "Received malformed DCC SEND message: no file name"
+            std::cout << FROM_PROGRAM << "Received malformed DCC SEND message: no file name"
                       << *this << std::endl;
             return;
          }
@@ -78,7 +78,7 @@ Msg::Run() const
 
          std::string host = get_addr_from_dcc_msg(mParams[1]);
          if (host.empty()) {
-            std::cout << "Received malformed DCC SEND message: no addr"
+            std::cout << FROM_PROGRAM << "Received malformed DCC SEND message: no addr"
                       << *this << std::endl;
             return;
          }
@@ -88,7 +88,7 @@ Msg::Run() const
 
          std::string port = get_port_from_dcc_msg(mParams[1]);
          if (port.empty()) {
-            std::cout << "Received malformed DCC SEND message: no port"
+            std::cout << FROM_PROGRAM << "Received malformed DCC SEND message: no port"
                       << *this << std::endl;
             return;
          }
