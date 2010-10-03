@@ -7,6 +7,10 @@
 #include "ComJoin.h"
 #include "irc.h"
 #include "ircc.h"
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+#include "utils.h"
 
 extern std::ostream* gpDebug;
 
@@ -20,6 +24,25 @@ get_nick_from_prefix(const std::string& rPrefix)
    size_t exclam_pos = rPrefix.find("!");
    std::string nick = rPrefix.substr(0, exclam_pos);
    return nick;
+}
+
+std::string
+string_nbo_to_addr(const std::string& str)
+{
+   int addr_nbo = string_to_int(str);
+   uint32_t addr_nbo_u32 = (uint32_t) addr_nbo; // TODO add utils function for this
+   struct in_addr ia;
+   ia.s_addr = addr_nbo_u32;
+   return std::string(inet_ntoa(ia));
+}
+
+std::string
+string_nbo_to_port_hbo(const std::string& str)
+{
+   int port_nbo = string_to_int(str);
+   uint16_t port_nbo_u16 = int_to_uint16(port_nbo); // TODO add error check
+   uint16_t port_hbo = ntohs(port_nbo_u16);
+   return stringify(port_hbo);
 }
 
 void
@@ -84,23 +107,25 @@ Msg::Run() const
                   << std::endl; */
 
          // host
-         std::string host = get_addr_from_dcc_msg(mParams[1]);
-         if (host.empty()) {
+         std::string host_network_byte_order = get_addr_from_dcc_msg(mParams[1]);
+         if (host_network_byte_order.empty()) {
             std::cout << FROM_PROGRAM << "Received malformed DCC SEND message: no addr"
                       << *this << std::endl;
             return;
          }
+         std::string host = string_nbo_to_addr(host_network_byte_order);
          /* *gpDebug << FROM_DEBUG
                   << "DCC SEND addr: \"" << host << "\""
                   << std::endl; */
 
          // port
-         std::string port = get_port_from_dcc_msg(mParams[1]);
-         if (port.empty()) {
+         std::string port_network_byte_order = get_port_from_dcc_msg(mParams[1]);
+         if (port_network_byte_order.empty()) {
             std::cout << FROM_PROGRAM << "Received malformed DCC SEND message: no port"
                       << *this << std::endl;
             return;
          }
+         std::string port = string_nbo_to_port_hbo(port_network_byte_order);
          /* *gpDebug << FROM_DEBUG
                   << "DCC SEND port: \"" << port << "\""
                   << std::endl; */

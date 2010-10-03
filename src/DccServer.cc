@@ -16,6 +16,7 @@
 #include <sstream>
 #include <netinet/in.h>
 #include <arpa/inet.h>
+#include <stdio.h>
 
 extern std::ostream* gpDebug;
 
@@ -195,7 +196,8 @@ DccServer::Listen(const std::string& rFileName)
       }
    }
 
-   mHost = std::string(inet_ntoa(my_addr.sin_addr));
+   mHost = std::string(inet_ntoa(my_addr.sin_addr)); // TODO it gets the 0.0.0.0!, change that!
+   mHost = "172.117.12.34"; // TODO remove this hardwiring
    mPort = my_addr.sin_port;
 
    mState = DccServer::LISTENING;
@@ -216,8 +218,17 @@ DccServer::Sleep()
 int
 host_to_int(const std::string& rHost)
 {
-   UNUSED(rHost);
-   return 12;
+   *gpDebug << FROM_DEBUG << "host_to_int("
+            << "\"" << rHost << "\""
+            << ")" << std::endl;
+   struct in_addr ia;
+   int ok;
+   ok = inet_aton(rHost.c_str(), &ia);
+   if (!ok) {
+      fprintf(stderr, "Error: inet_aton failed on %s", rHost.c_str());
+      exit(1);
+   }
+   return (int) ia.s_addr;
 }
 
 const std::string&
