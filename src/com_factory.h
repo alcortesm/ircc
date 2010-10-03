@@ -6,6 +6,7 @@
 #include "DccServer.h"
 #include <stdexcept>
 
+// Abstract factory
 Command* com_factory(const std::string& rLine, Server& rServer, DccServer& rDccServer);
 
 #endif /* COM_FACTORY_H */
