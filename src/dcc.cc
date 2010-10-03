@@ -27,6 +27,9 @@ is_dcc_send_msg(const string& str)
    return false;
 }
 
+// TODO: the followin functions to parse the DCC msg should be replaced
+// by a vector<string> dcc_msg_to_vector(const string& str) function
+// that tokenize the msg.
 size_t
 type_pos(const string& str)
 {
@@ -126,4 +129,45 @@ get_addr_from_dcc_msg(const std::string& str)
 
    size_t addr_length = space_after_addr - addr;
    return str.substr(addr, addr_length);
+}
+
+size_t
+port_pos(const string& str)
+{
+   size_t addr = addr_pos(str);
+
+   // no addr found
+   if (addr == string::npos)
+      return string::npos;
+
+   size_t space_after_addr = str.find(" ", addr);
+
+   if (space_after_addr == string::npos)
+      return string::npos;
+
+   // check if no port after addr
+   if (space_after_addr + 1 >= str.length())
+      return string::npos;
+
+   return space_after_addr + 1;
+}
+
+std::string
+get_port_from_dcc_msg(const std::string& str)
+{
+   if (!is_dcc_msg(str))
+      return string();
+
+   size_t port = port_pos(str);
+   if (port == string::npos)
+      return string();
+
+   size_t space_after_port = str.find(" ", port);
+
+   // malformed DCC SEND, nothing after port
+   if (space_after_port == string::npos)
+      return string();
+
+   size_t port_length = space_after_port - port;
+   return str.substr(port, port_length);
 }

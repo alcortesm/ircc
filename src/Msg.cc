@@ -86,7 +86,12 @@ Msg::Run() const
                   << "DCC SEND addr: \"" << host << "\""
                   << std::endl;
 
-         std::string port = "TODO_port"; // TODO extract from msg
+         std::string port = get_port_from_dcc_msg(mParams[1]);
+         if (port.empty()) {
+            std::cout << "Received malformed DCC SEND message: no port"
+                      << *this << std::endl;
+            return;
+         }
          *gpDebug << FROM_DEBUG
                   << "DCC SEND port: \"" << port << "\""
                   << std::endl;
