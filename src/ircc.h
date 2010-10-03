@@ -18,4 +18,5 @@ const std::string FROM_SERVER("<<< ");
 const std::string FROM_PROGRAM("*** ");
 const std::string FROM_DEBUG("DDD ");
 const std::string IRCC_HOST_PORT_SEPARATOR(":");
+const int BACK_LOG = 10;
 #endif // IRCC_H

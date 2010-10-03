@@ -12,6 +12,10 @@
 #include <cerrno>
 #include <stdlib.h>
 #include <climits>
+#include <netdb.h>
+#include <sstream>
+#include <netinet/in.h>
+#include <arpa/inet.h>
 
 extern std::ostream* gpDebug;
 
@@ -86,11 +90,41 @@ DccServer::Listen(const std::string& rFileName)
 
 
 
-   // launch server, get listen socket
-   int default_proto = 0; // use default
+   // get protocol of TCP
+   int proto;
+   {
+      struct protoent pe;
+      struct protoent * p_pe = NULL;
+      const size_t buf_sz = PROTOENT_BUF_SZ;
+      char* buf = (char*) xmalloc(buf_sz);
+      int r;
+      r = getprotobyname_r(TCP.c_str(), &pe, buf, buf_sz, &p_pe);
+      if (r != 0) { /* error */
+         if (r == ERANGE) {
+            std::stringstream ss;
+            ss << "DccServer::Listen() : getprotobyname_r returned ERANGE : a buffer of "
+               << buf_sz
+               << " is too smal for the struct protoent, try again with a bigger buffer";
+            throw std::runtime_error(ss.str());
+         }
+         std::stringstream ss;
+         ss << "DccServer::Listen() : getprotobyname_r returned the unknown error "
+            << r;
+         throw std::runtime_error(ss.str());
+      }
+      if (p_pe == NULL) { /* protocol not found */
+         std::stringstream ss;
+         ss << "DccServer::Listen() : getprotobyname_r : protocol \""
+            << TCP.c_str()
+            << "\" not found";
+         throw std::runtime_error(ss.str());
+      }
+      proto = pe.p_proto;
+      free(buf);
+   }
 
    // create the socket
-   mSocket = socket(AF_INET, SOCK_STREAM, default_proto);
+   mSocket = socket(AF_INET, SOCK_STREAM, proto);
    if (mSocket == -1) {
       size_t buf_sz = 1024; /* I hope is enough for errstr */
       char* buf = (char *) xmalloc(buf_sz);
@@ -101,12 +135,61 @@ DccServer::Listen(const std::string& rFileName)
       throw e;
    }
 
-   // bind (DCC doc Implementation section)
+   // get my local addr
+   struct addrinfo hints;
+   {
+      memset(&hints, 0, sizeof hints);
+      hints.ai_flags = AI_PASSIVE;
+      hints.ai_family = AF_INET;
+      hints.ai_socktype = SOCK_STREAM;
+      hints.ai_protocol = proto;
+   }
+   struct sockaddr_in my_addr;
+   {
+      struct addrinfo* p_ai;
+      int error;
+      error = getaddrinfo(NULL, NULL, &hints, &p_ai);
+      if (error) {
+         DccServer::ListenException e(gai_strerror(error));
+         throw e;
+      }
+      memcpy(&my_addr, p_ai->ai_addr, sizeof my_addr);
+      freeaddrinfo(p_ai);
+   }
 
+   // bind to local addr
+   {
+      struct sockaddr *p_sa = (struct sockaddr *) &my_addr;
+      int r;
+      r = bind(mSocket, p_sa, sizeof(struct sockaddr));
+      if (r == -1) {
+         size_t buf_sz = 1024; /* I hope is enough for errstr */
+         char* buf = (char *) xmalloc(buf_sz);
+         char* r;
+         r = strerror_r(errno, buf, buf_sz);
+         DccServer::ListenException e(r);
+         free(buf);
+         throw e;
+      }
+   }
 
-   mHost = std::string("192.168.1.1");
-   mPort = 2345;
-   mSocket = socket(AF_INET, SOCK_STREAM, 0);
+   // listen in local addr
+   {
+      int r;
+      r = listen(mSocket, BACK_LOG);
+      if (r == -1) {
+         size_t buf_sz = 1024; /* I hope is enough for errstr */
+         char* buf = (char *) xmalloc(buf_sz);
+         char* r;
+         r = strerror_r(errno, buf, buf_sz);
+         DccServer::ListenException e(r);
+         free(buf);
+         throw e;
+      }
+   }
+
+   mHost = std::string(inet_ntoa(my_addr.sin_addr));
+   mPort = my_addr.sin_port;
 
    mState = DccServer::LISTENING;
 }
