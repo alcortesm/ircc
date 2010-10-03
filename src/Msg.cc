@@ -61,40 +61,49 @@ Msg::Run() const
          }
          std::string sender = mParams[0];
 
+         // file name
          std::string file_name = get_file_name_from_dcc_send_msg(mParams[1]);
          if (file_name.empty()) {
             std::cout << FROM_PROGRAM << "Received malformed DCC SEND message: no file name"
                       << *this << std::endl;
             return;
          }
-         *gpDebug << FROM_DEBUG
+         /* *gpDebug << FROM_DEBUG
                   << "DCC SEND file name: \"" << file_name << "\""
-                  << std::endl;
+                  << std::endl; */
 
-         std::string file_size = "TODO_file_size"; // TODO extract from msg
-         *gpDebug << FROM_DEBUG
+         // file size
+         std::string file_size = get_file_size_from_dcc_send_msg(mParams[1]);
+         if (file_size.empty()) {
+            std::cout << FROM_PROGRAM << "Received malformed DCC SEND message: no file size"
+                      << *this << std::endl;
+            return;
+         }
+         /* *gpDebug << FROM_DEBUG
                   << "DCC SEND file size: \"" << file_size << "\""
-                  << std::endl;
+                  << std::endl; */
 
+         // host
          std::string host = get_addr_from_dcc_msg(mParams[1]);
          if (host.empty()) {
             std::cout << FROM_PROGRAM << "Received malformed DCC SEND message: no addr"
                       << *this << std::endl;
             return;
          }
-         *gpDebug << FROM_DEBUG
+         /* *gpDebug << FROM_DEBUG
                   << "DCC SEND addr: \"" << host << "\""
-                  << std::endl;
+                  << std::endl; */
 
+         // port
          std::string port = get_port_from_dcc_msg(mParams[1]);
          if (port.empty()) {
             std::cout << FROM_PROGRAM << "Received malformed DCC SEND message: no port"
                       << *this << std::endl;
             return;
          }
-         *gpDebug << FROM_DEBUG
+         /* *gpDebug << FROM_DEBUG
                   << "DCC SEND port: \"" << port << "\""
-                  << std::endl;
+                  << std::endl; */
 
          *gpDebug << FROM_DEBUG
                    << "DCC SEND request (" << file_name << " "

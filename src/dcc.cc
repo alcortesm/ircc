@@ -171,3 +171,46 @@ get_port_from_dcc_msg(const std::string& str)
    size_t port_length = space_after_port - port;
    return str.substr(port, port_length);
 }
+
+size_t
+file_size_pos(const string& str)
+{
+   size_t port = port_pos(str);
+
+   // no port found
+   if (port == string::npos)
+      return string::npos;
+
+   size_t space_after_port = str.find(" ", port);
+
+   if (space_after_port == string::npos)
+      return string::npos;
+
+   // check if no file_size after port
+   if (space_after_port + 1 >= str.length())
+      return string::npos;
+
+   return space_after_port + 1;
+}
+
+std::string
+get_file_size_from_dcc_send_msg(const std::string& str)
+{
+   if (!is_dcc_send_msg(str))
+      return string();
+
+   size_t file_size = file_size_pos(str);
+   if (file_size == string::npos)
+      return string();
+
+   size_t space_after_file_size = str.find(" ", file_size);
+
+   // malformed DCC SEND, something after file_size
+   if (space_after_file_size != string::npos)
+      return string();
+
+   size_t ctcp_x_delim_after_file_size = str.find(CTCP_X_DELIM, file_size);
+
+   size_t file_size_length = ctcp_x_delim_after_file_size - file_size;
+   return str.substr(file_size, file_size_length);
+}
