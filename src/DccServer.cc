@@ -72,9 +72,13 @@ DccServer::Listen(const std::string& rFileName)
       throw DccServer::AlreadyListeningException();
 
 
-   // check if rFileName exists
-   std::string path("./");
+   // get full path of file name
+   std::string path = std::string();
+   if (rFileName.at(0) != '/')
+      path.append("./");
    path.append(rFileName);
+
+   // check if rFileName exists
    int fd = open(path.c_str(), O_RDONLY);
    if (fd == -1) {
       size_t buf_sz = 1024; /* I hope is enough for errstr */
