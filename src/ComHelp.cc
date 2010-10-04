@@ -30,13 +30,13 @@ const std::string ComHelp::MSG("*** A typical user session goes like this:\n\
 ***     /leave                   Leaves your current channel.\n\
 ***     /who                     List users in current channel.\n\
 ***     /msg <txt>               Send <txt> to the channel.\n\
-***     /upload <file> <nick>    Launch a DCC server for a file\n\
+***     /offer <file> <nick>     Launch a DCC server for a file\n\
 ***                              transfer.  The recipient must accept\n\
 ***                              your offer with a '/download'.\n\
 ***     /download <host:port> <file>\n\
 ***                              Starts a file transfer by DCC.\n\
 ***                              The  sender must first have offered\n\
-***                              the file with an '/upload' command.\n\
+***                              the file with an '/offer' command.\n\
 ***     /disconnect              Disconnect from server.\n\
 ***     /quit                    Close program.\n\
 ***     /nop [<text>]            (debugging) no operation,\n\

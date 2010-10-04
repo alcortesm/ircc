@@ -82,16 +82,16 @@ new_offer(DccServer& rDccServer, Server& rServer, const string& rLine)
 {
    // if rLine is just the /connect command without arguments
    if (rLine == ComOffer::STR)
-      return new ComError("The /upload command needs a nick and a file name");
+      return new ComError("The /offer command needs a nick and a file name");
    
-   // there must be exactly 2 spaces in "/upload nick filename"
+   // there must be exactly 2 spaces in "/offer nick filename"
    size_t space1 = rLine.find(SPACE, 0);
    size_t space2 = rLine.find(SPACE, space1+1);
    if (space2 == string::npos)
-      return new ComError("The /upload command needs a nick and a file name");
+      return new ComError("The /offer command needs a nick and a file name");
    size_t space3 =  rLine.find(SPACE, space2+1);
    if (space3 != string::npos)
-      return new ComError("The /upload command needs a nick and a file name");
+      return new ComError("The /offer command needs a nick and a file name");
 
    size_t file_name_start = space1 + 1;
    size_t file_name_len = space2 - file_name_start;
@@ -261,7 +261,7 @@ com_factory(const std::string& rLine, Server& rServer, DccServer& rDccServer)
    if (starts_with(clean,ComQuit::STR))
       return new ComQuit();
 
-   /* UPLOAD */
+   /* OFFER */
    if (starts_with(clean, ComOffer::STR))
       return new_offer(rDccServer, rServer, clean);
 
