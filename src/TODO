@@ -1,3 +1,4 @@
+- Add real download funtionality to ComDownload
 - clean code by searching with grep -n 'TODO' *.cc *.h
 - move the code to get TCP protocol to a new function in utils
 - Replace the DCC parse functions with a tokenizer in dcc.cc
