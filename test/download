@@ -1,0 +1,29 @@
+/connect localhost:7101
+
+/sleep
+
+
+
+/auth alcortes
+
+/sleep
+
+
+
+/offer main.cc alcortes
+
+/sleep
+
+
+
+/download main.cc localhost:8101
+
+/sleep 3
+
+
+
+/disconnect
+
+/sleep
+
+/quit

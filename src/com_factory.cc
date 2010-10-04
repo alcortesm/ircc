@@ -1,3 +1,4 @@
+#include "ComDownload.h"
 #include "ComOffer.h"
 #include "ComWho.h"
 #include "ComList.h"
@@ -80,7 +81,7 @@ new_connect(Server& rServer, const string& rLine)
 Command*
 new_offer(DccServer& rDccServer, Server& rServer, const string& rLine)
 {
-   // if rLine is just the /connect command without arguments
+   // if rLine is just the /offer command without arguments
    if (rLine == ComOffer::STR)
       return new ComError("The /offer command needs a nick and a file name");
    
@@ -109,6 +110,50 @@ new_offer(DccServer& rDccServer, Server& rServer, const string& rLine)
       return new ComError("Not authenticated with the server");
 
    return new ComOffer(rDccServer, rServer, nick, file_name);
+}
+
+Command*
+new_download(const string& rLine)
+{
+   *gpDebug << FROM_DEBUG << "new_download(\"" << rLine << "\", "
+            << ")" << endl;
+
+   // if rLine is just the /download command without arguments
+   if (rLine == ComDownload::STR)
+      return new ComError("The /download command needs a host:port and a file name");
+
+   // there must be exactly 2 spaces in "/download nick filename"
+   const size_t space1 = rLine.find(SPACE, 0);
+   const size_t space2 = rLine.find(SPACE, space1+1);
+   if (space2 == string::npos)
+      return new ComError("The /download command needs a host:port and a file name");
+   const size_t space3 =  rLine.find(SPACE, space2+1);
+   if (space3 != string::npos)
+      return new ComError("The /download command needs a host:port and a file name");
+
+   const size_t file_name_start = space1 + 1;
+   const size_t file_name_len = space2 - file_name_start;
+
+   const size_t host_port_start = space2 + 1;
+   const size_t host_port_len = rLine.length() - host_port_start;
+
+   const string host_port(rLine, host_port_start, host_port_len);
+   const string file_name(rLine, file_name_start, file_name_len);
+
+   const size_t colon = host_port.find(IRCC_HOST_PORT_SEPARATOR);
+   if (colon == string::npos)
+      return new ComError("The /download command also needs a port");
+
+   const size_t host_start = 0;
+   const size_t host_len = colon - host_start;
+
+   const size_t port_start = colon + 1;
+   const size_t port_len = host_port.length() - port_start;
+
+   const string host(host_port, host_start, host_len);
+   const string port(host_port, port_start, port_len);
+
+   return new ComDownload(host, port, file_name);
 }
 
 // Returns true if the line is just: "word [ ' ' ]" the check for the
@@ -264,6 +309,10 @@ com_factory(const std::string& rLine, Server& rServer, DccServer& rDccServer)
    /* OFFER */
    if (starts_with(clean, ComOffer::STR))
       return new_offer(rDccServer, rServer, clean);
+
+   /* DOWNLOAD */
+   if (starts_with(clean, ComDownload::STR))
+      return new_download(clean);
 
    /* CONNECT */
    if (starts_with(clean, ComConnect::STR))

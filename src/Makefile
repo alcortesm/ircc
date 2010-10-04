@@ -1,6 +1,7 @@
 BIN = ircc
 INSTALL_DIR = ~/bin
 SRCS = \
+    ComDownload.cc \
     dcc.cc \
     ctcp.cc \
     DccServer.cc \
@@ -29,7 +30,7 @@ SRCS = \
     main.cc
 INCLUDES =
 LIBS =
-
+test_file = download
 
 
 CC = g++
@@ -41,6 +42,7 @@ INSTALL_BIN=$(INSTALL_DIR)/$(BIN)
 # can't use --track-origins==yes, because monitor01 use
 # an older version of valgrind
 VALGRIND_FLAGS = --tool=memcheck --show-reachable=yes --leak-check=full -q
+test_dir = ../test
 
 
 
@@ -61,10 +63,10 @@ TAGS:
 	cscope -b -q *.cc *.h
 
 test: $(BIN)
-	valgrind $(VALGRIND_FLAGS) ./$(BIN) < ../test/offer_local_path
+	valgrind $(VALGRIND_FLAGS) ./$(BIN) < $(test_dir)/$(test_file)
 
 testdebug: $(BIN)
-	valgrind $(VALGRIND_FLAGS) ./$(BIN) -d < ../test/offer_local_path
+	valgrind $(VALGRIND_FLAGS) ./$(BIN) -d < $(test_dir)/$(test_file)
 
 valgrind: $(BIN)
 	valgrind $(VALGRIND_FLAGS) ./$(BIN)
